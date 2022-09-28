@@ -14,8 +14,8 @@
             <p class="text-gray-500 font-normal text-sm">${param.descripcion}</p>
         </div>
     </div>
-    <div class="w-full h-auto py-4 flex items-center justify-center border-t border-gray-300">
+    <a href="actividadInfo.jsp" class="w-full h-auto py-4 flex items-center justify-center border-t border-gray-300">
         <p class="text-sm font-medium text-gray-700">Ver Mas</p>
-    </div>
+    </a>
 </div>
 

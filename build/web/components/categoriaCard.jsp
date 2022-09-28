@@ -23,7 +23,6 @@
     String acronym = "";
     for (int i = 0; i < myName.length; i++) {
         String s = myName[i];
-        System.out.println();
         acronym += s.charAt(0);
     }
     return acronym;
