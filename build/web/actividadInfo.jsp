@@ -64,7 +64,12 @@
                         </div>
                     </div>
             </div>
+            <%-- Solo si es socio --%>
+            <div class="w-full h-auto flex flex-row items-center justify-end h-10 my-2">
+                <p>Agregar</p>
+            </div>
             <div class="w-full h-full flex-grow max-h-full overflow-auto flex flex-row items-center justify-center gap-x-16">
+             
                 <div class="w-full flex-grow h-full rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start  overflow-hidden">
                     <div class="w-full flex flex-row items-center justify-start h-12 bg-gray-50 border-b border-gray-300 px-6">
                         <p class="w-2/5 h-auto text-sm text-gray-500 font-medium">Cuponeras</p>
@@ -80,7 +85,7 @@
                     </div>
                 </div>
                 
-                
+              
                 <div class="w-full flex-grow h-full rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start overflow-hidden">
                     <div class="w-full flex flex-row items-center justify-start h-12 bg-gray-50 border-b border-gray-300 px-6">
                         <p class="w-1/2 h-auto text-sm text-gray-500 font-medium">Clase</p>
