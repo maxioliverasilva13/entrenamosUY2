@@ -56,7 +56,10 @@
                         
                     %>
                      <div class="w-full h-auto px-4 py-4 border-b border-gray-300 flex flex-col gap-y-2">
-                        <p class="text-[#111827] text-base font-medium text-left w-full truncate max-w-full"> <%=val.getNombre()%> </p>
+                         <div class="w-full h-auto flex flex-row items-center justify-start gap-x-2">
+                             <img class="w-8 h-8 rounded-full" src="<%=btimg.getBase64StringImage(val.getImageBlob()) %>" />
+                            <p class="text-[#111827] text-base font-medium text-left w-full truncate max-w-full"> <%=val.getNombre()%> </p>
+                         </div>
                         <p class="text-[#6B7280] text-sm font-normal max-w-full text-left truncate">  <%=val.getDescripcion()%> </p>
                      </div>
                     <%

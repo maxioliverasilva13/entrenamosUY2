@@ -52,12 +52,12 @@ public class Inicio extends HttpServlet {
         instituciones = insBO.listarInstituciones();
         
         HashMap<Integer, ActividadDTO> actividades = new HashMap<>();
-        actividades = actBO.getAllActividades();
+        actividades = actBO.getActividadesWithLimitAndAccepted(9);
         
         request.setAttribute("cantidadUsuarios", cantidadUsuarios);
         request.setAttribute("instituciones", instituciones);
         request.setAttribute("actividades", actividades);
-        request.setAttribute("totalActividades", actividades.size());
+        request.setAttribute("totalActividades", actBO.getActividadesAceptadasSize());
         request.setAttribute("totalInstituciones", instituciones.size());
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
