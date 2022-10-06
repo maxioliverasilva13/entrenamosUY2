@@ -9,7 +9,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page='imports.jsp'>
     <jsp:param name="" value=""/>
-</jsp:include>
+</jsp:include> 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     <% List<String> instituciones = new ArrayList<>();
@@ -30,11 +30,15 @@
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="index" />
         </jsp:include>
-        <jsp:include page='/components/pagarClase.jsp' >
+        <%-- <jsp:include page='/components/pagarClase.jsp' >
             <jsp:param name="path" value="index" />
-        </jsp:include>
+        </jsp:include> --%>
+        
+        
         
         <a href="testServelet">Test</a>
+        <a href="myProfileProfesor">Perfil PROPIO Profe</a>
+        <a href="profAjeno">Perfil Ajeno Profe</a>
         <div class="w-full h-full flex-grow px-8 py-6 max-h-full overflow-auto flex items-center justify-between gap-x-8">
             <aside class="w-96 h-full border border-gray-300 rounded rounded-3xl overflow-hidden bg-white shadow-md flex flex-col items-start justify-start">
                 <span class="w-full h-auto px-4 py-2 bg-[#DEDEDE] text-[#6B7280] text-left">Instituciones</span>
