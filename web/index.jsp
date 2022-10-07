@@ -10,7 +10,6 @@
 <jsp:include page='imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     <% List<String> instituciones = new ArrayList<>();
     instituciones.add("test1");
@@ -30,9 +29,9 @@
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="index" />
         </jsp:include>
-        <jsp:include page='/components/pagarClase.jsp' >
+      <%-- <jsp:include page='/components/pagarClase.jsp' >
             <jsp:param name="path" value="index" />
-        </jsp:include>
+        </jsp:include>  --%>
         
         <a href="testServelet">Test</a>
         <div class="w-full h-full flex-grow px-8 py-6 max-h-full overflow-auto flex items-center justify-between gap-x-8">
