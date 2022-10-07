@@ -1,12 +1,12 @@
 <%-- 
-    Document   : perfilProfesorPropio
-    Created on : 30 set. 2022, 12:14:57
+    Document   : perfilProfesorAjeno
+    Created on : 30 set. 2022, 12:14:44
     Author     : mandi
 --%>
-
 <jsp:include page='../imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,13 +14,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Perfil Profesor Propio</title>
+        <title>Perfil Profesor Ajeno</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
     </head>
     <body class="w-screen h-full flex flex-col sm:items-start sm:justify-start">
-        <%--  COMENTADO PORQUE EL HEADER AÚN NO ES RESPONSIVE.
+        <%--
         <jsp:include page='../components/header.jsp' >
             <jsp:param name="path" value="perfilProfesor" />
         </jsp:include>
@@ -33,8 +33,8 @@
                 <p class="text-[#959EB0] text-2xl">Profesor</p>
             </div>
 
-            <div class="flex flex-col sm:justify-between border container h-max shadow sm:overflow-hidden rounded-2xl lg:flex-row bg-gray-50 flex-wrap mx-auto">
-                <div class="flex flex-col w-auto px-6 py-4 h-max max-w-full overflow-hidden">
+            <div class="flex flex-col sm:justify-between border container h-max shadow sm:overflow-hidden rounded-2xl lg:flex-row bg-gray-100 flex-wrap mx-auto">
+                <div class="flex flex-col w-auto px-6 py-4 h-max">
                     <div class="flex py-2 items-center">
                         <svg class="mx-4" width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 5C12 7.20914 10.2091 9 8 9C5.79086 9 4 7.20914 4 5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5Z" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -46,7 +46,7 @@
                         <svg class="mx-4" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <p class="font-[Inter] text-base text-gray-500 max-w-full truncate">ricardo.cooper@example.com</p>
+                        <p class="font-[Inter] text-base text-gray-500">ricardo.cooper@example.com</p>
                     </div>
                     <div class="flex py-2 items-center">
                         <svg class="mx-4" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,18 +86,16 @@
             </div>
 
 
-            <%-- MODIFY INFO SECTION --%>
-            <div class="mx-auto flex flex-col w-2/6 min-w-max h-max mt-2 lg:mt-0 gap-y-5">
-                    <button class="font-[Inter] font-medium bg-[#DFD9A4] hover:bg-[#EBE5B5] text-black p-4 rounded-md">
-                    Editar Información
-                </button>
-                <button class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white p-4 rounded-md">
-                    Cambiar Foto de Perfil
-                </button>
-                <button class="font-[Inter] font-medium bg-[#C56969] hover:bg-[#F38282] text-white p-4 rounded-md" onclick="">
-                    Cerrar Sesión
-                </button>
+            <%-- LAST ONLINE & FOLLOW BUTTON --%>
+            <div class="mx-auto flex flex-col w-2/6 min-w-max h-max mt-2 lg:mt-0">
+                <div class="flex flex-col container pt-2 pb-5 h-max text-center shadow border rounded-xl">
+                    <p class="text-[#6B7280] text-4xl font-[Inter] font-medium">Last Online</p>
+                    <p class="text-7xl text-[#3A5A6F] font-[Inter] font-extrabold">24/7</p>
+                </div>
 
+                <button class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white mt-8 p-4 rounded-md">
+                    Follow
+                </button>
             </div>
 
 
@@ -123,7 +121,7 @@
                                 Duración (mins)
                             </th>
                             <th scope="col" class="py-3 px-6">
-                                Estado
+                                Costo
                             </th>
                         </tr>
                     </thead>
@@ -139,9 +137,7 @@
                                 240
                             </td>
                             <td class="py-4 px-6">
-                                <span class="bg-red-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-red-200 dark:text-red-900">
-                                    Rechazada
-                                </span>
+                                $1999
                             </td>
                         </tr>
                         <tr class="bg-gray-50 border-b ">
@@ -155,9 +151,7 @@
                                 320
                             </td>
                             <td class="py-4 px-6">
-                                <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-yellow-200 dark:text-yellow-900">
-                                    Ingresada
-                                </span>
+                                $1500
                             </td>
                         </tr>
                         <tr class="bg-white border-b ">
@@ -171,9 +165,7 @@
                                 120
                             </td>
                             <td class="py-4 px-6">
-                                <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
-                                    Aceptada
-                                </span>
+                                $299
                             </td>
                         </tr>
                         <tr class="bg-gray-50 border-b ">
@@ -187,9 +179,7 @@
                                 60
                             </td>
                             <td class="py-4 px-6">
-                                <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
-                                    Aceptada
-                                </span>
+                                $599
                             </td>
                         </tr>
                         <tr>
@@ -203,26 +193,12 @@
                                 240
                             </td>
                             <td class="py-4 px-6">
-                                <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-yellow-200 dark:text-yellow-900">
-                                    Ingresada
-                                </span>
+                                $999
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        
-        <%-- 
-        <jsp:include page='../components/comprarCuponeraModal.jsp' >
-            <jsp:param name="path" value="index" />
-        </jsp:include>       
-        --%>
-             
-        <%-- 
-            <jsp:include page='../components/editarInfoProfesorModal.jsp' >
-                <jsp:param name="path" value="index" />
-            </jsp:include>       
-        --%>
     </body>
 </html>
