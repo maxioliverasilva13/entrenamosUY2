@@ -14,7 +14,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body class=" w-full h-full bg-cover bg-no-repeat " style="background-image: url('./assets/natacion.jpg');">
+    <body class=" w-full h-full bg-cover bg-no-repeat " style="background-image: url('https://res.cloudinary.com/dwh8j7fys/image/upload/v1665238297/natacion_twsiuc.jpg');">
         <div class="w-full w-h flex justify-end">
             <div class="bg-white basis-3/4 h-[100vh]">
                 <div class="w-full flex justify-center mt-5" id="form" >

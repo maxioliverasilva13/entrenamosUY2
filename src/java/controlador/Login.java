@@ -77,26 +77,30 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String email = (String)request.getParameter("email");
-        String password = request.getParameter("password");
-        // To verify whether entered data is printing correctly or not
-        if(email == null || password == null){
-            response.sendError(400, "Email o password invalida");
-        }
-        IUsuarioBO usuarioBo = new UsuarioBO();
-        
-        try{
-            UsuarioDTO user = usuarioBo.authenticarse(email, password);
-            HttpSession session = request.getSession(true);	    
-            session.setAttribute("currentSessionUser",user); 
-            response.sendRedirect("TestServelet");
-        }catch(UnauthorizedException e){
-            response.sendError(401);
-         }
-        catch(Exception e){
-            response.sendError(500);
-        }
+                String email = (String)request.getParameter("email");
+                String password = request.getParameter("password");
+                
+                System.out.println(email);
+                System.out.println(password);
+                if(email == null || password == null){
+                    response.sendError(400, "Email o password invalida");
+                }
+                IUsuarioBO usuarioBo = new UsuarioBO();
+
+                try{
+                    UsuarioDTO user = usuarioBo.authenticarse(email, password);
+                    HttpSession session = request.getSession(true);	    
+                    session.setAttribute("currentSessionUser",user); 
+                    response.sendRedirect("TestServelet");
+                    
+                }catch(UnauthorizedException e){
+                    request.setAttribute("status", "Correo o Contraseña incorrectos");
+                    request.getRequestDispatcher("/login.jsp").forward(request, response);
+                }
+                catch(Exception e){
+                    response.sendError(500, "Ha ocurrido un error inesperado");
+                    response.sendRedirect("login.jsp");
+                }
     }
 
     /**
