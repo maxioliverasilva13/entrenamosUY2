@@ -7,14 +7,22 @@
 --%>
 
 
+<%@page import="Actividad.dtos.ActividadDTO"%>
+<%@page import="Clase.DtClase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<% 
+  DtClase selectedClaseInfo = (DtClase)request.getAttribute("selectedClaseInfo");
+  ActividadDTO infoAct = (ActividadDTO) request.getAttribute("actInfo");
+
+%>
 <!DOCTYPE html>
 <div class="w-full h-full absolute top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 flex items-center justify-center transition-all">
     <div class="bg-white w-auto rounded-2xl p-12 px-24 border-gray-300 border  h-auto flex flex-row items-start justify-start gap-x-12 relative">
         <%-- Close Button --%>
-        <button class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
+        <a href="verActividadInfo?actId=<%=selectedClaseInfo.getIdActividad() %>" class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>
-        </button>
+        </a>
         
         <div class="flex flex-col items-center justify-start flex-grow gap-y-4 w-full h-full">
             <p class="text-2xl text-gray-900 font-medium">Elije como deseas pagar la clase</p>
@@ -54,7 +62,7 @@
                     <p class="text-gray-900 font-medium text-xl">Con un pago unico</p>
                     <div class="w-72 h-auto flex flex-col items-start justify-start shadow-md border border-gray-100 rounded-2xl">
                     <div class="w-full h-auto p-6 flex flex-col items-start justify-start gap-y-5">
-                        <p class="text-[#4F7994] text-[60px] font-bold">$56</p>
+                        <p class="text-[#4F7994] text-[60px] font-bold">$<%=infoAct.getCosto() %></p>
                         <p class="text-gray-500 text-xl font-normal">Este precio es el de cada clase para esta actividad</p>
                     </div>
                     <div class="p-6 w-full h-auto bg-gray-50 border-t border-gray-100">

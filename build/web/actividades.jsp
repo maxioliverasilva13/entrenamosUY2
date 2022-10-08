@@ -53,7 +53,7 @@
         <title>Actividades</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
-    <body class="w-screen h-screen flex items-start flex-col justify-start ">
+    <body class="w-screen h-screen flex items-start flex-col justify-start">
 
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="actividades" />
