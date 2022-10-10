@@ -8,6 +8,14 @@
         <servlet-name>Inicio</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>actividadesInfo</servlet-name>
+        <servlet-class>controlador.actividadesInfo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>actividadesInfo</servlet-name>
+        <url-pattern>/actividadesInfo</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>/files/*</url-pattern>
