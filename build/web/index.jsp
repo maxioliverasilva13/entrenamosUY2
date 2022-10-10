@@ -12,10 +12,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page='imports.jsp'>
     <jsp:param name="" value=""/>
-</jsp:include>
+</jsp:include> 
 <%@ page import="util.BlobToImage" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
     
 <% 
     HashMap<Integer, DtInstitucion> instituciones = new HashMap<Integer, DtInstitucion>();
@@ -45,6 +45,9 @@
             <jsp:param name="path" value="index" />
         </jsp:include>
         
+        <a href="testServelet">Test</a>
+        <a href="myProfileProfesor">Perfil PROPIO Profe</a>
+        <a href="profAjeno">Perfil Ajeno Profe</a>
         <div class="w-full h-full flex-grow px-8 py-6 max-h-full overflow-auto flex items-center justify-between gap-x-8">
             <aside class="w-96 h-full border border-gray-300 rounded rounded-3xl overflow-hidden bg-white shadow-md flex flex-col items-start justify-start">
                 <span class="w-full h-auto px-4 py-2 bg-[#DEDEDE] text-[#6B7280] text-left">Instituciones</span>
@@ -129,4 +132,3 @@
         </div>
     </body>
 </html>
-

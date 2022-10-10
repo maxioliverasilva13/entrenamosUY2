@@ -10,7 +10,6 @@
 <jsp:include page='imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     <% 
     List<String> categorias = new ArrayList<>();
@@ -54,7 +53,7 @@
         <title>Actividades</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
-    <body class="w-screen h-screen flex items-start flex-col justify-start ">
+    <body class="w-screen h-screen flex items-start flex-col justify-start">
 
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="actividades" />
@@ -81,7 +80,7 @@
                      <c:forEach items="${insts}" var="item">
                     <div class="w-full h-20 border-b border-gray-300 px-6 py-4 flex flex-row items-center justify-start gap-x-4">
                         <img 
-                        src="https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/download-23.jpg"
+                        src="./assets/gym.png"
                          class="w-12 h-12 rounded-full overflow-hidden"   
                         />
                         <div class="flex-grow h-full flex flex-col items-start justify-between">

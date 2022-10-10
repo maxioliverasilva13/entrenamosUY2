@@ -44,11 +44,6 @@
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="index" />
         </jsp:include>
-        <%-- <jsp:include page='/components/pagarClase.jsp' >
-            <jsp:param name="path" value="index" />
-        </jsp:include> --%>
-        
-        
         
         <a href="testServelet">Test</a>
         <a href="myProfileProfesor">Perfil PROPIO Profe</a>
@@ -137,4 +132,3 @@
         </div>
     </body>
 </html>
-
