@@ -23,9 +23,24 @@
 	<div class="flex">
        <div  class=" w-full h-full bg-cover bg-no-repeat flex-1 bg-center hidden md:block " style="background-image: url('https://res.cloudinary.com/dwh8j7fys/image/upload/v1665238283/gym_j5mokj.png'); width: 100%; height: 100vh;">
        </div>
-
+            
+           
        <div class="flex-1 flex flex-col justify-center items-center mt-5">
        	<!--code !-->
+             <% if(request.getAttribute("signUpSucces") != null){
+             %>
+              <div class="w-3/5 bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mb-5" role="alert">
+                <div class="flex">
+                  <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+                  <div>
+                    <p class="font-bold">Ya puedes logearte</p>
+                    <p class="text-sm">Cuenta creado con exito!!</p>
+                  </div>
+                </div>
+                </div>
+              <%
+            }%>
+          
        	   <div class="">
        	   	  <span class="font-['Inika'] text-2xl md:text-3xl">Entrenamos <span class="bg-[#709FE6] rounded-[15px] p-1 text-white">UY</span></span>
        	   </div>

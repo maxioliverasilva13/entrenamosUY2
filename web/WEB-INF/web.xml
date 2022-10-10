@@ -16,6 +16,10 @@
         <servlet-name>Institucion</servlet-name>
         <servlet-class>controlador.Institucion</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Usuarios</servlet-name>
+        <servlet-class>controlador.Usuarios</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Inicio</servlet-name>
         <url-pattern>/</url-pattern>
@@ -35,6 +39,10 @@
     <servlet-mapping>
         <servlet-name>Institucion</servlet-name>
         <url-pattern>/Institucion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Usuarios</servlet-name>
+        <url-pattern>/Usuarios</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

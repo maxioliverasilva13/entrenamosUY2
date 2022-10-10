@@ -64,6 +64,7 @@
                 <p class="text-gray-500 w-full text-left font-medium text-md">Categorias</p>
                 
                 <div class="w-full h-full flex-grow flex flex-col items-center justify-start gap-y-5">
+                    
                     <c:forEach items="${test}" var="item">
                       
                      <jsp:include page='/components/categoriaCard.jsp' >
