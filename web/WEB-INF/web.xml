@@ -4,6 +4,18 @@
         <servlet-name>Inicio</servlet-name>
         <servlet-class>controlador.Inicio</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>controlador.Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignUp</servlet-name>
+        <servlet-class>controlador.SignUp</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Institucion</servlet-name>
+        <servlet-class>controlador.Institucion</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Inicio</servlet-name>
         <url-pattern>/</url-pattern>
@@ -17,8 +29,20 @@
         <url-pattern>/actividadesInfo</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>/files/*</url-pattern>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/files/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignUp</servlet-name>
+        <url-pattern>/SignUp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Institucion</servlet-name>
+        <url-pattern>/Institucion</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

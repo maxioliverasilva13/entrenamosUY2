@@ -15,7 +15,6 @@
 <jsp:include page='imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
     BlobToImage bltim = new BlobToImage();
@@ -165,6 +164,7 @@
                     %>
                     <div class="w-full h-20 border-b border-gray-300 px-6 py-4 flex flex-row items-center justify-start gap-x-4">
                         <img 
+<<<<<<< HEAD
                             src="<%=bltim.getBase64StringImage(val.getImageBlob())%>"
                             class="w-12 h-12 rounded-full overflow-hidden"   
                             />
