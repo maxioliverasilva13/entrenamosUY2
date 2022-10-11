@@ -1,4 +1,6 @@
 
+<%@page import="util.BlobToImage"%>
+<%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page='../imports.jsp'>
     <jsp:param name="" value=""/>
@@ -11,16 +13,33 @@
         if (getComputedStyle(element).display === "none") {
             element.style.cssText = "display:flex";
             desktopHeader.classList.toggle("outHeader");
-            console.log("si");
         } else {
             element.style.cssText = "display: none";
             desktopHeader.classList.toggle("outHeader");
         }
     }
+
+    const toggleModalUser = (id) => {
+        var element = document.getElementById(id);
+        if (getComputedStyle(element).display === "none") {
+            element.style.cssText = "display:flex";
+            // desktopHeader.classList.toggle("outHeader");
+        } else {
+            element.style.cssText = "display: none";
+            //desktopHeader.classList.toggle("outHeader");
+        }
+    }
 </script>
 
+<%
+    UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
+    boolean hasUser = userInfo != null;
+    BlobToImage bltimg = new BlobToImage();
+
+%>
+
 <!DOCTYPE html>
-<div class="z-[3000]">
+<div class="z-[3000] relative">
     <style>
         .animationHeader {
             transition: .3s all ease;
@@ -65,9 +84,8 @@
         }
 
     </style>
-    <header id="desktopHeader" class="w-screen h-16 bg-[#1F2937] flex flex-row items-center justify-between md:px-6 px-2 max-w-full overflow-hidden enterHeader">
+    <header id="desktopHeader" class="w-screen h-16 bg-[#1F2937] flex flex-row items-center justify-between overflow-y-visible md:px-6 px-2 max-w-full overflow-x-hidden enterHeader">
 
-        <% boolean isLogged = true; %>
         <div class="w-auto h-full flex flex-row items-center justify-start gap-x-6">
             <p class="text-white font-semibold text-xl">Entrenamos<span class="bg-[#E5E2C9] py-1 px-2 rounded-xs mx-1 rounded-md">UY</span></p>
             <ul class="w-auto h-full items-center justify-start gap-x-4 md:flex hidden">
@@ -100,19 +118,23 @@
             </div>
             <div class="w-auto h-auto flex flex-row items-center justify-start">
                 <i onclick="toggleSidebar()" class="fa-solid fa-bars text-xl md:opacity-0 md:mx-2 mx-4 text-white md:hidden order-2"></i>
-                <%
-                    if (isLogged) {
+                <%                    if (hasUser) {
                 %>
                 <div class="w-auto h-full flex items-center jusitfy-start gap-x-4 md:order-2 order-1">
                     <i class="fa-regular fa-bell text-xl text-white"></i>
-                    <img class="w-8 h-8 min-w-8 min-h-8 rounded-full overflow-hidden object-cover" src="https://t3.ftcdn.net/jpg/01/97/11/64/360_F_197116416_hpfTtXSoJMvMqU99n6hGP4xX0ejYa4M7.jpg" />
+                    <div class="">
+                        <img onclick="toggleModalUser('claseModal')" class="w-8 cursor-pointer h-8 min-w-8 min-h-8 rounded-full overflow-hidden object-cover" src="<%=bltimg.getBase64StringImage(userInfo.getBlobImage())%>" />
+                        <div  id="claseModal" style="display: none" class="w-64 h-auto px-4 py-4 shadow-lg bg-gray-50 absolute top-12 right-12 border rounded-2xl border-gray-300 items-center justify-cecnter">
+                            <a href="logout" class="w-full h-auto bg-red-600 text-white px-4 py-2 font-medium cursor-pointer rounded-xl text-center">Logout</a>
+                        </div>
+                    </div>
                 </div>
                 <%
                 } else {
                 %>
                 <div class="flex flex-row items-center justify-center gap-x-4"> 
-                    <button class="bg-white py-2 px-3 text-base font-medium text-[#294557] rounded-md">Log In</button>
-                    <button class="bg-[#E5E2C9] py-2 px-3 text-base font-medium text-[#294557] rounded-md">Sign Up</button>
+                    <a href="login.jsp" class="bg-white py-2 px-3 text-base font-medium text-[#294557] rounded-md">Log In</a>
+                    <a href="signup.jsp" class="bg-[#E5E2C9] py-2 px-3 text-base font-medium text-[#294557] rounded-md">Sign Up</a>
                 </div>
                 <%
                     }
@@ -129,21 +151,24 @@
 
             <div class="w-full h-16 px-2 flex flex-row items-center justify-between">
                 <%
-                    if (isLogged) {
+                    if (hasUser) {
                 %>
                 <div class="w-full h-full flex flex-row items-center justify-between">
                     <p class="text-white -mt-1 font-semibold text-xl">Entrenamos<span class="bg-[#E5E2C9] text-xs  py-1 px-2 rounded-xs mx-1 rounded-md">UY</span></p>
                     <div class="w-auto h-full flex items-center jusitfy-start gap-x-4 md:order-2 order-1">
                         <i class="fa-regular fa-bell text-xl text-white"></i>
-                        <img class="w-8 h-8 min-w-8 min-h-8 rounded-full overflow-hidden object-cover" src="https://t3.ftcdn.net/jpg/01/97/11/64/360_F_197116416_hpfTtXSoJMvMqU99n6hGP4xX0ejYa4M7.jpg" />
+                        <img onclick="toggleModalUser('claseModalMobile')" class="w-8 cursor-pointer h-8 min-w-8 min-h-8 rounded-full overflow-hidden object-cover" src="<%=bltimg.getBase64StringImage(userInfo.getBlobImage())%>" />
+                        <div  id="claseModalMobile" style="display: none" class="w-64 h-auto px-4 py-4 shadow-lg bg-gray-50 absolute top-12 right-12 border rounded-2xl border-gray-300 items-center justify-cecnter">
+                            <a href="logout" class="w-full h-auto bg-red-600 text-white px-4 py-2 font-medium cursor-pointer rounded-xl text-center">Logout</a>
+                        </div>
                     </div>
                 </div>
                 <%
                 } else {
                 %>
                 <div class="flex flex-row items-center justify-center gap-x-4"> 
-                    <button class="bg-white py-2 px-3 text-base font-medium text-[#294557] rounded-md">Log In</button>
-                    <button class="bg-[#E5E2C9] py-2 px-3 text-base font-medium text-[#294557] rounded-md">Sign Up</button>
+                    <a href="login.jsp" class="bg-white py-2 px-3 text-base font-medium text-[#294557] rounded-md">Log In</a>
+                    <a href="signup.jsp" class="bg-[#E5E2C9] py-2 px-3 text-base font-medium text-[#294557] rounded-md">Sign Up</a>
                 </div>
                 <%
                     }

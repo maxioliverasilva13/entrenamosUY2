@@ -17,7 +17,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     
-<% 
+<%  
     HashMap<Integer, DtInstitucion> instituciones = new HashMap<Integer, DtInstitucion>();
     HashMap<Integer, ActividadDTO> actividades = new HashMap<Integer, ActividadDTO>();
     int cantidadUsuarios = (int)request.getAttribute("cantidadUsuarios");

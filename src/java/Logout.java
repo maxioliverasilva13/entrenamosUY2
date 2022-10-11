@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controlador;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,19 +10,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import Usuario.IUsuarioBO;
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
-import Usuario.exceptions.UnauthorizedException;
-
 import javax.servlet.http.HttpSession;
+
 /**
  *
- * @author rodrigo
+ * @author Maximiliano Olivera
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@WebServlet(urlPatterns = {"/logout"})
+public class Logout extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +36,10 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");            
+            out.println("<title>Servlet Logout</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Logout at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,7 +57,9 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession(true);
+        session.removeAttribute("currentSessionUser");
+        request.getRequestDispatcher("Inicio").forward(request, response);
     }
 
     /**
@@ -77,30 +73,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String email = (String)request.getParameter("email");
-                String password = request.getParameter("password");
-                
-                System.out.println(email);
-                System.out.println(password);
-                if(email == null || password == null){
-                    response.sendError(400, "Email o password invalida");
-                }
-                IUsuarioBO usuarioBo = new UsuarioBO();
-
-                try{
-                    UsuarioDTO user = usuarioBo.authenticarse(email, password);
-                    HttpSession session = request.getSession(true);	    
-                    session.setAttribute("currentSessionUser",user);
-                    response.sendRedirect("TestServelet");
-                    
-                }catch(UnauthorizedException e){
-                    request.setAttribute("status", "Correo o Contraseña incorrectos");
-                    request.getRequestDispatcher("/login.jsp").forward(request, response);
-                }
-                catch(Exception e){
-                    response.sendError(500, "Ha ocurrido un error inesperado");
-                    response.sendRedirect("login.jsp");
-                }
+        processRequest(request, response);
     }
 
     /**
