@@ -8,15 +8,13 @@
 <%@page import="java.util.Random"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% 
-    Random obj = new Random();
-    int rand_num = obj.nextInt(0xffffff + 1);
-    // format it as hexadecimal string and print
-    String colorCode = String.format("#%06x", rand_num);
-    String randomColor = colorCode;
     String categoriaName = request.getParameter("categoria");
+    String paramIndex = request.getParameter("index");
+    int categoriaId = Integer.parseInt(request.getParameter("categoriaId"));
 %>
 
 <%! 
+  String[] listOfColors = {"#468990", "#299D91", "#FFF4B8", "#F98F37", "#DE3C31"};
   public String formatName(Object x ) {
     String val = (String)x;
     String[] myName = val.split(" ");
@@ -28,19 +26,24 @@
     return acronym;
   }
 
+  public String getColor(String index) {
+    int indexInt = Integer.parseInt(index);
+    return listOfColors[indexInt%4];
+  }
+
 %>
    
 <div class="h-14 w-full flex flex-row items-center justify-start rounded-xl border border-gray-300 shadow overflow-hidden">
     <div class="w-16 h-full flex items-center justify-center text-white"
-         style="background: <%=randomColor%>"
+         style="background: <%=getColor(paramIndex)%>"
     >
-        <%
-            String newName = formatName(categoriaName);
-            out.print(newName);
-        %>
+        <%=formatName(categoriaName) %>
     </div>
     <div class="px-4 py-2 h-full flex-grow flex flex-col items-start justify-start">
         <p class="text-gray-900 font-medium text-xs ">${param.categoria}</p>
-        <p class="font-normal text-gray-400 text-sm">16 Actividades</p>
+        <p class="font-normal text-gray-400 text-sm">Total de actividades: ${param.totalActividades}</p>
+    </div>
+    <div class="w-8 h-full flex items-center justify-center">
+        <input type="checkbox" id="<%=categoriaName %>" name="<%=categoriaName %>" ${param.checked == true ? 'checked' : ''} value="<%=categoriaId %>" />
     </div>
 </div>
