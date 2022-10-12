@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "VerActividadInfo", urlPatterns = {"/verActividadInfo"})
 public class VerActividadInfo extends HttpServlet {
-
+    Boolean bool = new Boolean("true");
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
