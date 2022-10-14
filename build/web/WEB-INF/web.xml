@@ -19,6 +19,10 @@
     <servlet>
         <servlet-name>Usuarios</servlet-name>
         <servlet-class>controlador.Usuarios</servlet-class>
+    </servlet> 
+    <servlet>
+        <servlet-name>CrearActividad</servlet-name>
+        <servlet-class>controlador.CrearActividad</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Inicio</servlet-name>
@@ -43,6 +47,10 @@
     <servlet-mapping>
         <servlet-name>Usuarios</servlet-name>
         <url-pattern>/Usuarios</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CrearActividad</servlet-name>
+        <url-pattern>/CrearActividad</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
