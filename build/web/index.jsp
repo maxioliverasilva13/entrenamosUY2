@@ -17,23 +17,22 @@
 <%@ page import="util.BlobToImage" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<<<<<<< HEAD
 
 <%
-=======
-    
-<% 
->>>>>>> a529be1330cca3d5a4e583064cff8b28e12ba0dd
     HashMap<Integer, DtInstitucion> instituciones = new HashMap<Integer, DtInstitucion>();
     HashMap<Integer, ActividadDTO> actividades = new HashMap<Integer, ActividadDTO>();
     int cantidadUsuarios = (int) request.getAttribute("cantidadUsuarios");
     int totalActividades = (int) request.getAttribute("totalActividades");
     int totalInstituciones = (int) request.getAttribute("totalInstituciones");
     BlobToImage btimg = new BlobToImage();
-
-    // ID DEL LOGGED USER, CAMBIAR CUANDO ESTÉ EL LOGIN Y LA SESIÓN. ( int usrId = loggUser.getId(); )
-    int usrId = 3;
-
+    
+    
+    UsuarioDTO loggedUser = null;
+    loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
+    
+    // Id del user q quiero consultar
+    int usrId = 52;
+    
     try {
         instituciones = (HashMap<Integer, DtInstitucion>) request.getAttribute("instituciones");
         actividades = (HashMap<Integer, ActividadDTO>) request.getAttribute("actividades");
@@ -46,7 +45,6 @@
         nameOfUser = userInfo.getNombre() + " " + userInfo.getApellido();
     }
 %>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -59,24 +57,10 @@
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="index" />
         </jsp:include>
-<<<<<<< HEAD
 
-        <a href="verPerfil?usrId=<%=usrId%>"> Ver Perfil </a>
+        <a href="verPerfil?&userID=<%=usrId %>"> Ver Perfil</a>
         <div class="w-full h-full lg:flex-row flex-col flex-grow px-8 py-6 max-h-full overflow-auto flex items-center justify-between gap-x-8">
             <aside class="lg:w-96 w-full lg:h-full h-auto min-h-[300px] border max-h-full overflow-auto lg:mb-0 mb-4 border-gray-300 rounded rounded-3xl bg-white shadow-md flex flex-col items-start justify-start">
-=======
-        <%-- <jsp:include page='/components/pagarClase.jsp' >
-            <jsp:param name="path" value="index" />
-        </jsp:include> --%>
-        
-        
-        
-        <a href="testServelet">Test</a>
-        <a href="myProfileProfesor">Perfil PROPIO Profe</a>
-        <a href="profAjeno">Perfil Ajeno Profe</a>
-        <div class="w-full h-full flex-grow px-8 py-6 max-h-full overflow-auto flex items-center justify-between gap-x-8">
-            <aside class="w-96 h-full border border-gray-300 rounded rounded-3xl overflow-hidden bg-white shadow-md flex flex-col items-start justify-start">
->>>>>>> a529be1330cca3d5a4e583064cff8b28e12ba0dd
                 <span class="w-full h-auto px-4 py-2 bg-[#DEDEDE] text-[#6B7280] text-left">Instituciones</span>
                 <ul class="w-full h-auto flex flex-col items-start justify-start">
                     <%-- ForEach Instituciones --%>

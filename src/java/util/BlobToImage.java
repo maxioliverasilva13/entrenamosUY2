@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 import java.util.Base64;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -47,7 +48,42 @@ public class BlobToImage {
         }
         return "data:image/jpg;base64," + base64DataString;
     }
+    public String encodeFileToBase64(File file) {
+    try {
+         if (file == null) {
+            return "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png";
+        }
+        byte[] fileContent = Files.readAllBytes(file.toPath());
+        return Base64.getEncoder().encodeToString(fileContent);
+    } catch (IOException e) {
+        throw new IllegalStateException("could not read file " + file, e);
+    }
+    }
     
+    public byte[] getFileToByteArray(File file) throws FileNotFoundException, IOException {
+        if(file == null){
+            return null;
+        }
+        byte[] picInBytes = new byte[(int) file.length()];
+        FileInputStream fileInputStream = new FileInputStream(file);
+        fileInputStream.read(picInBytes);
+        fileInputStream.close();
+        return picInBytes;
+    }
     
-    
+    public  File writeBytesToFile(String nameFile , byte[] bytes) throws IOException {
+         String dir = System.getProperty("java.io.tmpdir");
+         File file = new File(dir + "image-user-" + nameFile + ".jpg");
+         try (FileOutputStream fos = new FileOutputStream(file)) {
+             fos.write(bytes);
+             fos.close();
+         }
+         return file;
+
+    }
 }
+    
+    
+    
+    
+

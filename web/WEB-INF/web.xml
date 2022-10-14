@@ -16,6 +16,17 @@
         <servlet-name>Institucion</servlet-name>
         <servlet-class>controlador.Institucion</servlet-class>
     </servlet>
+<<<<<<< HEAD
+=======
+    <servlet>
+        <servlet-name>Usuarios</servlet-name>
+        <servlet-class>controlador.Usuarios</servlet-class>
+    </servlet> 
+    <servlet>
+        <servlet-name>CrearActividad</servlet-name>
+        <servlet-class>controlador.CrearActividad</servlet-class>
+    </servlet>
+>>>>>>> 4b04e343c4c9ce4dc35e295448d36a7b7e7a1e58
     <servlet-mapping>
         <servlet-name>Inicio</servlet-name>
         <url-pattern>/</url-pattern>
@@ -57,6 +68,17 @@
         <servlet-name>Institucion</servlet-name>
         <url-pattern>/Institucion</url-pattern>
     </servlet-mapping>
+<<<<<<< HEAD
+=======
+    <servlet-mapping>
+        <servlet-name>Usuarios</servlet-name>
+        <url-pattern>/Usuarios</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CrearActividad</servlet-name>
+        <url-pattern>/CrearActividad</url-pattern>
+    </servlet-mapping>
+>>>>>>> 4b04e343c4c9ce4dc35e295448d36a7b7e7a1e58
     <session-config>
         <session-timeout>
             30 
