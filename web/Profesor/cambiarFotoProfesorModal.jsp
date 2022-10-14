@@ -1,6 +1,6 @@
 <%-- 
-    Document   : editarInfoProfesorModal
-    Created on : 2 oct. 2022, 19:51:51
+    Document   : cambiarFotoProfesorModal
+    Created on : 2 oct. 2022, 20:15:25
     Author     : mandi
 --%>
 
@@ -9,13 +9,13 @@
 <div class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 flex items-center justify-center transition-all">
     <div class="bg-white rounded-2xl py-8 px-14 border-gray-300 border flex flex-row items-start justify-start gap-x-12 relative">
         <%-- Close Button --%>
-        <button class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
+        <a href="verPerfil?userID=${param.usrIdConsultado}" class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>
-        </button>
+        </a>
         
         
         <form>
-            <p class="font-[Inter] font-medium text-center text-2xl mb-4">Editar Información</p>
+            <p class="font-[Inter] font-medium text-center text-2xl mb-4">Cambiar Foto de Perfil</p>
             <div class="relative z-0 mb-6 w-full group">
                 <input type="text" name="floating_nickname" id="floating_nickname" class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
                 <label for="floating_nickname" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nickname</label>
