@@ -107,10 +107,10 @@
                                                 <span class="text-blue-600 underline">browse</span>
                                             </span>
                                         </span>
-                                        <input type="file" value="" name="file_upload" class="hidden" accept="image/*" onchange="loadFile(event)"/>
+                                        <input type="file" id="inputFile" value="" name="file_upload" class="hidden" accept="image/*" onchange="loadFile(event)"/>
                                     </label>
                                 </div>
-                           <div class="w-full flex justify-center hidden" id="avatarContainer">
+                           <div class="hidden" id="avatarContainer">
                                <figure class="max-w-lg">
                                 <img id="avatar" class="max-w-full h-auto rounded-lg" src="/docs/images/examples/image-3@2x.jpg" alt="image description">
                                 <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">
@@ -281,46 +281,10 @@
       
     </body>
     <script>
-           $(function() {
+         
   // Initialize form validation on the registration form.
   // It has the name attribute "registration"
-  $("form[name='registration']").validate({
-    // Specify validation rules
-    rules: {
-      // The key name on the left side is the name attribute
-      // of an input field. Validation rules are defined
-      // on the right side
-      firstname: "required",
-      lastname: "required",
-      email: {
-        required: true,
-        // Specify that email should be validated
-        // by the built-in "email" rule
-        email: true
-      },
-      password: {
-        required: true,
-        minlength: 5
-      }
-    },
-    // Specify validation error messages
-    messages: {
-      firstname: "Please enter your firstname",
-      lastname: "Please enter your lastname",
-      password: {
-        required: "Please provide a password",
-        minlength: "Your password must be at least 5 characters long"
-      },
-      email: "Please enter a valid email address"
-    },
-    // Make sure the form is submitted to the destination defined
-    // in the "action" attribute of the form when valid
-    submitHandler: function(form) {
-      return;
-      form.submit();
-    }
-  });
-});
+  
             const SELECT_TIPO_USUARIO = document.getElementById("selectTipoUsuario");
             const PROFESOR_DATA_CARD = document.getElementById("profesorDataCard");
          
@@ -340,6 +304,7 @@
             }
             
             var loadFile = function(event) {
+                alert("event");
                 const avatarContainer = document.getElementById("avatarContainer");
                 avatarContainer.classList.remove("hidden");
                 avatarContainer.classList.add("flex");
@@ -359,10 +324,13 @@
                 const avatarContainer = document.getElementById("avatarContainer");
                 avatarContainer.classList.add("hidden");
                 avatarContainer.classList.remove("flex");
-                
-               const inputFileContainer = document.getElementById("inputFileContainer");
-               inputFileContainer.classList.add("flex");
-               inputFileContainer.classList.remove("hidden");
+                const  output = document.getElementById('avatar');
+                output.src = "";
+                const inputFile = document.getElementById("");
+                inputFile.value = "";
+                const inputFileContainer = document.getElementById("inputFileContainer");
+                inputFileContainer.classList.add("flex");
+                inputFileContainer.classList.remove("hidden");
         
             }
             
