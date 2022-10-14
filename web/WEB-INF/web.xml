@@ -8,6 +8,16 @@
         <servlet-name>Inicio</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>ListarCuponeras</servlet-name>
+        <servlet-class>controlador.ListarCuponeras</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListarCuponeras</servlet-name>
+        <url-pattern>/listarCuponeras</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>/files/*</url-pattern>
@@ -18,6 +28,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>PaginaInicio</welcome-file>
+        <welcome-file>comprarCuponeraModal.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
