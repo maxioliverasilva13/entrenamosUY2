@@ -20,10 +20,23 @@
         <servlet-name>Inicio</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+<<<<<<< HEAD
     <servlet>
         <servlet-name>actividadesInfo</servlet-name>
         <servlet-class>controlador.actividadesInfo</servlet-class>
     </servlet>
+=======
+    
+    <servlet>
+        <servlet-name>ListarCuponeras</servlet-name>
+        <servlet-class>controlador.ListarCuponeras</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListarCuponeras</servlet-name>
+        <url-pattern>/listarCuponeras</url-pattern>
+    </servlet-mapping>
+    
+>>>>>>> a529be1330cca3d5a4e583064cff8b28e12ba0dd
     <servlet-mapping>
         <servlet-name>actividadesInfo</servlet-name>
         <url-pattern>/actividadesInfo</url-pattern>
@@ -50,6 +63,10 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
+<<<<<<< HEAD
         <welcome-file>login.jsp</welcome-file>
+=======
+        <welcome-file>comprarCuponeraModal.jsp</welcome-file>
+>>>>>>> a529be1330cca3d5a4e583064cff8b28e12ba0dd
     </welcome-file-list>
 </web-app>
