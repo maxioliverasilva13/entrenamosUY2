@@ -1,10 +1,15 @@
 
+<<<<<<< HEAD
 <%@page import="util.BlobToImage"%>
 <%@page import="Usuario.dtos.UsuarioDTO"%>
+=======
+<%@page import="Cuponera.DtCuponera"%>
+>>>>>>> a529be1330cca3d5a4e583064cff8b28e12ba0dd
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page='../imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
+<<<<<<< HEAD
 
 <script>
     const toggleSidebar = () => {
@@ -35,7 +40,19 @@
     UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
     boolean hasUser = userInfo != null;
     BlobToImage bltimg = new BlobToImage();
-
+    
+    String openModalstr = (String) request.getAttribute("open");
+    Boolean arr = new Boolean(openModalstr);
+    boolean openCuponeraModal = false;
+    if (arr.equals(true)) {
+        openCuponeraModal = true;
+    }
+    System.out.println(openModalstr + "dfdf");
+    
+    DtCuponera cuponeraInfo = null;
+    if (request.getAttribute("cuponera")!= null) {
+        cuponeraInfo=(DtCuponera)request.getAttribute("cuponera");
+    }
 %>
 
 <!DOCTYPE html>
@@ -92,7 +109,7 @@
                 <a href="Inicio" class="text-white cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "index" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Inicio</a> 
                 <a href="actividadesInfo" class=" cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "actividades" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Actividades</a>
                 <a class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Clases</a>
-                <a class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Cuponeras</a>
+                <a href="listarCuponeras?openModal=true" class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Cuponeras</a>
             </ul>
         </div>
         <%-- Login icon --%>
@@ -181,7 +198,7 @@
                 <a href="Inicio" class="text-white w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl ${param.path == "index" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Inicio</a> 
                 <a href="actividadesInfo" class=" cursor-pointer w-full text-base font-normal py-2 px-4 rounded-xl ${param.path == "actividades" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Actividades</a>
                 <a class="text-[#D1D5DB] w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl">Clases</a>
-                <a class="text-[#D1D5DB] w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl">Cuponeras</a>
+                <a href="listarCuponeras?openModal=true" class="text-[#D1D5DB] w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl">Cuponeras</a>
             </ul>
 
         </div>

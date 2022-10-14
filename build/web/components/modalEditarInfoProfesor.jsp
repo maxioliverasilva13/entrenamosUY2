@@ -18,9 +18,9 @@
     <body class="w-screen h-screen flex items-start flex-col justify-start ">
         <div class="h-full w-full bg-[#6B7280] opacity-60 flex justify-center items-center">
             <div class="w-[681px] h-[903px] rounded-[10px] bg-[#FFFFFF] shadow-lg">           
-                <div class="flex flex-row items-center justify-center content-center  py-[16px]">
+                <div class="flex flex-row items-center justify-center content-center  py-[16px] relative">
                     <p class="h-[24px] w-auto text-[#000000] text-[24px] font-medium px-[176px]">Editar Información</p>
-                    <button class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full -top-3 -right-3">
+                    <button class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full -top-3 -right-3 absolute">
                     <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
