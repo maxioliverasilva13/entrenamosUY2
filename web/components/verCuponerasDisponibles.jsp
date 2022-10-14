@@ -31,7 +31,7 @@
                 <%-- item --%>
                 
                 <% 
-                for(int i = 0; i <= 11; i++) {
+                for(int i = 0; i <= 4; i++) {
                 %> 
                 <div class="w-full h-[108px] min-h-[108px] p-4 flex flex-col items-center justify-start border-b border-gray-300">
                     <div class="flex-grow w-full h-auto flex flex-row items-center justify-between">

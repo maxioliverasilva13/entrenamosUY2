@@ -34,7 +34,11 @@
             </div>
 
             <div class="flex flex-col sm:justify-between border container h-max shadow sm:overflow-hidden rounded-2xl lg:flex-row bg-gray-50 flex-wrap mx-auto">
+<<<<<<< HEAD
                 <div class="flex flex-col w-auto px-6 py-4 h-max max-w-full overflow-hidden">
+=======
+                <div class="flex flex-col w-auto px-6 py-4 h-max">
+>>>>>>> 35ed0bb1560bd81698726ce03d1766e60d2455f8
                     <div class="flex py-2 items-center">
                         <svg class="mx-4" width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 5C12 7.20914 10.2091 9 8 9C5.79086 9 4 7.20914 4 5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5Z" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -46,7 +50,11 @@
                         <svg class="mx-4" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 4L8.8906 9.2604C9.5624 9.70827 10.4376 9.70827 11.1094 9.2604L19 4M3 15H17C18.1046 15 19 14.1046 19 13V3C19 1.89543 18.1046 1 17 1H3C1.89543 1 1 1.89543 1 3V13C1 14.1046 1.89543 15 3 15Z" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
+<<<<<<< HEAD
                         <p class="font-[Inter] text-base text-gray-500 max-w-full truncate">ricardo.cooper@example.com</p>
+=======
+                        <p class="font-[Inter] text-base text-gray-500">ricardo.cooper@example.com</p>
+>>>>>>> 35ed0bb1560bd81698726ce03d1766e60d2455f8
                     </div>
                     <div class="flex py-2 items-center">
                         <svg class="mx-4" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
