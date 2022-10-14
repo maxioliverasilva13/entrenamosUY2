@@ -4,6 +4,7 @@
     Author     : mandi
 --%>
 
+<%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="Actividad.dtos.ActividadDTO"%>
@@ -14,6 +15,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <% 
+    
+    String modalEinfoIsOpen = (String) request.getParameter("modalEinfoIsOpen");
+    boolean openEditarInfoModal = modalEinfoIsOpen != null ? modalEinfoIsOpen.equals("true") : false;
+
     int cantSeguidores = (int)request.getAttribute("cantSeguidores");
     int cantSeguidos = (int)request.getAttribute("cantSeguidos");
 
@@ -27,9 +32,12 @@
     String biografia = (String)request.getAttribute("biografia");
     String descripcion = (String)request.getAttribute("descripcion");
     
-    List<ActividadDTO> listAct = new ArrayList<>();
+    int idConsultado = (int)request.getAttribute("idConsultado");
+
+    
+    HashMap<Integer, ActividadDTO> listAct = new HashMap<>();
     try {
-        listAct = (List<ActividadDTO>)request.getAttribute("actividades");
+        listAct = (HashMap<Integer, ActividadDTO>)request.getAttribute("actividades");
     } catch (Exception e) {
         System.out.println(e.getMessage());
     }
@@ -46,11 +54,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
     </head>
     <body class="w-screen h-full flex flex-col sm:items-start sm:justify-start">
-        <%--  COMENTADO PORQUE EL HEADER AÚN NO ES RESPONSIVE.
         <jsp:include page='../components/header.jsp' >
             <jsp:param name="path" value="perfilProfesor" />
         </jsp:include>
-        --%>
         
         <div class="flex flex-col lg:flex-row h-max p-6 md:p-8 gap-x-8 w-screen md:flex-nowrap flex-wrap">
             <div class="flex flex-col items-center h-max">
@@ -114,9 +120,13 @@
 
             <%-- MODIFY INFO SECTION --%>
             <div class="mx-auto flex flex-col w-2/6 min-w-max h-max mt-2 lg:mt-0 gap-y-5">
-                    <button class="font-[Inter] font-medium bg-[#DFD9A4] hover:bg-[#EBE5B5] text-black p-4 rounded-md">
+                <a href="verPerfil?&userID=<%= idConsultado %>&modalEinfoIsOpen=true" class="font-[Inter] font-medium bg-[#DFD9A4] hover:bg-[#EBE5B5] text-black p-4 rounded-md text-center">
                     Editar Información
-                </button>
+                </a>
+                
+                <%-- <button id="editarInfo" type="submit" class="font-[Inter] font-medium bg-[#DFD9A4] hover:bg-[#EBE5B5] text-black p-4 rounded-md" onclick="">
+                    Editar Información
+                </button> --%>
                 <button class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white p-4 rounded-md">
                     Cambiar Foto de Perfil
                 </button>
@@ -125,14 +135,12 @@
                 </button>
 
             </div>
-
-
         </div>
 
         <div class="flex flex-col lg:flex-row gap-8 p-6 md:p-8 w-full">
             <div class="flex lg:flex-col gap-8 mx-auto flex-wrap justify-center">
-                <textarea id="biografia" rows="8" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo biografía!"><%=biografia%></textarea>
-                <textarea id="descripcion" rows="12" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo descripcion!"><%=descripcion%></textarea>
+                <textarea readonly id="biografia" rows="8" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo biografía!"><%=biografia%></textarea>
+                <textarea readonly id="descripcion" rows="12" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo descripcion!"><%=descripcion%></textarea>
             </div>
 
             <div class="overflow-x-auto relative shadow-md sm:rounded-lg h-max w-full">
@@ -157,23 +165,24 @@
                         
                     <%-- ForEach Actividades --%>
                     <%
-                        for (ActividadDTO item : listAct) {
-                        System.out.println(listAct.size());
+                            for (HashMap.Entry<Integer, ActividadDTO> en : listAct.entrySet()) {
+                            Integer key = en.getKey();
+                            ActividadDTO val = en.getValue();
                     %>
                         <tr class="bg-white border-b ">
                             <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
-                                <%=item.getNombre()%>
+                                <%=val.getNombre()%>
                             </th>
                             <td class="py-4 px-6">
-                                <%=item.getFechaRegistro()%>
+                                <%=val.getFechaRegistro()%>
                             </td>
                             <td class="py-4 px-6">
-                                <%=item.getDuracion()%>
+                                <%=val.getDuracion()%>
                             </td>
                             <td class="py-4 px-6">
                                 <%-- Badge Aceptada --%>
                                 <%
-                                        if( item.getEstado().equals("Aceptada") ){
+                                        if( val.getEstado().equals("Aceptada") ){
                                 %>
                                         <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
                                             Aceptada
@@ -184,7 +193,7 @@
 
                                 <%-- Badge Ingresada --%>
                                 <%
-                                        if( item.getEstado().equals("Ingresada") ){
+                                        if( val.getEstado().equals("Ingresada") ){
                                 %>
                                         <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-yellow-200 dark:text-yellow-900">
                                             Ingresada
@@ -195,7 +204,7 @@
 
                                 <%-- Badge Rechazada --%>
                                 <%
-                                        if( item.getEstado().equals("Rechazada") ){
+                                        if( val.getEstado().equals("Rechazada") ){
                                 %>
                                         <span class="bg-red-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-red-200 dark:text-red-900">
                                             Rechazada
@@ -212,17 +221,22 @@
                 </table>
             </div>
         </div>
-        
-        <%-- 
-        <jsp:include page='../components/comprarCuponeraModal.jsp' >
-            <jsp:param name="path" value="index" />
-        </jsp:include>       
-        --%>
+        <%
+            if(openEditarInfoModal){
+        %>
+                <jsp:include page='editarInfoProfesorModal.jsp' >
+                    <jsp:param name="path" value="index" />
+                    <jsp:param name="usrIdConsultado" value="<%= idConsultado %>" />
+                </jsp:include>
+        <%
+            }
+        %>
              
-        <%-- 
-            <jsp:include page='../components/editarInfoProfesorModal.jsp' >
-                <jsp:param name="path" value="index" />
-            </jsp:include>       
+        <%--
+        <jsp:include page='cambiarFotoProfesorModal.jsp' >
+            <jsp:param name="path" value="index" />
+            <jsp:param name="usrIdConsultado" value="<%= idConsultado %>" />
+        </jsp:include>       
         --%>
     </body>
 </html>
