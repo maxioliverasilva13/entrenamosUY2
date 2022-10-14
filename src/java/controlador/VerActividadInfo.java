@@ -10,6 +10,8 @@ import Actividad.dtos.ActividadDetalleDTO;
 import Clase.ClaseBO;
 import Clase.ClaseDao;
 import Clase.DtClase;
+import Cuponera.CuponeraBo;
+import Cuponera.DtCuponera;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -41,12 +43,19 @@ public class VerActividadInfo extends HttpServlet {
         String modalOpen = request.getParameter("modalOpen");
         String claseId = request.getParameter("claseId");
         String verInfoPagoOpen = request.getParameter("verInfoPago");
+        String cupId = request.getParameter("cupId");
 
         try {
             if (claseId != null) {
                 ClaseBO clasebo = new ClaseBO();
                 DtClase claseInfo = clasebo.consultarClase(Integer.parseInt(claseId));
                 request.setAttribute("selectedClaseInfo", claseInfo);
+            }
+            
+            if (cupId != null) {
+                CuponeraBo cupBO = new CuponeraBo();
+                DtCuponera cupinfo = cupBO.consultarCuponera(Integer.parseInt(cupId));
+                request.setAttribute("selectedCuponeraInfo", cupinfo);
             }
 
             if (actID == null || actID.equals("")) {

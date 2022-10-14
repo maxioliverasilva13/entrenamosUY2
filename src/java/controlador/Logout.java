@@ -1,3 +1,5 @@
+package controlador;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
@@ -59,6 +61,7 @@ public class Logout extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         session.removeAttribute("currentSessionUser");
+        session.removeAttribute("typeOfUser");
         request.getRequestDispatcher("Inicio").forward(request, response);
     }
 

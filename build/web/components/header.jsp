@@ -84,7 +84,7 @@
         }
 
     </style>
-    <header id="desktopHeader" class="w-screen h-16 bg-[#1F2937] flex flex-row items-center justify-between overflow-y-visible md:px-6 px-2 max-w-full overflow-x-hidden enterHeader">
+    <header id="desktopHeader" class="w-screen overflow-hidden h-16 bg-[#1F2937] flex flex-row items-center justify-between overflow-y-visible md:px-6 px-2 max-w-full overflow-x-hidden enterHeader">
 
         <div class="w-auto h-full flex flex-row items-center justify-start gap-x-6">
             <p class="text-white font-semibold text-xl">Entrenamos<span class="bg-[#E5E2C9] py-1 px-2 rounded-xs mx-1 rounded-md">UY</span></p>
@@ -98,6 +98,7 @@
         <%-- Login icon --%>
         <div class="flex flex-row items-center justify-between gap-x-32">
             <%-- Search --%>
+            <%--
             <div class="w-96 h-10 lg:flex hidden bg-white rounded-md flex-row items-center overflow-hidden justify-center border border-gray-300">
                 <div class="flex-grow w-full h-full bg-white px-4 py-1 flex items-center justify-start gap-x-2">
                     <i class="fa-solid mt-1 fa-magnifying-glass text-gray-400"></i>
@@ -116,6 +117,7 @@
                     </div>
                 </div>
             </div>
+            --%>
             <div class="w-auto h-auto flex flex-row items-center justify-start">
                 <i onclick="toggleSidebar()" class="fa-solid fa-bars text-xl md:opacity-0 md:mx-2 mx-4 text-white md:hidden order-2"></i>
                 <%                    if (hasUser) {
@@ -133,8 +135,8 @@
                 } else {
                 %>
                 <div class="flex flex-row items-center justify-center gap-x-4"> 
-                    <a href="login.jsp" class="bg-white py-2 px-3 text-base font-medium text-[#294557] rounded-md">Log In</a>
-                    <a href="signup.jsp" class="bg-[#E5E2C9] py-2 px-3 text-base font-medium text-[#294557] rounded-md">Sign Up</a>
+                    <a href="login.jsp" class="bg-white py-1 px-3 text-base font-medium text-[#294557] rounded-md">Log In</a>
+                    <a href="signup.jsp" class="bg-[#E5E2C9] py-1 px-3 text-base font-medium text-[#294557] rounded-md">Sign Up</a>
                 </div>
                 <%
                     }
@@ -167,8 +169,8 @@
                 } else {
                 %>
                 <div class="flex flex-row items-center justify-center gap-x-4"> 
-                    <a href="login.jsp" class="bg-white py-2 px-3 text-base font-medium text-[#294557] rounded-md">Log In</a>
-                    <a href="signup.jsp" class="bg-[#E5E2C9] py-2 px-3 text-base font-medium text-[#294557] rounded-md">Sign Up</a>
+                    <a href="login.jsp" class="bg-white py-1 px-3 text-base font-medium text-[#294557] rounded-md">Log In</a>
+                    <a href="signup.jsp" class="bg-[#E5E2C9] py-1 px-3 text-base font-medium text-[#294557] rounded-md">Sign Up</a>
                 </div>
                 <%
                     }

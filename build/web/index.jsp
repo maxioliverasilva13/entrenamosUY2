@@ -35,6 +35,11 @@
     } catch (Exception e) {
         System.out.println("Error");
     }
+    String nameOfUser = "Usuario";
+    UsuarioDTO userInfo = (UsuarioDTO)session.getAttribute("currentSessionUser");
+    if (userInfo != null) {
+        nameOfUser = userInfo.getNombre() + " " + userInfo.getApellido();
+    }
 %>
 
 <!DOCTYPE html>
@@ -77,7 +82,7 @@
 
             <main class="flex-grow w-full h-full flex flex-col items-start justify-start gap-y-1">
                 <div class="w-full h-auto p-2 bg-blue-50 flex flex-col items-start justify-start gap-y-1.5 rounded-md ">
-                    <p class="text-[#0F225E] text-xl font-semibold">Buenas tardes Usuario, esperamos que estes teniendo un buen dia! </p>
+                    <p class="text-[#0F225E] text-xl font-semibold">Buenas tardes <%=nameOfUser %>, esperamos que estes teniendo un buen dia! </p>
                     <p class="text-[#1E40AF] text-xl font-medium">Tenemos un monton de actividades y clases para ti !</p>
                 </div>
                 <p class="text-[#3A5A6E] font-medium lg:my-0 my-3 text-xl">Algunas Estadisticas Que Podrian Interesarte</p>
