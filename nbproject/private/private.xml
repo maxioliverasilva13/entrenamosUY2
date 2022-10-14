@@ -4,12 +4,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4b04e343c4c9ce4dc35e295448d36a7b7e7a1e58
             <file>file:/C:/Users/rodrigo/entrenamosUY2/web/verActividades.jsp</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/src/java/controlador/Login.java</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/src/java/controlador/SignUp.java</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/src/java/controlador/CrearActividad.java</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/web/signup.jsp</file>
+<<<<<<< HEAD
 =======
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/Profesor/perfilProfesorPropio.jsp</file>
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/components/verCuponerasDisponibles.jsp</file>
@@ -18,6 +22,8 @@
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/InfoCuponera.java</file>
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/Profesor/perfilProfesorAjeno.jsp</file>
 >>>>>>> fc7f0bbdae3b10ef6d1930c0ba2c8e6df615a0c2
+=======
+>>>>>>> 4b04e343c4c9ce4dc35e295448d36a7b7e7a1e58
         </group>
     </open-files>
 </project-private>
