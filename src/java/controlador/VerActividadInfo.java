@@ -10,6 +10,8 @@ import Actividad.dtos.ActividadDetalleDTO;
 import Clase.ClaseBO;
 import Clase.ClaseDao;
 import Clase.DtClase;
+import Cuponera.CuponeraBo;
+import Cuponera.DtCuponera;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -25,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "VerActividadInfo", urlPatterns = {"/verActividadInfo"})
 public class VerActividadInfo extends HttpServlet {
-
+    Boolean bool = new Boolean("true");
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,26 +43,38 @@ public class VerActividadInfo extends HttpServlet {
         String modalOpen = request.getParameter("modalOpen");
         String claseId = request.getParameter("claseId");
         String verInfoPagoOpen = request.getParameter("verInfoPago");
+        String cupId = request.getParameter("cupId");
 
-        if (claseId != null) {
-            ClaseBO clasebo = new ClaseBO();
-            DtClase claseInfo = clasebo.consultarClase(Integer.parseInt(claseId));
-            request.setAttribute("selectedClaseInfo", claseInfo);
-        }
+        try {
+            if (claseId != null) {
+                ClaseBO clasebo = new ClaseBO();
+                DtClase claseInfo = clasebo.consultarClase(Integer.parseInt(claseId));
+                request.setAttribute("selectedClaseInfo", claseInfo);
+            }
+            
+            if (cupId != null) {
+                CuponeraBo cupBO = new CuponeraBo();
+                DtCuponera cupinfo = cupBO.consultarCuponera(Integer.parseInt(cupId));
+                request.setAttribute("selectedCuponeraInfo", cupinfo);
+            }
 
-        if (actID == null || actID.equals("")) {
+            if (actID == null || actID.equals("")) {
+                response.sendRedirect("NotFound.jsp");
+            } else {
+                ActividadBO actBO = new ActividadBO();
+                ActividadDTO actInfo = actBO.consultarById(Integer.parseInt(actID));
+                request.setAttribute("actInfo", actInfo);
+                if (modalOpen != null) {
+                    request.setAttribute("modalIsOpen", modalOpen.equals("true") ? "true" : "false");
+                }
+                if (verInfoPagoOpen != null) {
+                    request.setAttribute("infoPagoModal", verInfoPagoOpen.equals("true") ? "true" : "false");
+                }
+                request.getRequestDispatcher("/actividadInfo.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             response.sendRedirect("NotFound.jsp");
-        } else {
-            ActividadBO actBO = new ActividadBO();
-            ActividadDTO actInfo = actBO.consultarById(Integer.parseInt(actID));
-            request.setAttribute("actInfo", actInfo);
-            if (modalOpen != null) {
-                request.setAttribute("modalIsOpen", modalOpen.equals("true") ? "true" : "false");
-            }
-            if (verInfoPagoOpen != null) {
-                request.setAttribute("infoPagoModal", verInfoPagoOpen.equals("true") ? "true" : "false");
-            }
-            request.getRequestDispatcher("/actividadInfo.jsp").forward(request, response);
         }
     }
 

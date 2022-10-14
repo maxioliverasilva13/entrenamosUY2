@@ -3,12 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/rodrigo/entrenamosUY2/web/verActividades.jsp</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/src/java/controlador/Login.java</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/src/java/controlador/SignUp.java</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/src/java/controlador/CrearActividad.java</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/rodrigo/entrenamosUY2/web/signup.jsp</file>
+=======
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/Profesor/perfilProfesorPropio.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/components/verCuponerasDisponibles.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/ListarCuponeras.java</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/components/header.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/InfoCuponera.java</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/Profesor/perfilProfesorAjeno.jsp</file>
+>>>>>>> fc7f0bbdae3b10ef6d1930c0ba2c8e6df615a0c2
         </group>
     </open-files>
 </project-private>

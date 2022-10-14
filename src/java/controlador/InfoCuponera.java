@@ -4,8 +4,15 @@
  */
 package controlador;
 
+import Cuponera.CuponeraBo;
+import Cuponera.DtCuponera;
+import CuponeraXActividad.DtCuponeraXActividad;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Integer.parseInt;
+import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,10 +21,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Maximiliano Olivera
+ * @author pedri
  */
-@WebServlet(name = "ProfesorPropioServlet", urlPatterns = {"/myProfileProfesor"})
-public class PerfilProfesorPropioServlet extends HttpServlet {
+@WebServlet(name = "InfoCuponera", urlPatterns = {"/InfoCuponera"})
+public class InfoCuponera extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,11 +35,42 @@ public class PerfilProfesorPropioServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        CuponeraBo cupo = new CuponeraBo();
+        int id =parseInt(request.getParameter("id"));
+        String nom = cupo.consultarCuponera(id).getNombre();
+        String des = cupo.consultarCuponera(id).getDescripcion();
+        Date  vig = cupo.consultarCuponera(id).getPeriodoVigencia();
+        int desc = cupo.consultarCuponera(id).getDescuento();
+        float precio = cupo.consultarCuponera(id).getPrecio();
+        List<DtCuponeraXActividad> cupxa = cupo.consultarCuponera(id).getCuponerasXActividad();
+        File foto = cupo.consultarCuponera(id).getImage();
+        
+        DtCuponera res = new DtCuponera(id, nom, des, vig, desc, precio, cupxa, foto);
+        
+        String openModal=request.getParameter("openModal");
+        System.out.println(openModal + "estfgg");
+        request.setAttribute("open", openModal);
+        request.setAttribute("infoCupo", res);
+        
+        request.getRequestDispatcher("/Inicio").forward(request, response);
+    }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        //request.setAttribute("nombre", "Maxi");
-        request.getRequestDispatcher("./Profesor/perfilProfesorPropio.jsp").forward(request, response);
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet InfoCuponera</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet InfoCuponera at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -44,11 +82,6 @@ public class PerfilProfesorPropioServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.

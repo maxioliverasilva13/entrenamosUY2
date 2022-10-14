@@ -4,6 +4,7 @@
     Author     : angel
 --%>
 
+<%@page import="Cuponera.DtCuponera"%>
 <%@page import="java.util.Random"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="Institucion.DtInstitucion"%>
@@ -31,21 +32,70 @@
     List<DtClase> clasesAct = infoAct.getClases();
     List<DtCuponeraXActividad> cuponerasXAct = infoAct.getCuponerasXActivdad();
     DtInstitucion instAct = infoAct.getInstitucion();
+    DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");
+    System.out.println("cupInfo is" + cupInfo);
 
 %>
 
 <%!
-    String getRandomColor() {
-        Random obj = new Random();
-        int rand_num = obj.nextInt(0xffffff + 1);
-        // format it as hexadecimal string and print
-        String colorCode = String.format("#%06x", rand_num);
-        String randomColor = colorCode;
-        return randomColor;
+    String[] listOfColors = {"#468990", "#299D91", "#FFF4B8", "#F98F37", "#DE3C31"};
+
+    public String formatName(Object x) {
+        String val = (String) x;
+        String[] myName = val.split(" ");
+        String acronym = "";
+        for (int i = 0; i < myName.length; i++) {
+            String s = myName[i];
+            acronym += s.charAt(0);
+        }
+        return acronym;
     }
 
+    public String getColor(int index) {
+        return listOfColors[index % 4];
+    }
 %>
 
+<script>
+    const handleGetItem = (itemId) => {
+        const url = '/entrenamosUY34//cuponeraById?cupId=' + itemId;
+        const cuponeraModal = document.getElementById("cuponeraInfoModal");
+        window.cuponeraInfo = "Loading";
+        cuponeraModal.style.cssText = "display: flex";
+        cuponeraModal.onload();
+        window.fetch(url).then((response) => {
+            return response.json();
+        }).then((data) => {
+            cuponeraModal.style.cssText = "display: flex";
+            window.cuponeraInfo = data;
+            cuponeraModal.onload();
+        }).catch((err) => {
+            console.log(err);
+            window.cuponeraInfo = "Error";
+        });
+    }
+
+    const handleGetClase = (itemId) => {
+        const url = '/entrenamosUY34//claseById?claseId=' + itemId;
+        const claseModal = document.getElementById("infoClaseModal");
+        if (window.claseInfo !== "Loading") {
+            window.claseInfo = "Loading";
+            claseModal.onload();
+
+            window.fetch(url).then((response) => {
+                return response.json();
+            }).then((data) => {
+                claseModal.style.cssText = "display: flex";
+                window.claseInfo = data;
+                claseModal.onload();
+            }).catch((err) => {
+                console.log(err);
+                window.claseInfo = "Error";
+            });
+        }
+
+    }
+</script>
 <!DOCTYPE html>
 <html>
     <head>
@@ -56,16 +106,7 @@
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="index" />
         </jsp:include>
-
-        <%            if (openClaseModalInfo) {
-        %> 
-        <jsp:include page='/components/infoClaseModal.jsp' >
-            <jsp:param name="path" value="index" />
-        </jsp:include>
-        <%
-            }
-        %>
-
+        
         <%
             if (openPagoModal) {
         %> 
@@ -75,6 +116,9 @@
         <%
             }
         %>
+
+        <jsp:include page='/components/selectedCuponeraInfo.jsp' />
+        <jsp:include page='/components/infoClaseModal.jsp' />
 
         <div class="w-full h-full flex-grow flex flex-col items-start justify-start px-20 my-8 gap-y-12">
             <div class="w-full h-[450px] flex flex-row items-center justify-between gap-x-20">
@@ -87,16 +131,17 @@
                     <p class="text-gray-900 text-xl font-medium pb-5 border-b w-full border-gray-300">Categorias</p>
 
                     <div class="w-full h-auto flex flex-row items-center justify-start gap-2 flex-wrap">
-
+                        <% int indexCat = 0; %>
                         <% for (DtCategoria cat : categoriasAct) {
                                 DtCategoria val = cat;
 
                         %>
-                        <div class="w-auto h-6 flex items-center justify-center px-4 gap-x-2 bg-red-300 rounded-md " style="background: <%=getRandomColor()%>">
+                        <div class="w-auto h-6 flex items-center justify-center px-4 gap-x-2 bg-red-300 rounded-md " style="background: <%=getColor(indexCat)%>">
                             <span class="w-2 h-2 bg-red-600 rounded-full"></span>
                             <p class="text-sm font-medium text-white"><%=cat.getNombre()%></p>
                         </div>
                         <%
+                                indexCat++;
                             }
                         %>
                     </div>
@@ -127,9 +172,9 @@
             <div class="w-full h-auto flex flex-row items-center justify-end h-10 my-2">
                 <p>Agregar</p>
             </div>
-            <div class="w-full h-full flex-grow max-h-full overflow-auto flex flex-row items-center justify-center gap-x-16">
+            <div class="w-full h-full min-h-[400px] flex-grow max-h-full overflow-auto flex flex-row items-start justify-center gap-x-16">
 
-                <div class="w-full flex-grow h-full rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start  overflow-hidden">
+                <div class="w-full flex-grow h-auto rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start  overflow-hidden">
                     <div class="w-full flex flex-row items-center justify-start h-12 bg-gray-50 border-b border-gray-300 px-6">
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Cuponeras</p>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Descripcion</p>
@@ -142,7 +187,7 @@
                     <% for (DtCuponeraXActividad cat : cuponerasXAct) {
                             DtCuponeraXActividad val = cat;
                     %>
-                    <div class="w-full flex flex-row items-center justify-start h-16 border-b border-gray-300 px-6">
+                    <a onclick="handleGetItem('<%=cat.getCuponera().getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-6">
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getNombre()%></p>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescripcion()%></p>
                         <p class="w-[20%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCantClases()%></p>
@@ -150,7 +195,7 @@
                         <div class="w-[15%] h-auto text-sm font-medium">
                             <p class="bg-green-100 w-fit h-auto text-green-800 rounded-xl py-0.5 px-3 ">Activa</p>
                         </div>
-                    </div>
+                    </a>
                     <%
                         }
                     %>
@@ -158,7 +203,7 @@
                 </div>
 
 
-                <div class="w-full flex-grow h-full rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start overflow-hidden">
+                <div class="w-full flex-grow h-auto rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start overflow-hidden">
                     <div class="w-full flex flex-row items-center justify-start h-12 bg-gray-50 border-b border-gray-300 px-6">
                         <p class="w-[20%] h-auto text-sm text-gray-500 font-medium">Clase</p>
                         <p class="w-[20%] h-auto text-sm text-gray-500 font-medium">Profesor</p>
@@ -171,7 +216,7 @@
 
                     <% for (DtClase clase : clasesAct) {
                     %>
-                    <a href="verActividadInfo?actId=<%=infoAct.getId()%>&modalOpen=true&claseId=<%=clase.getId()%>" class="w-full flex flex-row items-center justify-start h-16 border-b border-gray-300 px-6">
+                    <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-6">
                         <p class="w-[20%] h-auto tex%>')"t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
                         <p class="w-[20%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
                         <p class="w-[15%] h-auto text-sm text-gray-500 font-medium"><%=clase.getCapMinima()%></p>

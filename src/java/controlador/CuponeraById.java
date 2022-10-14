@@ -4,6 +4,9 @@
  */
 package controlador;
 
+import Cuponera.CuponeraBo;
+import Cuponera.DtCuponera;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,18 +15,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Usuario.IUsuarioBO;
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
-import Usuario.exceptions.UnauthorizedException;
-
-import javax.servlet.http.HttpSession;
 /**
  *
- * @author rodrigo
+ * @author Maximiliano Olivera
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "CuponeraById", urlPatterns = {"/cuponeraById"})
+public class CuponeraById extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +39,10 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");            
+            out.println("<title>Servlet CuponeraById</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CuponeraById at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,7 +60,19 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String cupId = request.getParameter("cupId");
+
+        if (cupId != null) {
+            CuponeraBo cupBO = new CuponeraBo();
+            DtCuponera cupinfo = cupBO.consultarCuponera(Integer.parseInt(cupId));
+            request.setAttribute("selectedCuponeraInfo", cupinfo);
+            PrintWriter out = response.getWriter();
+            String cuponeraJSON = new Gson().toJson(cupinfo);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(cuponeraJSON);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
     }
 
     /**
@@ -77,32 +86,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String email = (String)request.getParameter("email");
-                String password = request.getParameter("password");
-                
-                System.out.println(email);
-                System.out.println(password);
-                if(email == null || password == null){
-                    response.sendError(400, "Email o password invalida");
-                }
-                IUsuarioBO usuarioBo = new UsuarioBO();
-
-                try{
-                    UsuarioDTO user = usuarioBo.authenticarse(email, password);
-                    String typeofUser = usuarioBo.getTipoById(user.getId());
-                    HttpSession session = request.getSession(true);	    
-                    session.setAttribute("currentSessionUser",user);
-                    session.setAttribute("typeOfUser", typeofUser);
-                    response.sendRedirect("TestServelet");
-                    
-                }catch(UnauthorizedException e){
-                    request.setAttribute("status", "Correo o Contraseña incorrectos");
-                    request.getRequestDispatcher("/login.jsp").forward(request, response);
-                }
-                catch(Exception e){
-                    response.sendError(500, "Ha ocurrido un error inesperado");
-                    response.sendRedirect("login.jsp");
-                }
+        processRequest(request, response);
     }
 
     /**

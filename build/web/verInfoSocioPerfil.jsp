@@ -3,11 +3,41 @@
     Created on : 2 oct. 2022, 14:50:35
     Author     : pedri
 --%>
+<%@page import="java.util.HashMap"%>
+<%@page import="Cuponera.DtCuponera"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <jsp:include page='imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
 
+<%@ page import="util.BlobToImage" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<% 
+    int cantSeguidores = (int)request.getAttribute("cantSeguidores");
+    int cantSeguidos = (int)request.getAttribute("cantSeguidos");
+
+    String userType = (String)request.getAttribute("userType");
+    String nombre = (String)request.getAttribute("nombre");
+    String apellido = (String)request.getAttribute("apellido");
+    String correo = (String)request.getAttribute("correo");
+    String institucion = (String)request.getAttribute("institucion");
+    String fnacimiento = (String)request.getAttribute("fnacimiento");
+    String website = (String)request.getAttribute("website");
+    String biografia = (String)request.getAttribute("biografia");
+    String descripcion = (String)request.getAttribute("descripcion");
+    
+    BlobToImage btimg = new BlobToImage();
+    
+    HashMap<Integer, DtCuponera> listCups = new HashMap<>();
+    try {
+        listCups = (HashMap<Integer, DtCuponera>)request.getAttribute("cuponeras");
+    } catch (Exception e) {
+        System.out.println(e.getMessage());
+    }
+%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,15 +54,15 @@
              <div class="w-full h-[263px] flex flex-row items-stretch justify-between flex-grow">
                  <div class="w-auto h-full flex flex-col items-start justify-start content-start ">
                     <img src="https://cdn.shopify.com/s/files/1/0229/0839/files/bancos_de_imagenes_gratis.jpg?v=1630420628&width=1024" alt="Girl in a jacket" class="rounded-[100000px] w-[187px] h-[192px] object-cover"/>
-                    <div class="text-[#595E67] text-[48px] font-normal gap-y-[25px] px-[33px]">Pepe</div>
+                    <div class="text-[#595E67] text-[48px] font-normal gap-y-[25px] px-[33px]"><%= nombre %></div>
                     <div class="text-[#959EB0] text-[24px] font-normal gap-y-[14px] px-[61px]">Socio</div>
                  </div>
                  <div class="w-[1083px] h-[263px] rounded-[20px] bg-[#F4F4F4] px-[28px] shadow-md flex flex-row ">
                      <div class="w-full h-full flex flex-col items-stretch justify-start gap-y-[27px] py-[24px]">
-                         <p class="text-[#6B7280] text-[14px] font-normal">Nombre y Apellido</p>
-                         <p class="text-[#6B7280] text-[14px] font-normal">Correo@correo.com</p>
+                         <p class="text-[#6B7280] text-[14px] font-normal"><%=nombre + " " +  apellido%></p>
+                         <p class="text-[#6B7280] text-[14px] font-normal"><%=correo%></p>
                          <p class="text-[#6B7280] text-[14px] font-normal">Institucion</p>
-                         <p class="text-[#6B7280] text-[14px] font-normal">Fecha de Nacimiento</p>
+                         <p class="text-[#6B7280] text-[14px] font-normal"><%=fnacimiento%></p>
                          <p class="text-[#6B7280] text-[14px] font-normal">www.miweb.com</p>
                      </div>
                      
@@ -40,11 +70,11 @@
                      <div class="w-full h-full flex flex-col justify-center items-end gap-y-[19px] ">
                         <div class="bg-[#FFFFFF] rounded-[8px] shadow-md h-[100px] w-[344px] flex flex-col justify-center items-start px-[16px] py-[20px]">
                             <p class="text-[14px] text-[#4C837A] font-medium">Seguidores</p>
-                            <p class="text-[30px] font-semibold text-gray-900">71,897</p>
+                            <p class="text-[30px] font-semibold text-gray-900"><%= cantSeguidores %></p>
                         </div>
                         <div class="bg-[#FFFFFF] rounded-[8px] shadow-md h-[100px] w-[344px] flex flex-col justify-center items-start px-[16px] py-[20px]">
                             <p class="text-[14px] text-[#4C837A] font-medium">Seguidos</p>
-                            <p class="text-[30px] font-semibold text-gray-900">1,250</p>
+                            <p class="text-[30px] font-semibold text-gray-900"><%= cantSeguidos %></p>
                         </div>
                      </div>
                  </div>
@@ -53,11 +83,6 @@
                      <button class="h-[57px] w-[306px]  bg-[#4F7994] text-[20px] font-medium rounded-[6px]">Cambiar Foto</button>
                      <button class="h-[57px] w-[306px]  bg-[#C56969] text-[20px] font-medium rounded-[6px]">Cerrar Sesion</button>
                  </div>
-                 
-                 
-                 
-                 
-                 
                  
              </div>
              <div class="w-full h-[582px] flex flex-row items-stretch justify-center gap-x-[96px]">
@@ -86,11 +111,24 @@
                      <div class="bg-[#DEDEDE] px-[24px] py-[12px]">
                          <p class="text-gray-500 text-[12px] font-medium">CUPONERAS</p>
                      </div>
-                     <div class="h-[72px] w-[403px] border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
-                        <img src="https://cdn.shopify.com/s/files/1/0229/0839/files/bancos_de_imagenes_gratis.jpg?v=1630420628&width=1024" alt="Girl in a jacket" class="rounded-full w-[40px] h-[40px] object-cover"/>
-                        <div class="text-gray-500 text-[12px] font-medium flex-grow h-full flex item-start justify-start flex-col">CLASES</div>
+                     
+                      
+                    <%-- ForEach Cuponeras --%>
+                    <%
+                        for (HashMap.Entry<Integer, DtCuponera> en : listCups.entrySet()) {
+                            Integer key = en.getKey();
+                            DtCuponera val = en.getValue();
+                    %>
+                    <div class="h-[72px] w-[403px] border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
+                        <%-- <img src="<%=btimg.getBase64StringImage(val.getImage())%>" alt="Cup Image" class="rounded-full w-[40px] h-[40px] object-cover"/> --%>
+                        <div class="text-gray-500 text-[12px] font-medium flex-grow h-full flex item-start justify-start flex-col">
+                            <%=val.getNombre()%>
+                        </div>
                         <button class="border border-gray-300 py-[1px] px-[10px] rounded-[14px] font-medium text-[14px] text-gray-700 shadow-sm">View</button>
-                     </div>
+                    </div>    
+                    <%
+                        }
+                    %>
                  </div>
              </div>
          </div>
