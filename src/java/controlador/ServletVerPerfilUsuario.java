@@ -6,6 +6,8 @@ package controlador;
 
 import Actividad.ActividadBO;
 import Actividad.dtos.ActividadDTO;
+import Cuponera.CuponeraBo;
+import Cuponera.DtCuponera;
 import Institucion.DtInstitucion;
 import Institucion.InstitucionBO;
 import Profesor.ProfesorBO;
@@ -16,6 +18,7 @@ import Usuario.UsuarioBO;
 import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -47,33 +50,49 @@ public class ServletVerPerfilUsuario extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //request.setAttribute("usrId", getRequestParameter(request, "usrId"));
-        int userId = Integer.parseInt(getRequestParameter(request, "usrId"));
-
+        
+        // ANDANDO    int userAconsultar = Integer.parseInt(getRequestParameter(request, "usrId"));
+        int userAconsultar = Integer.parseInt(request.getParameter("userID"));  //  A PRUEBA
+        
         InstitucionBO insBO = new InstitucionBO();
         ActividadBO actBO = new ActividadBO();
         UsuarioBO userBO = new UsuarioBO();
         ProfesorBO profBO = new ProfesorBO();
         SocioBO socBO = new SocioBO();
+        CuponeraBo cupBO = new CuponeraBo();
 
         HttpSession session = request.getSession(true);
-        UsuarioDTO userInfoToShow = null;
+        UsuarioDTO userInfoToShow = null; // Guarda la info del usuario a consultar. (trae el id del url que viene de los parametros del servlet)
         String userType;
         
         // Aqui ya se valida si el user no existe (dependiendo del id)
         try {
-            userType = userBO.getTipoById(userId);
+            userType = userBO.getTipoById(userAconsultar);
         } catch (Exception e) {
             response.sendRedirect("NotFound.jsp");
             return;
         }
         
         if (userType.equals("Profesor")) {
-            userInfoToShow = profBO.getProfesorById(userId); // USER_ID 52: Nicolas
+            userInfoToShow = profBO.getProfesorById(userAconsultar); // USER_ID 52: Nicolas
         } else if (userType.equals("Socio")) {
-            userInfoToShow = socBO.consultarSocio(userId);  // USER_ID 2: Manuel
+            userInfoToShow = socBO.consultarSocio(userAconsultar);  // USER_ID 2: Manuel
         }
-
+        
         UsuarioDTO loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
+        request.setAttribute("idConsultado", userAconsultar); // Para usar luego en el POST.
+        request.setAttribute("userDT", userInfoToShow);
+        
+        // Setteo atributo para saber si el loggUser actualmente sigue al usuario consultado.
+        boolean loggSigueAconsultado = false;
+        try {
+            loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), userAconsultar);
+            request.setAttribute("sigoAlConsultado", loggSigueAconsultado);
+        } catch (Exception e) {
+            System.out.println("ERROR CATCHED: " + e.getMessage());
+        }
+        
+        
         // Validar si es profesor o socio
         if (userInfoToShow instanceof ProfesorDTO) {
 
@@ -82,7 +101,16 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             List<DtInstitucion> list = dtProfesor.getInstituciones();
             DtInstitucion dtIns = list.get(0);
 
-            List<ActividadDTO> listAct = dtProfesor.getActividades();
+            
+            
+            HashMap<Integer, ActividadDTO> listAct = new HashMap<>();
+            
+            try {
+                listAct = actBO.listarActividadesByProfesor(userAconsultar);
+            } catch (Exception e) {
+                response.sendRedirect("NotFound.jsp");
+                return;
+            }
 
             request.setAttribute("cantSeguidores", dtProfesor.getCantSeguidores());
             request.setAttribute("cantSeguidos", dtProfesor.getCantSeguidos());
@@ -99,12 +127,17 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("actividades", listAct);
 
             // Validar si el perfil q va a consultar es el suyo o uno ajeno.
-            if (userId == loggedUser.getId()) {
-                // Es su propio perfil
-                System.out.println("si1");
-                request.getRequestDispatcher("Profesor/perfilProfesorPropio.jsp").forward(request, response);
-            } else {
-                System.out.println("si2");
+            
+            if (loggedUser != null){
+                if (userAconsultar == loggedUser.getId()) {
+                    // Es su propio perfil
+                    System.out.println("si1");
+                    request.getRequestDispatcher("Profesor/perfilProfesorPropio.jsp").forward(request, response);
+                } else {
+                    System.out.println("si2");
+                    request.getRequestDispatcher("Profesor/perfilProfesorAjeno.jsp").forward(request, response);
+                }
+            }else{
                 request.getRequestDispatcher("Profesor/perfilProfesorAjeno.jsp").forward(request, response);
             }
         }
@@ -112,11 +145,15 @@ public class ServletVerPerfilUsuario extends HttpServlet {
         if (userInfoToShow instanceof SocioDTO) {
             SocioDTO dtSocio = (SocioDTO) userInfoToShow;
 
-            int cantSeguidores = dtSocio.getCantSeguidores();
-            int cantSeguidos = dtSocio.getCantSeguidos();
-            String tipoUsuario = "Socio";
-
-            //List<ActividadDTO> listAct = dtSocio.getActividades();
+            HashMap<Integer, DtCuponera> listCuponeras = new HashMap<>();
+            
+            try {
+                listCuponeras = cupBO.listarCuponerasBySocio(userAconsultar);
+            } catch (Exception e) {
+                response.sendRedirect("NotFound.jsp");
+                return;
+            }
+            
             request.setAttribute("cantSeguidores", dtSocio.getCantSeguidores());
             request.setAttribute("cantSeguidos", dtSocio.getCantSeguidos());
 
@@ -126,15 +163,50 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("correo", dtSocio.getEmail());
             //request.setAttribute("institucion", dtIns.getNombre());
             request.setAttribute("fnacimiento", dtSocio.getNacimiento().toString());
-            //request.setAttribute("website", dtSocio.getLinkSitioWeb());
+            //  SOCIO NO TIENE WEBSITE ???  request.setAttribute("website", dtSocio.getLinkSitioWeb());
             //request.setAttribute("biografia", dtSocio.getBiografia());
             //request.setAttribute("descripcion", dtSocio.getdescripcionGeneral());
             //request.setAttribute("actividades", listAct);
+            //request.setAttribute("clases", listClases);
+            request.setAttribute("cuponeras", listCuponeras);
 
             request.getRequestDispatcher("verInfoSocioPerfil.jsp").forward(request, response);
 
         }
     }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            doGet(request, response);
+
+            UsuarioBO userBO = new UsuarioBO();
+            HttpSession session = request.getSession(true);
+            UsuarioDTO loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
+            
+            int idConsultado = (int)request.getAttribute("idConsultado");
+            boolean sigoAconsultado = (boolean)request.getAttribute("sigoAlConsultado");
+            
+            if (!sigoAconsultado){
+                userBO.seguirAUsuario(loggedUser.getId(), idConsultado);
+                request.setAttribute("sigoAlConsultado", true);
+            }else{
+                try {
+                    userBO.dejarSeguirUsuario(loggedUser.getId(), idConsultado);
+                    System.out.println("Ya lo seguias, lo has dejado de seguir!");
+                    request.setAttribute("sigoAlConsultado", false);
+                } catch (Exception e) {
+                    System.out.println("Error:" + e.getMessage());
+                }
+            }
+            
+            //doGet(request, response);
+        } catch (Exception e) {
+            System.out.println("ERROOOR:" + e.getMessage());
+            response.sendRedirect("NotFound.jsp");
+        }
+    }
+    
+    
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
