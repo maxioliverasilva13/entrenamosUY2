@@ -123,8 +123,9 @@ public class SignUp extends HttpServlet {
         if(filePart.getSize() > 0){
             BlobToImage blobToImg = new BlobToImage();
             fileContent = filePart.getInputStream();
-            byte[] bytes = fileContent.readAllBytes();
-            avatar = blobToImg.writeBytesToFile(nickname, bytes);
+            byte[] targetArray = new byte[fileContent.available()];
+            // byte[] bytes = fileContent.readAllBytes();
+            avatar = blobToImg.writeBytesToFile(nickname, targetArray);
         }
         IUsuarioBO usuarioBo = new UsuarioBO();
         try{

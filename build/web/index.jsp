@@ -31,7 +31,7 @@
     loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
     
     // Id del user q quiero consultar
-    int usrId = 52;
+    int usrId = 4;
     
     try {
         instituciones = (HashMap<Integer, DtInstitucion>) request.getAttribute("instituciones");
@@ -54,12 +54,9 @@
     </head>
     <body class="w-screen h-screen flex items-start flex-col justify-start ">
 
-        <jsp:include page='/components/header.jsp' >
-            <jsp:param name="path" value="index" />
-        </jsp:include>
 
         <a href="verPerfil?&userID=<%=usrId %>"> Ver Perfil</a>
-        <div class="w-full h-full lg:flex-row flex-col flex-grow px-8 py-6 max-h-full overflow-auto flex items-center justify-between gap-x-8">
+        <div class="w-full h-full lg:flex-row  flex-col flex-grow px-8 py-6 max-h-full overflow-auto flex items-center justify-between gap-x-8">
             <aside class="lg:w-96 w-full lg:h-full h-auto min-h-[300px] border max-h-full overflow-auto lg:mb-0 mb-4 border-gray-300 rounded rounded-3xl bg-white shadow-md flex flex-col items-start justify-start">
                 <span class="w-full h-auto px-4 py-2 bg-[#DEDEDE] text-[#6B7280] text-left">Instituciones</span>
                 <ul class="w-full h-auto flex flex-col items-start justify-start">

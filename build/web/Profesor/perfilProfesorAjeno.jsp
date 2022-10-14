@@ -54,11 +54,6 @@
     </head>
     <body class="w-screen h-full flex flex-col sm:items-start sm:justify-start">
         
-        <jsp:include page='../components/header.jsp' >
-            <jsp:param name="path" value="perfilProfesor" />
-        </jsp:include>
-        
-        
         <div class="flex flex-col lg:flex-row h-max p-6 md:p-8 gap-x-8 w-screen md:flex-nowrap flex-wrap">
             <div class="flex flex-col items-center h-max">
                 <img class="rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Imagen Profesor"/>

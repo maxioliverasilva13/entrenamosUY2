@@ -5,7 +5,8 @@
         <group>
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/Profesor/perfilProfesorPropio.jsp</file>
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/InfoCuponera.java</file>
-            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/ServletVerPerfilUsuario.java</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/util/JSONConverter.java</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/util/BlobToImage.java</file>
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/SignUp.java</file>
         </group>
     </open-files>
