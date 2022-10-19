@@ -4,6 +4,8 @@
     Author     : mandi
 --%>
 
+<%@page import="util.BlobToImage"%>
+<%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -15,14 +17,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <% 
-    
-    String modalEinfoIsOpen = (String) request.getParameter("modalEinfoIsOpen");
-    boolean openEditarInfoModal = modalEinfoIsOpen != null ? modalEinfoIsOpen.equals("true") : false;
 
     int cantSeguidores = (int)request.getAttribute("cantSeguidores");
     int cantSeguidos = (int)request.getAttribute("cantSeguidos");
 
-    String userType = (String)request.getAttribute("userType");
+    UsuarioDTO userDT = (UsuarioDTO)request.getAttribute("userDT");
     String nombre = (String)request.getAttribute("nombre");
     String apellido = (String)request.getAttribute("apellido");
     String correo = (String)request.getAttribute("correo");
@@ -35,6 +34,11 @@
     int idConsultado = (int)request.getAttribute("idConsultado");
 
     
+    BlobToImage btimg = new BlobToImage();
+    
+    byte[] imageBlob = (byte[])request.getAttribute("imagen");
+    
+    
     HashMap<Integer, ActividadDTO> listAct = new HashMap<>();
     try {
         listAct = (HashMap<Integer, ActividadDTO>)request.getAttribute("actividades");
@@ -43,6 +47,12 @@
     }
 %>
 
+<script><%-- INICIO NUEVO --%>
+    const handleEditInfo = () => {
+        const editarInfoModal = document.getElementById("editarInfoProfeModal");
+        editarInfoModal.style.cssText = "display: flex";
+    };
+</script> <%-- FIN NUEVO --%>
 <!DOCTYPE html>
 <html class="h-full">
     <head>
@@ -54,13 +64,13 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
     </head>
     <body class="w-screen h-full flex flex-col sm:items-start sm:justify-start">
-        <jsp:include page='../components/header.jsp' >
+        <%-- <jsp:include page='../components/header.jsp' >
             <jsp:param name="path" value="perfilProfesor" />
-        </jsp:include>
-        
+        </jsp:include> --%>
+
         <div class="flex flex-col lg:flex-row h-max p-6 md:p-8 gap-x-8 w-screen md:flex-nowrap flex-wrap">
             <div class="flex flex-col items-center h-max">
-                <img class="rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Imagen Profesor"/>
+                <img class="rounded-full w-[180px] h-[180px] max-h-[180px] max-w-[180px] object-cover" src="<%=btimg.getBase64StringImage(imageBlob)%>" alt="Imagen Profesor"/>
                 <p class="text-[#595E67] text-5xl"><%=nombre%></p>
                 <p class="text-[#959EB0] text-2xl">Profesor</p>
             </div>
@@ -119,20 +129,16 @@
 
 
             <%-- MODIFY INFO SECTION --%>
-            <div class="mx-auto flex flex-col w-2/6 min-w-max h-max mt-2 lg:mt-0 gap-y-5">
-                <a href="verPerfil?&userID=<%= idConsultado %>&modalEinfoIsOpen=true" class="font-[Inter] font-medium bg-[#DFD9A4] hover:bg-[#EBE5B5] text-black p-4 rounded-md text-center">
+            <div class="mx-auto flex flex-col w-2/6 min-w-max h-max mt-6 lg:mt-4 gap-y-5">
+                <button onclick="handleEditInfo()" class="font-[Inter] font-medium bg-[#DFD9A4] hover:bg-[#EBE5B5] text-black p-4 rounded-md text-center">
                     Editar Información
-                </a>
-                
-                <%-- <button id="editarInfo" type="submit" class="font-[Inter] font-medium bg-[#DFD9A4] hover:bg-[#EBE5B5] text-black p-4 rounded-md" onclick="">
-                    Editar Información
-                </button> --%>
-                <button class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white p-4 rounded-md">
+                </button>
+                <%--<button class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white p-4 rounded-md">
                     Cambiar Foto de Perfil
-                </button>
-                <button class="font-[Inter] font-medium bg-[#C56969] hover:bg-[#F38282] text-white p-4 rounded-md" onclick="">
+                </button> --%>
+                <a href="logout" class="text-center font-[Inter] font-medium bg-[#C56969] hover:bg-[#F38282] text-white p-4 rounded-md" onclick="">
                     Cerrar Sesión
-                </button>
+                </a>
 
             </div>
         </div>
@@ -221,16 +227,22 @@
                 </table>
             </div>
         </div>
-        <%
-            if(openEditarInfoModal){
-        %>
-                <jsp:include page='editarInfoProfesorModal.jsp' >
-                    <jsp:param name="path" value="index" />
-                    <jsp:param name="usrIdConsultado" value="<%= idConsultado %>" />
-                </jsp:include>
-        <%
-            }
-        %>
+
+        <jsp:include page='editarInfoProfesorModal.jsp' >
+            <jsp:param name="path" value="index" />
+            <jsp:param name="usrIdConsultado" value="<%= idConsultado %>" />
+            <jsp:param name="nickname" value="<%= userDT.getNickname() %>" />
+            <jsp:param name="email" value="<%= userDT.getEmail() %>" />
+            <jsp:param name="institucion" value="<%= institucion %>" />
+            <jsp:param name="name" value="<%= nombre %>" />
+            <jsp:param name="lastname" value="<%= apellido %>" />
+            <jsp:param name="fnacimiento" value="<%= userDT.getNacimiento() %>" />
+            <jsp:param name="website" value="<%= website %>" />
+            <jsp:param name="biografia" value="<%= biografia %>" />
+            <jsp:param name="description" value="<%= descripcion %>" />
+            <jsp:param name="utype" value="<%= userDT.getType() %>" />
+        </jsp:include>
+            <%-- <jsp:param name="password" value="<%= idConsultado %>" /> --%>
              
         <%--
         <jsp:include page='cambiarFotoProfesorModal.jsp' >
