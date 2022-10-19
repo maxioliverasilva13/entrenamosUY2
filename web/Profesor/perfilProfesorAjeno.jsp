@@ -3,6 +3,7 @@
     Created on : 30 set. 2022, 12:14:44
     Author     : mandi
 --%>
+<%@page import="util.BlobToImage"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -16,26 +17,40 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<% 
-    int cantSeguidores = (int)request.getAttribute("cantSeguidores");
-    int cantSeguidos = (int)request.getAttribute("cantSeguidos");
+<%
+    int cantSeguidores = (int) request.getAttribute("cantSeguidores");
+    int cantSeguidos = (int) request.getAttribute("cantSeguidos");
 
-    String userType = (String)request.getAttribute("userType");
-    String nombre = (String)request.getAttribute("nombre");
-    String apellido = (String)request.getAttribute("apellido");
-    String correo = (String)request.getAttribute("correo");
-    String institucion = (String)request.getAttribute("institucion");
-    String fnacimiento = (String)request.getAttribute("fnacimiento");
-    String website = (String)request.getAttribute("website");
-    String biografia = (String)request.getAttribute("biografia");
-    String descripcion = (String)request.getAttribute("descripcion");
-   
-    int idConsultado = (int)request.getAttribute("idConsultado");
-    boolean seguido = (boolean)request.getAttribute("sigoAlConsultado");
+    String userType = (String) request.getAttribute("userType");
+    String nombre = (String) request.getAttribute("nombre");
+    String apellido = (String) request.getAttribute("apellido");
+    String correo = (String) request.getAttribute("correo");
+    String institucion = (String) request.getAttribute("institucion");
+    String fnacimiento = (String) request.getAttribute("fnacimiento");
+    String website = (String) request.getAttribute("website");
+    String biografia = (String) request.getAttribute("biografia");
+    String descripcion = (String) request.getAttribute("descripcion");
+
+    int idConsultado = (int) request.getAttribute("idConsultado");
+
+    
+    BlobToImage btimg = new BlobToImage();
+    
+    byte[] imageBlob = (byte[])request.getAttribute("imagen");
+    
+    boolean sigoAlConsultado = false;
+    boolean userNotLogged = false;
+    if (request.getAttribute("sigoAlConsultado") != null){
+        sigoAlConsultado = (boolean)request.getAttribute("sigoAlConsultado");
+    }
+    
+    if (request.getAttribute("userNotLogged") != null){
+        userNotLogged = (boolean)request.getAttribute("userNotLogged");
+    }
     
     HashMap<Integer, ActividadDTO> listAct = new HashMap<>();
     try {
-        listAct = (HashMap<Integer, ActividadDTO>)request.getAttribute("actividades");
+        listAct = (HashMap<Integer, ActividadDTO>) request.getAttribute("actividades");
     } catch (Exception e) {
         System.out.println(e.getMessage());
     }
@@ -53,10 +68,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
     </head>
     <body class="w-screen h-full flex flex-col sm:items-start sm:justify-start">
-        
+
         <div class="flex flex-col lg:flex-row h-max p-6 md:p-8 gap-x-8 w-screen md:flex-nowrap flex-wrap">
             <div class="flex flex-col items-center h-max">
-                <img class="rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Imagen Profesor"/>
+                <img class="rounded-full w-[180px] h-[180px] object-cover" src="<%=btimg.getBase64StringImage(imageBlob)%>" alt="Imagen Profesor"/>
                 <p class="text-[#595E67] text-5xl"><%=nombre%></p>
                 <p class="text-[#959EB0] text-2xl">Profesor</p>
             </div>
@@ -68,7 +83,7 @@
                         <path d="M12 5C12 7.20914 10.2091 9 8 9C5.79086 9 4 7.20914 4 5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5Z" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M8 12C4.13401 12 1 15.134 1 19H15C15 15.134 11.866 12 8 12Z" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <p class="font-[Inter] text-base text-gray-500"><%=nombre + " " +  apellido%></p>
+                        <p class="font-[Inter] text-base text-gray-500"><%=nombre + " " + apellido%></p>
                     </div>
                     <div class="flex py-2 items-center">
                         <svg class="mx-4" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -120,23 +135,37 @@
                     <p class="text-[#6B7280] text-4xl font-[Inter] font-medium">Last Online</p>
                     <p class="text-7xl text-[#3A5A6F] font-[Inter] font-extrabold">24/7</p>
                 </div>
-                <form onsubmit="handleSubmit(event);" method="POST">
-                <%
-                    if (!seguido){
-                %>
-                    <button type="submit" class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white mt-8 p-4 rounded-md w-full">
-                        Follow
-                    </button>
-                <%
-                    }else{
-                %>
+                <form action="SeguirUsuario" method="post">
+                    <input hidden type="text" name="idConsultado" value="<%= idConsultado %>"/>
+                    <input hidden type="text" name="userId" value="${param.usrIdConsultado}"/>
+                    
+                    
+                    <%
+                    //Si no hay sesion (loggedUser), no le muestro el boton de follow. (Otra opción seria si mostrarlo, pero redirigirlo al login).
+                    if (!userNotLogged){
+                        if (sigoAlConsultado){
+                    %>
                     <button type="submit" class="font-[Inter] font-medium bg-red-500 hover:bg-red-400 text-white mt-8 p-4 rounded-md w-full">
                         Unfollow
                     </button>
-                <%
-                    }
-                %>
                     
+                    <%
+                    }
+                    %>
+                    
+                    
+                    <%
+                        if (!sigoAlConsultado){
+                    %>    
+                    
+                    <button type="submit" class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white mt-8 p-4 rounded-md w-full">
+                        Follow
+                    </button>
+                    
+                    <%
+                        }
+                    }
+                    %>
                 </form>
             </div>
 
@@ -168,57 +197,57 @@
                         </tr>
                     </thead>
                     <tbody>
-                      <%-- ForEach Actividades --%>
+                        <%-- ForEach Actividades --%>
                         <%
                             for (HashMap.Entry<Integer, ActividadDTO> en : listAct.entrySet()) {
-                            Integer key = en.getKey();
-                            ActividadDTO val = en.getValue();
+                                Integer key = en.getKey();
+                                ActividadDTO val = en.getValue();
                         %>
-                            <tr class="bg-white border-b ">
-                                <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
-                                    <%=val.getNombre()%>
-                                </th>
-                                <td class="py-4 px-6">
-                                    <%=val.getFechaRegistro()%>
-                                </td>
-                                <td class="py-4 px-6">
-                                    <%=val.getDuracion()%>
-                                </td>
-                                <td class="py-4 px-6">
-                                    <%-- Badge Aceptada --%>
-                                    <%
-                                            if( val.getEstado().equals("Aceptada") ){
-                                    %>
-                                            <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
-                                                Aceptada
-                                            </span>
-                                    <%
-                                            }
-                                    %>
+                        <tr class="bg-white border-b ">
+                            <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
+                                <%=val.getNombre()%>
+                            </th>
+                            <td class="py-4 px-6">
+                                <%=val.getFechaRegistro()%>
+                            </td>
+                            <td class="py-4 px-6">
+                                <%=val.getDuracion()%>
+                            </td>
+                            <td class="py-4 px-6">
+                                <%-- Badge Aceptada --%>
+                                <%
+                                    if (val.getEstado().equals("Aceptada")) {
+                                %>
+                                <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
+                                    Aceptada
+                                </span>
+                                <%
+                                    }
+                                %>
 
-                                    <%-- Badge Ingresada --%>
-                                    <%
-                                            if( val.getEstado().equals("Ingresada") ){
-                                    %>
-                                            <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-yellow-200 dark:text-yellow-900">
-                                                Ingresada
-                                            </span>
-                                    <%
-                                            }
-                                    %>
+                                <%-- Badge Ingresada --%>
+                                <%
+                                    if (val.getEstado().equals("Ingresada")) {
+                                %>
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-yellow-200 dark:text-yellow-900">
+                                    Ingresada
+                                </span>
+                                <%
+                                    }
+                                %>
 
-                                    <%-- Badge Rechazada --%>
-                                    <%
-                                            if( val.getEstado().equals("Rechazada") ){
-                                    %>
-                                            <span class="bg-red-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-red-200 dark:text-red-900">
-                                                Rechazada
-                                            </span>
-                                    <%
-                                            }
-                                    %>            
-                                </td>
-                            </tr>
+                                <%-- Badge Rechazada --%>
+                                <%
+                                    if (val.getEstado().equals("Rechazada")) {
+                                %>
+                                <span class="bg-red-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-red-200 dark:text-red-900">
+                                    Rechazada
+                                </span>
+                                <%
+                                    }
+                                %>            
+                            </td>
+                        </tr>
                         <%
                             }
                         %>
@@ -227,4 +256,5 @@
             </div>
         </div>
     </body>
+    
 </html>
