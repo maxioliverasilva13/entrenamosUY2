@@ -71,7 +71,7 @@
 
         <div class="flex flex-col lg:flex-row h-max p-6 md:p-8 gap-x-8 w-screen md:flex-nowrap flex-wrap">
             <div class="flex flex-col items-center h-max">
-                <img class="rounded-full w-[180px] h-[180px] object-cover" src="<%=btimg.getBase64StringImage(imageBlob)%>" alt="Imagen Profesor"/>
+                <img class="rounded-full w-[180px] h-[180px] max-w-[180px] max-h-[180px] object-cover" src="<%=btimg.getBase64StringImage(imageBlob)%>" alt="Imagen Profesor"/>
                 <p class="text-[#595E67] text-5xl"><%=nombre%></p>
                 <p class="text-[#959EB0] text-2xl">Profesor</p>
             </div>
