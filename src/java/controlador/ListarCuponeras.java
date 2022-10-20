@@ -49,9 +49,9 @@ public class ListarCuponeras extends HttpServlet {
         String openModal=request.getParameter("openModal");
         request.setAttribute("open", openModal);
         request.setAttribute("cuponerasDisp", res);
-        System.out.println(openModal + "hasdf");
+        //System.out.println(openModal + "hasdf");
         
-        request.getRequestDispatcher("/Inicio").forward(request, response);
+        request.getRequestDispatcher("InfoCuponera?openModal=true&id=2").forward(request, response);
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

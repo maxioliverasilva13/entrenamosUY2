@@ -4,27 +4,22 @@
  */
 package controlador;
 
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
-import CuponeraXActividad.DtCuponeraXActividad;
-import java.io.File;
+import Usuario.IUsuarioBO;
+import Usuario.UsuarioBO;
+import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.Integer.parseInt;
-import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author pedri
+ * @author rodrigo
  */
-@WebServlet(name = "InfoCuponera", urlPatterns = {"/InfoCuponera"})
-public class InfoCuponera extends HttpServlet {
+public class Usuarios extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,20 +30,6 @@ public class InfoCuponera extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CuponeraBo cupo = new CuponeraBo();
-        int id =parseInt(request.getParameter("id"));
-        
-        DtCuponera res = cupo.consultarCuponera(id);
-        
-        String openModal=request.getParameter("openModal");
-        System.out.println(openModal + "estfgg");
-        request.setAttribute("open", openModal);
-        request.setAttribute("infoCupo", res);
-        
-        request.getRequestDispatcher("/Inicio").forward(request, response);
-    }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -57,10 +38,10 @@ public class InfoCuponera extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet InfoCuponera</title>");            
+            out.println("<title>Servlet Usuarios</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet InfoCuponera at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Usuarios at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,6 +56,19 @@ public class InfoCuponera extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        IUsuarioBO usuarioBo = new UsuarioBO();
+        try{
+            HashMap<Integer,UsuarioDTO> res = usuarioBo.listarUsuarios();
+            request.setAttribute("usuarios", res);
+            request.getRequestDispatcher("/usuarios.jsp").forward(request, response);
+        }catch(Exception e){
+            response.sendError(500,"Ha ocurrido un error insesperado");
+        }
+        
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.

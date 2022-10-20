@@ -3,6 +3,7 @@
     Created on : 30 set. 2022, 12:14:44
     Author     : mandi
 --%>
+<%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.List"%>
@@ -28,10 +29,13 @@
     String website = (String)request.getAttribute("website");
     String biografia = (String)request.getAttribute("biografia");
     String descripcion = (String)request.getAttribute("descripcion");
+   
+    int idConsultado = (int)request.getAttribute("idConsultado");
+    boolean seguido = (boolean)request.getAttribute("sigoAlConsultado");
     
-    List<ActividadDTO> listAct = new ArrayList<>();
+    HashMap<Integer, ActividadDTO> listAct = new HashMap<>();
     try {
-        listAct = (List<ActividadDTO>)request.getAttribute("actividades");
+        listAct = (HashMap<Integer, ActividadDTO>)request.getAttribute("actividades");
     } catch (Exception e) {
         System.out.println(e.getMessage());
     }
@@ -49,11 +53,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
     </head>
     <body class="w-screen h-full flex flex-col sm:items-start sm:justify-start">
-        <%--
-        <jsp:include page='../components/header.jsp' >
-            <jsp:param name="path" value="perfilProfesor" />
-        </jsp:include>
-        --%>
         
         <div class="flex flex-col lg:flex-row h-max p-6 md:p-8 gap-x-8 w-screen md:flex-nowrap flex-wrap">
             <div class="flex flex-col items-center h-max">
@@ -121,10 +120,24 @@
                     <p class="text-[#6B7280] text-4xl font-[Inter] font-medium">Last Online</p>
                     <p class="text-7xl text-[#3A5A6F] font-[Inter] font-extrabold">24/7</p>
                 </div>
-
-                <button class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white mt-8 p-4 rounded-md">
-                    Follow
-                </button>
+                <form onsubmit="handleSubmit(event);" method="POST">
+                <%
+                    if (!seguido){
+                %>
+                    <button type="submit" class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white mt-8 p-4 rounded-md w-full">
+                        Follow
+                    </button>
+                <%
+                    }else{
+                %>
+                    <button type="submit" class="font-[Inter] font-medium bg-red-500 hover:bg-red-400 text-white mt-8 p-4 rounded-md w-full">
+                        Unfollow
+                    </button>
+                <%
+                    }
+                %>
+                    
+                </form>
             </div>
 
 
@@ -132,8 +145,8 @@
 
         <div class="flex flex-col lg:flex-row gap-8 p-6 md:p-8 w-full">
             <div class="flex lg:flex-col gap-8 mx-auto flex-wrap justify-center">
-                <textarea id="biografia" rows="8" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo biografía!"><%=biografia%></textarea>
-                <textarea id="descripcion" rows="12" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo descripcion!"><%=descripcion%></textarea>
+                <textarea readonly id="biografia" rows="8" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo biografía!"><%=biografia%></textarea>
+                <textarea readonly id="descripcion" rows="12" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo descripcion!"><%=descripcion%></textarea>
             </div>
 
             <div class="overflow-x-auto relative shadow-md sm:rounded-lg h-max w-full">
@@ -157,23 +170,24 @@
                     <tbody>
                       <%-- ForEach Actividades --%>
                         <%
-                            for (ActividadDTO item : listAct) {
-                            System.out.println(listAct.size());
+                            for (HashMap.Entry<Integer, ActividadDTO> en : listAct.entrySet()) {
+                            Integer key = en.getKey();
+                            ActividadDTO val = en.getValue();
                         %>
                             <tr class="bg-white border-b ">
                                 <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
-                                    <%=item.getNombre()%>
+                                    <%=val.getNombre()%>
                                 </th>
                                 <td class="py-4 px-6">
-                                    <%=item.getFechaRegistro()%>
+                                    <%=val.getFechaRegistro()%>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <%=item.getDuracion()%>
+                                    <%=val.getDuracion()%>
                                 </td>
                                 <td class="py-4 px-6">
                                     <%-- Badge Aceptada --%>
                                     <%
-                                            if( item.getEstado().equals("Aceptada") ){
+                                            if( val.getEstado().equals("Aceptada") ){
                                     %>
                                             <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
                                                 Aceptada
@@ -184,7 +198,7 @@
 
                                     <%-- Badge Ingresada --%>
                                     <%
-                                            if( item.getEstado().equals("Ingresada") ){
+                                            if( val.getEstado().equals("Ingresada") ){
                                     %>
                                             <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-yellow-200 dark:text-yellow-900">
                                                 Ingresada
@@ -195,7 +209,7 @@
 
                                     <%-- Badge Rechazada --%>
                                     <%
-                                            if( item.getEstado().equals("Rechazada") ){
+                                            if( val.getEstado().equals("Rechazada") ){
                                     %>
                                             <span class="bg-red-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-red-200 dark:text-red-900">
                                                 Rechazada
