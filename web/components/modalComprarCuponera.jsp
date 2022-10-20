@@ -4,20 +4,27 @@
     Author     : pedri
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="util.BlobToImage"%>
+<%@page import="Actividad.dtos.ActividadDTO"%>
+<%@page import="CuponeraXActividad.DtCuponeraXActividad"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="Cuponera.DtCuponera"%>
 <jsp:include page='../imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
 
 <%
- 
-    
     DtCuponera cuponeraInfo = null;
-    if (request.getAttribute("cuponera")!= null) {
-        cuponeraInfo=(DtCuponera)request.getAttribute("cuponera");
-    }
-  
-   
+    BlobToImage btimg = new BlobToImage();
+    
+    
+    cuponeraInfo=(DtCuponera)request.getAttribute("infoCupo");
+    List<DtCuponeraXActividad> actividades = cuponeraInfo.getCuponerasXActividad(); 
+    
+    String[] listOfColors = {"#468990", "#299D91", "#FFF4B8", "#F98F37", "#DE3C31"};
+    
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -40,16 +47,12 @@
                         <div class="border-b-[1px] w-full h-[64px] flex items-center px-[24px]">
                             <p class="text-[18px] text-[#111827] font-medium"><%=cuponeraInfo.getNombre()%></p>
                         </div>
-                        <div class="border-b-[1px] w-full h-[60px] flex flex-row items-center px-[24px]">
-                            <p class="text-[14px] text-[#6B7280] font-medium w-[221px]">Fecha Inicio</p>
-                            <p class="text-[14px] font-normal text-[#111827] ml-[16px]">21/10/2022</p>
-                        </div>
                         <div class="border-b-[1px] w-full h-[60px] flex items-center px-[24px]">
                             <p class="text-[14px] text-[#6B7280] font-medium w-[221px]">Fecha Fin</p>
-                            <p class="text-[14px] font-normal text-[#111827] ml-[16px]">21/12/2022</p>
+                            <p class="text-[14px] font-normal text-[#111827] ml-[16px]"><%=cuponeraInfo.getPeriodoVigencia()%></p>
                         </div>
                         <div class="w-full h-[60px] flex items-center px-[24px]">
-                            <p class="text-[14px] text-[#6B7280] font-medium w-[221px]">Descuento</p>
+                            <p class="text-[14px] text-[#6B7280] font-medium w-[221px]"><%=cuponeraInfo.getDescuento()%></p>
                             <p class="text-[14px] font-normal text-[#111827] ml-[16px]">10%</p>
                         </div>
                     </div>    
@@ -63,29 +66,23 @@
                 </div>
                 <div class="w-full h-[322px] flex flex-row align-center justify-center gap-x-[82px] px-[33px]">
                     <div class="bg-[#FFFFFF] w-[656px] h-[322px] rounded-[6px] shadow-md border-[1px] ">
+                    <% //for (HashMap.Entry<Integer, DtCuponeraXActividad> en : actividades.entrySet()) {                        
+                        for (DtCuponeraXActividad act : actividades) {
+                            DtCuponeraXActividad val = act;
+                            ActividadDTO acti = val.getActividad();
+                           // System.out.println("esto es");
+                    %> 
                         <div class="border-b-[1px] w-full h-[80px] flex flex-row items-center px-[24px] ">
-                            <img src="https://cdn.shopify.com/s/files/1/0229/0839/files/bancos_de_imagenes_gratis.jpg?v=1630420628&width=1024" alt="Girl in a jacket" class="rounded-full w-[48px] h-[48px] object-cover"/>
-                            <p class="text-[#4F46E5] text-[14px] font-medium h-[48px] w-[246px] ml-[16px]">Actividad</p>
-                            <p class="text-[#111827] text-[14px font-normal] flex-grow h-[20px] w-[246px] flex item-start justify-start flex-col ">32 clases</p>
+                            <img src="<%btimg.getBase64StringImage(acti.getImageBlob());%>%" class="rounded-full w-[48px] h-[48px] object-cover"/>
+                            <p class="text-[#4F46E5] text-[14px] font-medium h-[48px] w-[246px] ml-[16px]"><%=acti.getNombre() %></p>
+                            <p class="text-[#111827] text-[14px font-normal] flex-grow h-[20px] w-[246px] flex item-start justify-start flex-col "><%=act.getCantClases()%></p>
                         </div>
-                        <div class="border-b-[1px] w-full h-[80px] flex flex-row items-center px-[24px]">
-                            <img src="https://cdn.shopify.com/s/files/1/0229/0839/files/bancos_de_imagenes_gratis.jpg?v=1630420628&width=1024" alt="Girl in a jacket" class="rounded-full w-[48px] h-[48px] object-cover"/>
-                            <p class="text-[#4F46E5] text-[14px] font-medium h-[48px] w-[246px] ml-[16px]">Actividad</p>
-                            <p class="text-[#111827] text-[14px font-normal] flex-grow h-[20px] w-[246px] flex item-start justify-start flex-col ">32 clases</p>
-                        </div>
-                        <div class="border-b-[1px] w-full h-[80px] flex items-center px-[24px]">
-                            <img src="https://cdn.shopify.com/s/files/1/0229/0839/files/bancos_de_imagenes_gratis.jpg?v=1630420628&width=1024" alt="Girl in a jacket" class="rounded-full w-[48px] h-[48px] object-cover"/>
-                            <p class="text-[#4F46E5] text-[14px] font-medium h-[48px] w-[246px] ml-[16px]">Actividad</p>
-                            <p class="text-[#111827] text-[14px font-normal] flex-grow h-[20px] w-[246px] flex item-start justify-start flex-col ">32 clases</p>
-                        </div>
-                        <div class="border-b-[1px] w-full h-[80px] flex items-center px-[24px]">
-                            <img src="https://cdn.shopify.com/s/files/1/0229/0839/files/bancos_de_imagenes_gratis.jpg?v=1630420628&width=1024" alt="Girl in a jacket" class="rounded-full w-[48px] h-[48px] object-cover"/>
-                            <p class="text-[#4F46E5] text-[14px] font-medium h-[48px] w-[246px] ml-[16px]">Actividad</p>
-                            <p class="text-[#111827] text-[14px font-normal] flex-grow h-[20px] w-[246px] flex item-start justify-start flex-col ">32 clases</p>
-                        </div>
+                    <%
+                        }
+                    %>
                     </div>
                     <div class="bg-[#FFFFFF] w-[295px] h-[322px] rounded-[6px] shadow-lg flex flex-col px-[24px]">
-                        <p class="text-[#4F7994] text-[60px] font-extrabold mt-[32px]">$49</p>
+                        <p class="text-[#4F7994] text-[60px] font-extrabold mt-[32px]">$<%=cuponeraInfo.getPrecio()%></p>
                         <p class="text-gray-500 text-[18px] mt-[20px]">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
                         <button class="w-[247px] h-[50px] bg-[#4F7994] rounded-[6px] mt-[56px] text-[#FFFFFF] text-[16px] font-medium">Comprar</button>
                     </div>

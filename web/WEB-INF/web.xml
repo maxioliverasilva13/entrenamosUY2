@@ -44,6 +44,16 @@
         <servlet-name>ListarCuponeras</servlet-name>
         <url-pattern>/listarCuponeras</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>InfoCuponera</servlet-name>
+        <servlet-class>controlador.InfoCuponera</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InfoCuponera</servlet-name>
+        <url-pattern>/InfoCuponera</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>actividadesInfo</servlet-name>
         <url-pattern>/actividadesInfo</url-pattern>
