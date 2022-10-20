@@ -4,6 +4,10 @@
  */
 package controlador;
 
+import Profesor.ProfesorBO;
+import Profesor.dtos.ProfesorDTO;
+import Socio.SocioBO;
+import Socio.dtos.SocioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -18,6 +22,7 @@ import Usuario.dtos.UsuarioDTO;
 import Usuario.exceptions.UnauthorizedException;
 
 import javax.servlet.http.HttpSession;
+
 /**
  *
  * @author rodrigo
@@ -42,7 +47,7 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");            
+            out.println("<title>Servlet Login</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
@@ -77,32 +82,37 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String email = (String)request.getParameter("email");
-                String password = request.getParameter("password");
-                
-                System.out.println(email);
-                System.out.println(password);
-                if(email == null || password == null){
-                    response.sendError(400, "Email o password invalida");
-                }
-                IUsuarioBO usuarioBo = new UsuarioBO();
+        String email = (String) request.getParameter("email");
+        String password = request.getParameter("password");
 
-                try{
-                    UsuarioDTO user = usuarioBo.authenticarse(email, password);
-                    String typeofUser = usuarioBo.getTipoById(user.getId());
-                    HttpSession session = request.getSession(true);	    
-                    session.setAttribute("currentSessionUser",user);
-                    session.setAttribute("typeOfUser", typeofUser);
-                    response.sendRedirect("TestServelet");
-                    
-                }catch(UnauthorizedException e){
-                    request.setAttribute("status", "Correo o Contraseña incorrectos");
-                    request.getRequestDispatcher("/login.jsp").forward(request, response);
-                }
-                catch(Exception e){
-                    response.sendError(500, "Ha ocurrido un error inesperado");
-                    response.sendRedirect("login.jsp");
-                }
+        if (email == null || password == null) {
+            response.sendError(400, "Email o password invalida");
+        }
+        IUsuarioBO usuarioBo = new UsuarioBO();
+        try {
+            UsuarioDTO user = usuarioBo.authenticarse(email, password);
+            String typeofUser = usuarioBo.getTipoById(user.getId());
+            HttpSession session = request.getSession(true);
+            session.setAttribute("typeOfUser", typeofUser);
+            if (typeofUser.equals("Profesor")) {
+                ProfesorBO profeBO = new ProfesorBO();
+                ProfesorDTO profe = profeBO.getProfesorById(user.getId());
+                session.setAttribute("currentSessionUser", profe);
+            } else if (typeofUser.equals("Socio")) {
+                SocioBO socBO = new SocioBO();
+                SocioDTO socio = socBO.consultarSocio(user.getId());
+                session.setAttribute("currentSessionUser", socio);
+            }
+
+            response.sendRedirect("TestServelet");
+
+        } catch (UnauthorizedException e) {
+            request.setAttribute("status", "Correo o Contraseña incorrectos");
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendError(500, "Ha ocurrido un error inesperado");
+            response.sendRedirect("login.jsp");
+        }
     }
 
     /**

@@ -12,9 +12,18 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/EditInfo.java</file>
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/actividadInfo.jsp</file>
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/Profesor/perfilProfesorAjeno.jsp</file>
+=======
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/components/selectedCuponeraInfo.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/components/addClaseModal.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/actividadInfo.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/signup.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/verActividades.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/InsertarClase.java</file>
+>>>>>>> e16959c77465af1b610f3f0aba84345b1ee5ccd5
         </group>
     </open-files>
 </project-private>

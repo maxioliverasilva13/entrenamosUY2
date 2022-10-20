@@ -12,6 +12,8 @@ import Clase.ClaseDao;
 import Clase.DtClase;
 import Cuponera.CuponeraBo;
 import Cuponera.DtCuponera;
+import Profesor.dtos.ProfesorDTO;
+import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -27,7 +30,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "VerActividadInfo", urlPatterns = {"/verActividadInfo"})
 public class VerActividadInfo extends HttpServlet {
+
     Boolean bool = new Boolean("true");
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,6 +49,15 @@ public class VerActividadInfo extends HttpServlet {
         String claseId = request.getParameter("claseId");
         String verInfoPagoOpen = request.getParameter("verInfoPago");
         String cupId = request.getParameter("cupId");
+        HttpSession session = request.getSession(true);
+        ProfesorDTO loggUser = null;
+        if (session.getAttribute("currentSessionUser") != null && session.getAttribute("typeOfUser") != null) {
+            if (session.getAttribute("typeOfUser").equals("Profesor")) {
+                loggUser = (ProfesorDTO)session.getAttribute("currentSessionUser");
+                System.out.println("El logueado es un profe");
+            }
+
+        }
 
         try {
             if (claseId != null) {
@@ -51,7 +65,7 @@ public class VerActividadInfo extends HttpServlet {
                 DtClase claseInfo = clasebo.consultarClase(Integer.parseInt(claseId));
                 request.setAttribute("selectedClaseInfo", claseInfo);
             }
-            
+
             if (cupId != null) {
                 CuponeraBo cupBO = new CuponeraBo();
                 DtCuponera cupinfo = cupBO.consultarCuponera(Integer.parseInt(cupId));
@@ -64,6 +78,13 @@ public class VerActividadInfo extends HttpServlet {
                 ActividadBO actBO = new ActividadBO();
                 ActividadDTO actInfo = actBO.consultarById(Integer.parseInt(actID));
                 request.setAttribute("actInfo", actInfo);
+                if (loggUser != null) {
+                    ProfesorDTO profe = loggUser;
+                    if (profe.getInstituciones().get(0).getId() ==  actInfo.getInstitucion().getId()) {
+                        request.setAttribute("showAddClassButton", true);
+                    }
+                }
+
                 if (modalOpen != null) {
                     request.setAttribute("modalIsOpen", modalOpen.equals("true") ? "true" : "false");
                 }

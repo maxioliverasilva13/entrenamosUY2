@@ -53,7 +53,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body class="w-screen h-screen flex items-start flex-col justify-start ">
-
+        <jsp:include page='./components/header.jsp'>
+            <jsp:param name="" value=""/>
+        </jsp:include> 
 
         <a href="verPerfil?&userID=<%=usrId %>"> Ver Perfil</a>
         <div class="w-full h-full lg:flex-row  flex-col flex-grow px-8 py-6 max-h-full overflow-auto flex items-center justify-between gap-x-8">
