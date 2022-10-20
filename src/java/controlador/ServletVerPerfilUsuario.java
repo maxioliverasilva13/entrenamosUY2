@@ -98,6 +98,13 @@ public class ServletVerPerfilUsuario extends HttpServlet {
         request.setAttribute("idConsultado", userAconsultar); // Para usar luego en el POST.
         request.setAttribute("userDT", userInfoToShow);
 
+        int seguidos = (int) userBO.getSeguidos(userAconsultar);
+        int seguidores = (int) userBO.getSeguidores(userAconsultar);
+
+        request.setAttribute("cantSeguidores", seguidores);
+        request.setAttribute("cantSeguidos", seguidos);
+        
+        
         byte[] imageBlob = null;
         imageBlob = userInfoToShow.getBlobImage();
 
@@ -143,12 +150,6 @@ public class ServletVerPerfilUsuario extends HttpServlet {
                 response.sendRedirect("NotFound.jsp");
                 return;
             }
-
-            int seguidos = (int) userBO.getSeguidos(userAconsultar);
-            int seguidores = (int) userBO.getSeguidores(userAconsultar);
-
-            request.setAttribute("cantSeguidores", seguidores);
-            request.setAttribute("cantSeguidos", seguidos);
 
             request.setAttribute("userType", "Profesor");
             request.setAttribute("nombre", dtProfesor.getNombre());
@@ -211,23 +212,27 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("listClasesOfUser", listClasesOfUser);
             request.setAttribute("actividadesOfUser", actividadesOfUser);
 
-            request.setAttribute("cantSeguidores", dtSocio.getCantSeguidores());
-            request.setAttribute("cantSeguidos", dtSocio.getCantSeguidos());
-
             request.setAttribute("userType", "Profesor");
             request.setAttribute("nombre", dtSocio.getNombre());
             request.setAttribute("apellido", dtSocio.getApellido());
             request.setAttribute("correo", dtSocio.getEmail());
-            //request.setAttribute("institucion", dtIns.getNombre());
+            request.setAttribute("nickname", dtSocio.getNickname());
             request.setAttribute("fnacimiento", dtSocio.getNacimiento().toString());
-            //  SOCIO NO TIENE WEBSITE ???  request.setAttribute("website", dtSocio.getLinkSitioWeb());
-            //request.setAttribute("biografia", dtSocio.getBiografia());
-            //request.setAttribute("descripcion", dtSocio.getdescripcionGeneral());
-            //request.setAttribute("actividades", listAct);
-            //request.setAttribute("clases", listClases);
             request.setAttribute("cuponeras", listCuponeras);
 
-            request.getRequestDispatcher("verInfoSocioPerfil.jsp").forward(request, response);
+
+            // Validar si el perfil q va a consultar es el suyo o uno ajeno.
+            if (loggedUser != null) {
+                if (userAconsultar == loggedUser.getId()) {
+                    // Es su propio perfil
+                    request.getRequestDispatcher("verInfoSocioPerfil.jsp").forward(request, response);
+                } else {
+                    // Es un perfil ajeno
+                    request.getRequestDispatcher("Socio/perfilSocioAjeno.jsp").forward(request, response);
+                }
+            } else {
+                request.getRequestDispatcher("Socio/perfilSocioAjeno.jsp").forward(request, response);
+            }
 
         }
     }

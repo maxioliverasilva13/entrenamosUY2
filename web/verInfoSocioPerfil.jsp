@@ -26,6 +26,7 @@
     UsuarioDTO userDT = (UsuarioDTO) request.getAttribute("userDT");
     String nombre = (String) request.getAttribute("nombre");
     String apellido = (String) request.getAttribute("apellido");
+    String nickname = (String) request.getAttribute("nickname");
     String correo = (String) request.getAttribute("correo");
     String institucion = (String) request.getAttribute("institucion");
     String fnacimiento = (String) request.getAttribute("fnacimiento");
@@ -81,29 +82,48 @@
         }
 
     }
+    
+    const handleGetCuponera = (itemId) => {
+        const url = '/entrenamosUY34//cuponeraById?cupId=' + itemId;
+        const cuponeraModal = document.getElementById("cuponeraInfoModal");
+        window.cuponeraInfo = "Loading";
+        cuponeraModal.style.cssText = "display: flex";
+        cuponeraModal.onload();
+        window.fetch(url).then((response) => {
+            return response.json();
+        }).then((data) => {
+            cuponeraModal.style.cssText = "display: flex";
+            window.cuponeraInfo = data;
+            cuponeraModal.onload();
+        }).catch((err) => {
+            console.log(err);
+            window.cuponeraInfo = "Error";
+        });
+    }
 </script>
 
 <!DOCTYPE html>
 <html>
     <jsp:include page='/components/infoClaseModal.jsp' />
+    <jsp:include page='/components/selectedCuponeraInfo.jsp' />
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <title>Perfil Propio Socio</title>
-            <link rel="preconnect" href="https://fonts.googleapis.com">
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
-                        </head>
+        <title>Perfil Propio Socio</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
+    </head>
                         <script>
                             const handleEditInfo = () => {
-                                const editarInfoModal = document.getElementById("editarInfoProfeModal");
+                                const editarInfoModal = document.getElementById("editarInfoSocioModal");
                                 editarInfoModal.style.cssText = "display: flex";
                             };
-                        </script>>
+                        </script>
+                        <jsp:include page='/components/header.jsp' >
+                            <jsp:param name="path" value="index" />
+                        </jsp:include>
                         <body class="w-screen h-full flex flex-col sm:items-start sm:justify-start">
 
-                            <%--<jsp:include page='/components/header.jsp' >
-                                <jsp:param name="path" value="index" />
-                            </jsp:include> --%>
 
                             <div class="flex flex-col lg:flex-row h-max p-6 md:p-8 gap-x-8 w-screen md:flex-nowrap flex-wrap">
                                 <div class="flex flex-col items-center h-max">
@@ -127,10 +147,10 @@
                                             <p class="font-[Inter] text-base text-gray-500"><%=correo%></p>
                                         </div>
                                         <div class="flex py-2 items-center">
-                                            <svg class="mx-4" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M17 19V3C17 1.89543 16.1046 1 15 1H5C3.89543 1 3 1.89543 3 3V19M17 19L19 19M17 19H12M3 19L1 19M3 19H8M7 4.99998H8M7 8.99998H8M12 4.99998H13M12 8.99998H13M8 19V14C8 13.4477 8.44772 13 9 13H11C11.5523 13 12 13.4477 12 14V19M8 19H12" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <svg class="mx-4" width="23" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7 20L11 4M13 20L17 4M6 9H20M4 15H18" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
-                                            <p class="font-[Inter] text-base text-gray-500">Institución</p>
+                                            <p class="font-[Inter] text-base text-gray-500"><%=nickname%></p>
                                         </div>
                                         <div class="flex py-2 items-center">
                                             <svg class="mx-4" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,7 +188,7 @@
                             </div>
                             <div class="flex flex-col items-center lg:items-start justify-center p-6 md:p-8 gap-y-4 lg:flex-row w-screen h-max lg:gap-x-12">
                                 <div class="h-max w-5/6 lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
-                                    <div class="bg-[#DEDEDE] px-[24px] py-[12px]">
+                                    <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium">ACTIVIDADES</p>
                                     </div>
 
@@ -192,7 +212,7 @@
 
                                 </div>
                                 <div class="h-max w-5/6 lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
-                                    <div class="bg-[#DEDEDE] px-[24px] py-[12px]">
+                                    <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium ">CLASES</p>
                                     </div>
 
@@ -217,7 +237,7 @@
                                 </div>
 
                                 <div class="h-max w-5/6 lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
-                                    <div class="bg-[#DEDEDE] px-[24px] py-[12px]">
+                                    <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium">CUPONERAS ADQUIRIDAS</p>
                                     </div>
 
@@ -228,13 +248,15 @@
                                             Integer key = en.getKey();
                                             DtCuponera val = en.getValue();
                                     %>
-                                    <div class="h-[72px] border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
+                                    <a onclick="handleGetCuponera('<%=val.getId()%>')" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
                                         <img src="<%=btimg.getBase64StringImage(val.getBlobImage())%>" alt="Cup Image" class="rounded-full w-[40px] h-[40px] object-cover"/>
                                         <div class="text-gray-500 text-[12px] font-medium flex-grow h-full flex item-start justify-start flex-col">
                                             <%=val.getNombre()%>
+                                            <p class="mt-1">Precio: <%=val.getPrecio()%></p>
+
                                         </div>
                                         <button class="border border-gray-300 py-[1px] px-[10px] rounded-[14px] font-medium text-[14px] text-gray-700 shadow-sm">View</button>
-                                    </div>    
+                                    </a>    
                                     <%
                                         }
                                     %>
@@ -243,7 +265,7 @@
                             <jsp:include page='Socio/editarInfoSocioModal.jsp' >
                                 <jsp:param name="path" value="index" />
                                 <jsp:param name="usrIdConsultado" value="<%= idConsultado%>" />
-                                <jsp:param name="nickname" value="<%= userDT.getNickname()%>" />
+                                <jsp:param name="nickname" value="<%= nickname%>" />
                                 <jsp:param name="email" value="<%= userDT.getEmail()%>" />
                                 <jsp:param name="institucion" value="<%= institucion%>" />
                                 <jsp:param name="name" value="<%= nombre%>" />

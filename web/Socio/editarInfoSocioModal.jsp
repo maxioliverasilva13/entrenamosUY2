@@ -1,12 +1,12 @@
 <%-- 
-    Document   : editarInfoProfesorModal
-    Created on : 2 oct. 2022, 19:51:51
+    Document   : editarInfoSocioModal
+    Created on : 2 oct. 2022, 22:40:06
     Author     : mandi
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<div id="editarInfoProfeModal" style="display: none;" class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 flex items-center justify-center transition-all">
+<div id="editarInfoSocioModal" style="display: none;" class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 flex items-center justify-center transition-all">
     <div class="bg-white rounded-2xl py-6 px-8 border-gray-300 border flex flex-row items-start justify-start gap-x-12 relative">
         <%-- Close Button --%>
         <button onclick="closeModal()" class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
@@ -14,22 +14,17 @@
         </button>
 
         <form id="edit" action="EditInfo" method="post" enctype="multipart/form-data" class="flex flex-col">
-            <p class="font-[Inter] font-medium text-center text-2xl mb-1">Editar Información</p>
+            <p class="font-[Inter] font-medium text-center text-2xl mb-1">Editar Información Socio</p>
             <div class="border-gray-300 border-b mb-4 mx-16"></div>
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 mb-6 w-full group">
-                    <input name="nickname" type="text" value="${param.nickname}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled />
+                    <input id="nickname" type="text" name="nickname" value="${param.nickname}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " readonly />
                     <label for="nickname" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nickname</label>
                 </div>
                 <div class="relative z-0 mb-6 w-full group">
-                    <input id="email" type="text" name="email" value="${param.email}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled />
+                    <input id="email" type="text" name="email" value="${param.email}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " readonly />
                     <label for="email" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">E-mail</label>
                 </div>
-            </div>
-
-            <div class="relative z-0 mb-6 w-full group">
-                <input id="institucion" type="text" name="institucion" value="${param.institucion}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled />
-                <label for="institucion" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Institución</label>
             </div>
 
             <div class="grid md:grid-cols-2 md:gap-6">
@@ -41,15 +36,6 @@
                     <input  type="text" name="lastname" id="lastname" value="${param.lastname}" class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
                     <label for="lastname" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Apellido</label>
                 </div>
-            </div>
-
-            <div class="relative z-0 mb-6 w-full group">
-                <textarea id="biography" name="biography" rows="1" class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer max-h-24" placeholder=" ">${param.biografia}</textarea>
-                <label for="biography" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Biografía</label>
-            </div>
-            <div class="relative z-0 mb-6 w-full group">
-                <textarea id="description" name="description" rows="1" class="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer max-h-24" placeholder=" ">${param.description}</textarea>
-                <label for="description" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Descripción</label>
             </div>
 
             <div class="relative z-0 mb-6 w-full group">
@@ -86,7 +72,7 @@
 </div>
 <script>
     const closeModal = () => {
-        document.getElementById("editarInfoProfeModal").style.cssText = "display: none";
+        document.getElementById("editarInfoSocioModal").style.cssText = "display: none";
     };
 
     let showPassFields = false;

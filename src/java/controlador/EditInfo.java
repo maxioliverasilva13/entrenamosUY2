@@ -6,6 +6,9 @@ package controlador;
 
 import Profesor.ProfesorBO;
 import Profesor.dtos.ProfesorEditDTO;
+import Socio.SocioBO;
+import Socio.dtos.SocioDTO;
+import Socio.dtos.SocioEditDTO;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -84,7 +87,21 @@ public class EditInfo extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html");
 
+        // Asignación de variables en común para ambos tipos d usuario
         String userType = request.getParameter("userType");
+        String nickname = request.getParameter("nickname");
+        String name = request.getParameter("name");
+        String lastname = request.getParameter("lastname");
+        String mail = request.getParameter("email");
+        String fnacimientoStr = request.getParameter("fechaNacimiento");
+        Date fechaNacimientoDate = null;
+        try {
+            fechaNacimientoDate = new SimpleDateFormat("dd/MM/yyyy").parse(fnacimientoStr);
+        } catch (Exception e) {
+            System.err.println("fechaNacimiento parse error catched, file: EditInfo.java");
+        }
+        
+
         String pass = request.getParameter("password");
         int userId = Integer.parseInt(request.getParameter("userId"));
 
@@ -93,16 +110,10 @@ public class EditInfo extends HttpServlet {
                 ProfesorEditDTO data;
                 ProfesorBO profBO = new ProfesorBO();
 
-                String name = request.getParameter("name");
-                String lastname = request.getParameter("lastname");
-                String nickname = request.getParameter("nickname");
                 String description = request.getParameter("description");
                 String biography = request.getParameter("biography");
                 String website = request.getParameter("website");
-                String mail = request.getParameter("email");
-                String fnacimientoStr = request.getParameter("fechaNacimiento");
-                Date fechaNacimientoDate = new SimpleDateFormat("dd/MM/yyyy").parse(fnacimientoStr);
-
+                
                 Part filePart = request.getPart("selected_file");
                 System.out.println(filePart.getSize());
                 InputStream fileContent = null;
@@ -133,9 +144,41 @@ public class EditInfo extends HttpServlet {
                 System.out.println("ERROR EN SERVLET EditInfo " + e.getMessage());
             }
         }
-
+        
         if (userType.equals("Socio")) {
-            // do something
+            try {
+                SocioEditDTO dataSocio;
+                SocioBO socioBO = new SocioBO();
+
+                Part filePart = request.getPart("selected_file");
+                System.out.println(filePart.getSize());
+                InputStream fileContent = null;
+                File avatar = null;
+                if(filePart.getSize() > 0){
+                    BlobToImage blobToImg = new BlobToImage();
+                    fileContent = filePart.getInputStream();
+                    byte[] targetArray = fileContent.readAllBytes();
+                    avatar = blobToImg.writeBytesToFile(nickname, targetArray);
+                }
+                
+                if (pass == null || request.getParameter("confirmPassword").equals("")) {
+                    // NO modifico password
+                    dataSocio = new SocioEditDTO(name, lastname, nickname, null, mail, fechaNacimientoDate, avatar != null ? avatar : null);
+                    socioBO.editar(userId, dataSocio);
+                    System.out.println("profesor editado correctamente! (no editaste password)");
+                    response.sendRedirect("verPerfil");
+                } else {
+                    // SI modifico password
+                    char[] charPass = request.getParameter("confirmPassword").toCharArray();
+                    dataSocio = new SocioEditDTO(name, lastname, nickname, charPass, mail, fechaNacimientoDate, avatar != null ? avatar : null);
+                    socioBO.editar(userId, dataSocio);
+                    System.out.println("PASS: " + request.getParameter("confirmPassword"));
+                    System.out.println("socio editado correctamente! (SI editaste password)");
+                    response.sendRedirect("verPerfil");
+                }
+            } catch (Exception e) {
+                System.out.println("ERROR EN SERVLET EditInfo " + e.getMessage());
+            }
         }
     }
 

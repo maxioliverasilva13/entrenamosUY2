@@ -16,32 +16,30 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<% 
+<%
 
-    int cantSeguidores = (int)request.getAttribute("cantSeguidores");
-    int cantSeguidos = (int)request.getAttribute("cantSeguidos");
+    int cantSeguidores = (int) request.getAttribute("cantSeguidores");
+    int cantSeguidos = (int) request.getAttribute("cantSeguidos");
 
-    UsuarioDTO userDT = (UsuarioDTO)request.getAttribute("userDT");
-    String nombre = (String)request.getAttribute("nombre");
-    String apellido = (String)request.getAttribute("apellido");
-    String correo = (String)request.getAttribute("correo");
-    String institucion = (String)request.getAttribute("institucion");
-    String fnacimiento = (String)request.getAttribute("fnacimiento");
-    String website = (String)request.getAttribute("website");
-    String biografia = (String)request.getAttribute("biografia");
-    String descripcion = (String)request.getAttribute("descripcion");
-    
-    int idConsultado = (int)request.getAttribute("idConsultado");
+    UsuarioDTO userDT = (UsuarioDTO) request.getAttribute("userDT");
+    String nombre = (String) request.getAttribute("nombre");
+    String apellido = (String) request.getAttribute("apellido");
+    String correo = (String) request.getAttribute("correo");
+    String institucion = (String) request.getAttribute("institucion");
+    String fnacimiento = (String) request.getAttribute("fnacimiento");
+    String website = (String) request.getAttribute("website");
+    String biografia = (String) request.getAttribute("biografia");
+    String descripcion = (String) request.getAttribute("descripcion");
 
-    
+    int idConsultado = (int) request.getAttribute("idConsultado");
+
     BlobToImage btimg = new BlobToImage();
-    
-    byte[] imageBlob = (byte[])request.getAttribute("imagen");
-    
-    
+
+    byte[] imageBlob = (byte[]) request.getAttribute("imagen");
+
     HashMap<Integer, ActividadDTO> listAct = new HashMap<>();
     try {
-        listAct = (HashMap<Integer, ActividadDTO>)request.getAttribute("actividades");
+        listAct = (HashMap<Integer, ActividadDTO>) request.getAttribute("actividades");
     } catch (Exception e) {
         System.out.println(e.getMessage());
     }
@@ -63,10 +61,10 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
     </head>
+    <jsp:include page='../components/header.jsp' >
+        <jsp:param name="path" value="perfilProfesor" />
+    </jsp:include>
     <body class="w-screen h-full flex flex-col sm:items-start sm:justify-start">
-        <%-- <jsp:include page='../components/header.jsp' >
-            <jsp:param name="path" value="perfilProfesor" />
-        </jsp:include> --%>
 
         <div class="flex flex-col lg:flex-row h-max p-6 md:p-8 gap-x-8 w-screen md:flex-nowrap flex-wrap">
             <div class="flex flex-col items-center h-max">
@@ -82,7 +80,7 @@
                         <path d="M12 5C12 7.20914 10.2091 9 8 9C5.79086 9 4 7.20914 4 5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5Z" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M8 12C4.13401 12 1 15.134 1 19H15C15 15.134 11.866 12 8 12Z" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <p class="font-[Inter] text-base text-gray-500"><%=nombre + " " +  apellido%></p>
+                        <p class="font-[Inter] text-base text-gray-500"><%=nombre + " " + apellido%></p>
                     </div>
                     <div class="flex py-2 items-center">
                         <svg class="mx-4" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,13 +166,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
-                    <%-- ForEach Actividades --%>
-                    <%
+
+                        <%-- ForEach Actividades --%>
+                        <%
                             for (HashMap.Entry<Integer, ActividadDTO> en : listAct.entrySet()) {
-                            Integer key = en.getKey();
-                            ActividadDTO val = en.getValue();
-                    %>
+                                Integer key = en.getKey();
+                                ActividadDTO val = en.getValue();
+                        %>
                         <tr class="bg-white border-b ">
                             <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
                                 <%=val.getNombre()%>
@@ -188,67 +186,58 @@
                             <td class="py-4 px-6">
                                 <%-- Badge Aceptada --%>
                                 <%
-                                        if( val.getEstado().equals("Aceptada") ){
+                                    if (val.getEstado().equals("Aceptada")) {
                                 %>
-                                        <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
-                                            Aceptada
-                                        </span>
+                                <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
+                                    Aceptada
+                                </span>
                                 <%
-                                        }
+                                    }
                                 %>
 
                                 <%-- Badge Ingresada --%>
                                 <%
-                                        if( val.getEstado().equals("Ingresada") ){
+                                    if (val.getEstado().equals("Ingresada")) {
                                 %>
-                                        <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-yellow-200 dark:text-yellow-900">
-                                            Ingresada
-                                        </span>
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-yellow-200 dark:text-yellow-900">
+                                    Ingresada
+                                </span>
                                 <%
-                                        }
+                                    }
                                 %>
 
                                 <%-- Badge Rechazada --%>
                                 <%
-                                        if( val.getEstado().equals("Rechazada") ){
+                                    if (val.getEstado().equals("Rechazada")) {
                                 %>
-                                        <span class="bg-red-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-red-200 dark:text-red-900">
-                                            Rechazada
-                                        </span>
+                                <span class="bg-red-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-red-200 dark:text-red-900">
+                                    Rechazada
+                                </span>
                                 <%
-                                        }
+                                    }
                                 %>            
                             </td>
                         </tr>
-                    <%
-                        }
-                    %>
+                        <%
+                            }
+                        %>
                     </tbody>  
                 </table>
             </div>
         </div>
-
         <jsp:include page='editarInfoProfesorModal.jsp' >
             <jsp:param name="path" value="index" />
-            <jsp:param name="usrIdConsultado" value="<%= idConsultado %>" />
-            <jsp:param name="nickname" value="<%= userDT.getNickname() %>" />
-            <jsp:param name="email" value="<%= userDT.getEmail() %>" />
-            <jsp:param name="institucion" value="<%= institucion %>" />
-            <jsp:param name="name" value="<%= nombre %>" />
-            <jsp:param name="lastname" value="<%= apellido %>" />
-            <jsp:param name="fnacimiento" value="<%= userDT.getNacimiento() %>" />
-            <jsp:param name="website" value="<%= website %>" />
-            <jsp:param name="biografia" value="<%= biografia %>" />
-            <jsp:param name="description" value="<%= descripcion %>" />
-            <jsp:param name="utype" value="<%= userDT.getType() %>" />
+            <jsp:param name="usrIdConsultado" value="<%= idConsultado%>" />
+            <jsp:param name="nickname" value="<%= userDT.getNickname()%>" />
+            <jsp:param name="email" value="<%= userDT.getEmail()%>" />
+            <jsp:param name="institucion" value="<%= institucion%>" />
+            <jsp:param name="name" value="<%= nombre%>" />
+            <jsp:param name="lastname" value="<%= apellido%>" />
+            <jsp:param name="fnacimiento" value="<%= userDT.getNacimiento()%>" />
+            <jsp:param name="website" value="<%= website%>" />
+            <jsp:param name="biografia" value="<%= biografia%>" />
+            <jsp:param name="description" value="<%= descripcion%>" />
+            <jsp:param name="utype" value="<%= userDT.getType()%>" />
         </jsp:include>
-            <%-- <jsp:param name="password" value="<%= idConsultado %>" /> --%>
-             
-        <%--
-        <jsp:include page='cambiarFotoProfesorModal.jsp' >
-            <jsp:param name="path" value="index" />
-            <jsp:param name="usrIdConsultado" value="<%= idConsultado %>" />
-        </jsp:include>       
-        --%>
     </body>
 </html>

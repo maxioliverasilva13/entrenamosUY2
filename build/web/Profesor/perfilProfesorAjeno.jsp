@@ -67,6 +67,9 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
     </head>
+    <jsp:include page='../components/header.jsp' >
+        <jsp:param name="path" value="perfilProfesor" />
+    </jsp:include>
     <body class="w-screen h-full flex flex-col sm:items-start sm:justify-start">
 
         <div class="flex flex-col lg:flex-row h-max p-6 md:p-8 gap-x-8 w-screen md:flex-nowrap flex-wrap">
