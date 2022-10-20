@@ -24,6 +24,10 @@
         <servlet-name>CrearActividad</servlet-name>
         <servlet-class>controlador.CrearActividad</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditInfo</servlet-name>
+        <servlet-class>controlador.EditInfo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Inicio</servlet-name>
         <url-pattern>/</url-pattern>
@@ -77,6 +81,10 @@
     <servlet-mapping>
         <servlet-name>CrearActividad</servlet-name>
         <url-pattern>/CrearActividad</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditInfo</servlet-name>
+        <url-pattern>/EditInfo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

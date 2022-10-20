@@ -4,9 +4,8 @@
  */
 package controlador;
 
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
-import com.google.gson.Gson;
+import Usuario.UsuarioBO;
+import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -14,13 +13,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Maximiliano Olivera
+ * @author mandi
  */
-@WebServlet(name = "CuponeraById", urlPatterns = {"/cuponeraById"})
-public class CuponeraById extends HttpServlet {
+@WebServlet(name = "SeguirUsuario", urlPatterns = {"/SeguirUsuario"})
+public class SeguirUsuario extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +39,10 @@ public class CuponeraById extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CuponeraById</title>");
+            out.println("<title>Servlet SeguirUsuario</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CuponeraById at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SeguirUsuario at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,19 +60,20 @@ public class CuponeraById extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String cupId = request.getParameter("cupId");
-
-        if (cupId != null) {
-            CuponeraBo cupBO = new CuponeraBo();
-            DtCuponera cupinfo = cupBO.consultarCuponera(Integer.parseInt(cupId));
-            request.setAttribute("selectedCuponeraInfo", cupinfo);
-            PrintWriter out = response.getWriter();
-            
-            String cuponeraJSON = new Gson().toJson(cupinfo);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(cuponeraJSON);
-            response.setStatus(HttpServletResponse.SC_OK);
+        
+        HttpSession session = request.getSession(true);
+        UsuarioBO userBO = new UsuarioBO();
+        
+        int usrIDConsultado = Integer.parseInt(request.getParameter("idConsultado"));
+        UsuarioDTO loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
+        
+        boolean loggSigueAconsultado = false;
+        
+        try {
+            loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), usrIDConsultado);
+            request.setAttribute("sigoAlConsultado", loggSigueAconsultado);
+            System.out.println(loggSigueAconsultado);
+        } catch (Exception e) {
         }
     }
 
@@ -87,7 +88,31 @@ public class CuponeraById extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doGet(request, response);
+        try {
+            UsuarioBO userBO = new UsuarioBO();
+            HttpSession session = request.getSession(true);
+            UsuarioDTO loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
+
+            int idConsultado = Integer.parseInt(request.getParameter("idConsultado"));
+            boolean sigoAconsultado = (boolean)request.getAttribute("sigoAlConsultado");
+
+            if (!sigoAconsultado) {
+                userBO.seguirAUsuario(loggedUser.getId(), idConsultado);
+            } else {
+                try {
+                    userBO.dejarSeguirUsuario(loggedUser.getId(), idConsultado);
+                    System.out.println("Ya lo seguias, lo has dejado de seguir!");
+                } catch (Exception e) {
+                    System.out.println("Error:" + e.getMessage());
+                }
+            }
+        response.sendRedirect("verPerfil?&userID="+idConsultado);
+
+        } catch (Exception e) {
+            System.out.println("ERROOOR:" + e.getMessage());
+            response.sendRedirect("NotFound.jsp");
+        }
     }
 
     /**

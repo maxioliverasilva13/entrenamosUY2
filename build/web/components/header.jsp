@@ -3,10 +3,7 @@
 <%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="Cuponera.DtCuponera"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page='../imports.jsp'>
-    <jsp:param name="" value=""/>
-</jsp:include>
-
+<jsp:include page='../imports.jsp' />
 <script>
     const toggleSidebar = () => {
         var element = document.getElementById("mobile-menu");
@@ -53,7 +50,7 @@
 %>
 
 <!DOCTYPE html>
-<div class="z-[3000] relative">
+<div class="z-[3000] w-screen max-w-screen relative">
     <style>
         .animationHeader {
             transition: .3s all ease;
@@ -98,7 +95,6 @@
         }
 
     </style>
-     
     <header id="desktopHeader" class="w-screen overflow-hidden h-16 bg-[#1F2937] flex flex-row items-center justify-between overflow-y-visible md:px-6 px-2 max-w-full overflow-x-hidden enterHeader">
         <% if (openCuponeraModal == true || cuponeraInfo != null) {
         %>

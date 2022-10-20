@@ -31,7 +31,7 @@
     loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
     
     // Id del user q quiero consultar
-    int usrId = 4;
+    int usrId = 52;
     
     try {
         instituciones = (HashMap<Integer, DtInstitucion>) request.getAttribute("instituciones");
@@ -54,7 +54,7 @@
     </head>
     <body class="w-screen h-screen flex items-start flex-col justify-start ">
         <jsp:include page='./components/header.jsp'>
-             <jsp:param name="" value=""/>
+            <jsp:param name="" value=""/>
         </jsp:include> 
 
         <a href="verPerfil?&userID=<%=usrId %>"> Ver Perfil</a>
