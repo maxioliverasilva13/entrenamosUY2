@@ -39,15 +39,8 @@ public class InfoCuponera extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CuponeraBo cupo = new CuponeraBo();
         int id =parseInt(request.getParameter("id"));
-        String nom = cupo.consultarCuponera(id).getNombre();
-        String des = cupo.consultarCuponera(id).getDescripcion();
-        Date  vig = cupo.consultarCuponera(id).getPeriodoVigencia();
-        int desc = cupo.consultarCuponera(id).getDescuento();
-        float precio = cupo.consultarCuponera(id).getPrecio();
-        List<DtCuponeraXActividad> cupxa = cupo.consultarCuponera(id).getCuponerasXActividad();
-        File foto = cupo.consultarCuponera(id).getImage();
         
-        DtCuponera res = new DtCuponera(id, nom, des, vig, desc, precio, cupxa, foto, null);
+        DtCuponera res = cupo.consultarCuponera(id);
         
         String openModal=request.getParameter("openModal");
         System.out.println(openModal + "estfgg");

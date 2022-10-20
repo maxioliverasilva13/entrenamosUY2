@@ -31,7 +31,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        
+        <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
         
     </head>
     <body class=" w-full h-full bg-cover bg-no-repeat " style="background-image: url('https://res.cloudinary.com/dwh8j7fys/image/upload/v1665238297/natacion_twsiuc.jpg');">
