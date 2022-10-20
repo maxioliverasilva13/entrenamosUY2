@@ -31,7 +31,7 @@
     loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
     
     // Id del user q quiero consultar
-    int usrId = 4;
+    int usrId = 52;
     
     try {
         instituciones = (HashMap<Integer, DtInstitucion>) request.getAttribute("instituciones");
