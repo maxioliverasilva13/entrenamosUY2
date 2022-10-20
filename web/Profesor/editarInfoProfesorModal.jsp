@@ -14,21 +14,21 @@
         </button>
 
         <form id="edit" action="EditInfo" method="post" enctype="multipart/form-data">
-            <p class="font-[Inter] font-medium text-center text-2xl mb-1">Editar Información</p>
+            <p class="font-[Inter] font-medium text-center text-2xl mb-1">Editar Información Profesor</p>
             <div class="border-gray-300 border-b mb-4 mx-16"></div>
             <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 mb-6 w-full group">
-                    <input name="nickname" type="text" value="${param.nickname}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled />
+                    <input name="nickname" type="text" value="${param.nickname}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " readonly />
                     <label for="nickname" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nickname</label>
                 </div>
                 <div class="relative z-0 mb-6 w-full group">
-                    <input id="email" type="text" name="email" value="${param.email}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled />
+                    <input id="email" type="text" name="email" value="${param.email}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " readonly />
                     <label for="email" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">E-mail</label>
                 </div>
             </div>
 
             <div class="relative z-0 mb-6 w-full group">
-                <input id="institucion" type="text" name="institucion" value="${param.institucion}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " disabled />
+                <input id="institucion" type="text" name="institucion" value="${param.institucion}" class="hover:cursor-not-allowed block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " readonly />
                 <label for="institucion" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Institución</label>
             </div>
 
