@@ -37,7 +37,7 @@ public class ListarCuponeras extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CuponeraBo cup = new CuponeraBo();
         HashMap<Integer, DtCuponera> res = new HashMap<Integer, DtCuponera>();
-        // res = cup.listarCuponerasBySocio(1);
+        res = cup.listarCuponerasBySocio(1);
         
         
         String prueba = request.getParameter("id");
@@ -49,9 +49,9 @@ public class ListarCuponeras extends HttpServlet {
         String openModal=request.getParameter("openModal");
         request.setAttribute("open", openModal);
         request.setAttribute("cuponerasDisp", res);
-        System.out.println(openModal + "hasdf");
+        //System.out.println(openModal + "hasdf");
         
-        request.getRequestDispatcher("/Inicio").forward(request, response);
+        request.getRequestDispatcher("InfoCuponera?openModal=true&id=2").forward(request, response);
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
