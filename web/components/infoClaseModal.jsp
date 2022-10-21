@@ -42,7 +42,6 @@
                 $("#contentInfo").css("display", "none");
                 // document.getElementById("imageCup").setAttribute("src", "")
             } else {
-                console.log(claseInfo);
                 $("#contentInfo").css("display", "flex");
                 $("#claseNombre").text(claseInfo?.nombre);
                 $("#fechaInicioClase").text(claseInfo?.fecha);
@@ -51,7 +50,7 @@
                 $("#sociosMaximosClase").text(claseInfo?.capMaxima);
                 $("#urlClase").text(claseInfo?.urlAcceso);
                 $("#inscriptosClase").text(claseInfo?.registros?.length || 0);
-                var imgsrc = claseInfo.blobImage ? "data:image/jpg;base64," + btoa(new Uint8Array(claseInfo.blobImage).reduce(function (data, byte) {
+                var imgsrc = claseInfo.imageBlob ? "data:image/jpg;base64," + btoa(new Uint8Array(claseInfo.imageBlob).reduce(function (data, byte) {
                     return data + String.fromCharCode(byte);
                 }, '')) : "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png"
                 $("#imageClase").attr("src", imgsrc);

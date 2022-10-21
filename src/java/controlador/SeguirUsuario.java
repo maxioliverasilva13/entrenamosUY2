@@ -4,27 +4,23 @@
  */
 package controlador;
 
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
-import CuponeraXActividad.DtCuponeraXActividad;
-import java.io.File;
+import Usuario.UsuarioBO;
+import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.Integer.parseInt;
-import java.util.Date;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author pedri
+ * @author mandi
  */
-@WebServlet(name = "InfoCuponera", urlPatterns = {"/InfoCuponera"})
-public class InfoCuponera extends HttpServlet {
+@WebServlet(name = "SeguirUsuario", urlPatterns = {"/SeguirUsuario"})
+public class SeguirUsuario extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,20 +31,6 @@ public class InfoCuponera extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CuponeraBo cupo = new CuponeraBo();
-        int id =parseInt(request.getParameter("id"));
-        
-        DtCuponera res = cupo.consultarCuponera(id);
-        
-        String openModal=request.getParameter("openModal");
-        System.out.println(openModal + "estfgg");
-        request.setAttribute("open", openModal);
-        request.setAttribute("infoCupo", res);
-        
-        request.getRequestDispatcher("/Inicio").forward(request, response);
-    }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -57,10 +39,10 @@ public class InfoCuponera extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet InfoCuponera</title>");            
+            out.println("<title>Servlet SeguirUsuario</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet InfoCuponera at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SeguirUsuario at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,6 +57,25 @@ public class InfoCuponera extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        HttpSession session = request.getSession(true);
+        UsuarioBO userBO = new UsuarioBO();
+        
+        int usrIDConsultado = Integer.parseInt(request.getParameter("idConsultado"));
+        UsuarioDTO loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
+        
+        boolean loggSigueAconsultado = false;
+        
+        try {
+            loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), usrIDConsultado);
+            request.setAttribute("sigoAlConsultado", loggSigueAconsultado);
+            System.out.println(loggSigueAconsultado);
+        } catch (Exception e) {
+        }
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -87,7 +88,31 @@ public class InfoCuponera extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doGet(request, response);
+        try {
+            UsuarioBO userBO = new UsuarioBO();
+            HttpSession session = request.getSession(true);
+            UsuarioDTO loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
+
+            int idConsultado = Integer.parseInt(request.getParameter("idConsultado"));
+            boolean sigoAconsultado = (boolean)request.getAttribute("sigoAlConsultado");
+
+            if (!sigoAconsultado) {
+                userBO.seguirAUsuario(loggedUser.getId(), idConsultado);
+            } else {
+                try {
+                    userBO.dejarSeguirUsuario(loggedUser.getId(), idConsultado);
+                    System.out.println("Ya lo seguias, lo has dejado de seguir!");
+                } catch (Exception e) {
+                    System.out.println("Error:" + e.getMessage());
+                }
+            }
+        response.sendRedirect("verPerfil?&userID="+idConsultado);
+
+        } catch (Exception e) {
+            System.out.println("ERROOOR:" + e.getMessage());
+            response.sendRedirect("NotFound.jsp");
+        }
     }
 
     /**

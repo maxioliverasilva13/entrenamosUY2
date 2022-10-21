@@ -59,6 +59,7 @@ public class CuponeraById extends HttpServlet {
             DtCuponera cupinfo = cupBO.consultarCuponera(Integer.parseInt(cupId));
             request.setAttribute("selectedCuponeraInfo", cupinfo);
             PrintWriter out = response.getWriter();
+            
             String cuponeraJSON = new Gson().toJson(cupinfo);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

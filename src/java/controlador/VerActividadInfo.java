@@ -13,6 +13,7 @@ import Clase.DtClase;
 import Cuponera.CuponeraBo;
 import Cuponera.DtCuponera;
 import Cuponera.InterfaceCuponeraBo;
+import Profesor.dtos.ProfesorDTO;
 import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,7 +31,9 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "VerActividadInfo", urlPatterns = {"/verActividadInfo"})
 public class VerActividadInfo extends HttpServlet {
+
     Boolean bool = new Boolean("true");
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,16 +51,21 @@ public class VerActividadInfo extends HttpServlet {
         String verInfoPagoOpen = request.getParameter("verInfoPago");
         String cupId = request.getParameter("cupId");
         HttpSession session = request.getSession(true);
-        UsuarioDTO user = (UsuarioDTO)session.getAttribute("currentSessionUser");
-        
-        
+        ProfesorDTO loggUser = null;
+        if (session.getAttribute("currentSessionUser") != null && session.getAttribute("typeOfUser") != null) {
+            if (session.getAttribute("typeOfUser").equals("Profesor")) {
+                loggUser = (ProfesorDTO)session.getAttribute("currentSessionUser");
+                System.out.println("El logueado es un profe");
+            }
+
+        }
         try {
             if (claseId != null) {
                 ClaseBO clasebo = new ClaseBO();
                 DtClase claseInfo = clasebo.consultarClase(Integer.parseInt(claseId));
                 request.setAttribute("selectedClaseInfo", claseInfo);
             }
-            
+
             if (cupId != null) {
                 CuponeraBo cupBO = new CuponeraBo();
                 DtCuponera cupinfo = cupBO.consultarCuponera(Integer.parseInt(cupId));
@@ -72,6 +80,13 @@ public class VerActividadInfo extends HttpServlet {
                 ActividadBO actBO = new ActividadBO();
                 ActividadDTO actInfo = actBO.consultarById(Integer.parseInt(actID));
                 request.setAttribute("actInfo", actInfo);
+                if (loggUser != null) {
+                    ProfesorDTO profe = loggUser;
+                    if (profe.getInstituciones().get(0).getId() ==  actInfo.getInstitucion().getId()) {
+                        request.setAttribute("showAddClassButton", true);
+                    }
+                }
+
                 if (modalOpen != null) {
                     request.setAttribute("modalIsOpen", modalOpen.equals("true") ? "true" : "false");
                 }

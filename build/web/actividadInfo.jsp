@@ -25,6 +25,11 @@
     String modalPagoOpen = (String) request.getAttribute("infoPagoModal");
     boolean openClaseModalInfo = modalIsOpen != null ? modalIsOpen.equals("true") : false;
     boolean openPagoModal = modalPagoOpen != null ? modalPagoOpen.equals("true") : false;
+    boolean showAddClassButton = false;
+
+    if (request.getAttribute("showAddClassButton") != null) {
+        showAddClassButton = (boolean) request.getAttribute("showAddClassButton");
+    }
 
     BlobToImage btimg = new BlobToImage();
     ActividadDTO infoAct = (ActividadDTO) request.getAttribute("actInfo");
@@ -34,6 +39,7 @@
     DtInstitucion instAct = infoAct.getInstitucion();
     DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");
     System.out.println("cupInfo is" + cupInfo);
+    
 
 %>
 
@@ -57,8 +63,14 @@
 %>
 
 <script>
+    var idActividad;
+    var idProfesor;
+    var profesorNombre;
+    
+    console.log('<%=infoAct.getImageBlob().toString() %>')
+
     const handleGetItem = (itemId) => {
-        const url = '/entrenamosUY34//cuponeraById?cupId=' + itemId;
+        const url = '/entrenamosUY3/cuponeraById?cupId=' + itemId;
         const cuponeraModal = document.getElementById("cuponeraInfoModal");
         window.cuponeraInfo = "Loading";
         cuponeraModal.style.cssText = "display: flex";
@@ -76,7 +88,7 @@
     }
 
     const handleGetClase = (itemId) => {
-        const url = '/entrenamosUY34//claseById?claseId=' + itemId;
+        const url = '/entrenamosUY3/claseById?claseId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
         if (window.claseInfo !== "Loading") {
             window.claseInfo = "Loading";
@@ -93,6 +105,19 @@
                 window.claseInfo = "Error";
             });
         }
+    }
+
+    const toggleOpenAddClaseModal = (idA, idP, nombreProfesor) => {
+        idActividad = idA;
+        idProfesor = idP;
+        profesorNombre = nombreProfesor;
+
+        const addClaseModal = document.getElementById("addClaseModal");
+        if (addClaseModal.style.display === "none") {
+            addClaseModal.style.cssText = "display: flex";
+        } else {
+            addClaseModal.style.cssText = "display: none";
+        }
 
     }
 </script>
@@ -106,7 +131,6 @@
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="index" />
         </jsp:include>
-        
         <%
             if (openPagoModal) {
         %>
@@ -114,8 +138,6 @@
             <jsp:include page='/components/pagarClase.jsp' >
                 <jsp:param name="path" value="index" />
             </jsp:include>
-       
-            
         <%
             }
         %>
@@ -123,8 +145,17 @@
         <jsp:include page='/components/selectedCuponeraInfo.jsp' />
         <jsp:include page='/components/infoClaseModal.jsp' />
 
-        <div class="w-full h-full flex-grow flex flex-col items-start justify-start px-20 my-8 gap-y-12">
-            <div class="w-full h-[450px] flex flex-row items-center justify-between gap-x-20">
+        <%
+            if (showAddClassButton == true) {
+        %>
+        <jsp:include page='/components/addClaseModal.jsp' />
+        <%
+            }
+        %>
+
+
+        <div class="w-full h-full flex-grow flex flex-col items-start justify-start px-20 my-8 gap-y-4">
+            <div class="w-full h-[450px] flex flex-row items-start justify-between gap-x-20">
                 <div class='w-[420px] h-full flex flex-col items-center justify-start gap-y-6'>
                     <img
                         src="<%=btimg.getBase64StringImage(infoAct.getImageBlob())%>"
@@ -150,7 +181,7 @@
                     </div>
                 </div>
 
-                <div class='w-full flex-grow h-full border border-gray-300 rounded-md shadow-md flex flex-col items-start justify-start p-6'>
+                <div class='w-full flex-grow h-auto border border-gray-300 rounded-md shadow-md flex flex-col items-start justify-start p-6'>
 
                     <p class="py-5 border-b border-gray-300 w-full text-left">Nombre Actividad: <%=infoAct.getNombre()%></p>
                     <div class="flex w-full flex-row items-center justify-start py-5 border-b border-gray-300">
@@ -165,19 +196,26 @@
                         <p class="w-1/3 text-gray-500 text-sm font-medium">Fecha Alta</p>
                         <p class="w-2/3 text-sm font-normal text-gray-900"><%=infoAct.getFechaRegistro()%></p>
                     </div>
-                    <div class="flex w-full flex-row flex-grow items-start justify-start py-5 border-b border-gray-300">
+                    <div class="flex w-full flex-row items-start justify-start py-5 h-auto">
                         <p class="w-1/3 text-gray-500 text-sm font-medium">Descripcion</p>
                         <p class="w-2/3 text-sm font-normal text-gray-900"><%=infoAct.getDescripcion()%></p>
                     </div>
                 </div>
             </div>
-            <%-- Solo si es socio --%>
-            <div class="w-full h-auto flex flex-row items-center justify-end h-10 my-2">
-                <p>Agregar</p>
+            <%-- Solo si es Profesor --%>
+            <%
+                if (showAddClassButton == true) {
+            %>
+            <div class="w-full h-auto flex flex-row items-center justify-end h-auto my-0">
+                <button onclick="toggleOpenAddClaseModal('<%=infoAct.getId()%>', '<%=infoAct.getProfesor().getId()%>', '<%=infoAct.getProfesor().getNombre()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-[#294557]">Agregar</button>
             </div>
-            <div class="w-full h-full min-h-[400px] flex-grow max-h-full overflow-auto flex flex-row items-start justify-center gap-x-16">
+            <%
+                }
+            %>
 
-                <div class="w-full flex-grow h-auto rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start  overflow-hidden">
+            <div class="w-full h-auto pb-4 my-12 flex-grow flex flex-row items-start justify-center gap-x-16">
+
+                <div class="w-full flex-grow mb-8 h-auto  min-h-[400px] overflow-auto rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start  overflow-hidden">
                     <div class="w-full flex flex-row items-center justify-start h-12 bg-gray-50 border-b border-gray-300 px-6">
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Cuponeras</p>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Descripcion</p>
@@ -206,13 +244,12 @@
                 </div>
 
 
-                <div class="w-full flex-grow h-auto rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start overflow-hidden">
+                <div id="clasesListadoFromActInfo" class="w-full flex-grow mb-8  min-h-[400px] overflow-auto h-auto rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start overflow-hidden">
                     <div class="w-full flex flex-row items-center justify-start h-12 bg-gray-50 border-b border-gray-300 px-6">
-                        <p class="w-[20%] h-auto text-sm text-gray-500 font-medium">Clase</p>
+                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium"></p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Clase</p>
                         <p class="w-[20%] h-auto text-sm text-gray-500 font-medium">Profesor</p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium">Min Socio</p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium">Max Socio</p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium">Inscriptos</p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Inscriptos</p>
                         <p class="w-[15%] h-auto text-sm text-gray-500 font-medium">Fecha</p>
                     </div>
 
@@ -220,11 +257,15 @@
                     <% for (DtClase clase : clasesAct) {
                     %>
                     <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-6">
-                        <p class="w-[20%] h-auto tex%>')"t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
+                        <div class="w-[15%] h-auto flex items-center justify-center">
+                            <img
+                            src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
+                            class="w-8 h-8 object-cover rounded-full overflow-hidden"
+                            />
+                        </div>
+                        <p class="w-[25%] h-auto tex%>')"t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
                         <p class="w-[20%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium"><%=clase.getCapMinima()%></p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium"><%=clase.getCapMaxima()%></p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium"><%=clase.getRegistros().size()%></p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getRegistros().size()%></p>
                         <p class="w-[15%] h-auto text-sm text-gray-500 font-medium"><%=clase.getFecha().toLocaleString()%></p>
                     </a>
                     <%
