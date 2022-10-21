@@ -23,6 +23,7 @@
           
           
           
+          
         item) ->{
      System.out.println("cuponera con id: " + key);
     });
@@ -84,7 +85,9 @@
                             }
                         %>
                     </div>
-
+                    <%
+                        }
+                    %>
                     <%-- Payment Card --%>
                     <div class="w-auto h-auto flex flex-col items-center justify-start gap-y-5">
                         <p class="text-gray-900 font-medium text-xl">Con un pago unico</p>
@@ -100,9 +103,7 @@
                             </div>
                         </div>
                     </div>
-                    <%
-                        }
-                    %>
+
                 </div>
             </div>
         </div>

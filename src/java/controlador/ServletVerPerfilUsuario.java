@@ -217,7 +217,7 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("apellido", dtSocio.getApellido());
             request.setAttribute("correo", dtSocio.getEmail());
             request.setAttribute("nickname", dtSocio.getNickname());
-            request.setAttribute("fnacimiento", dtSocio.getNacimiento().toString());
+            request.setAttribute("fnacimiento", dtSocio.getNacimiento() != null ? dtSocio.getNacimiento().toString() : "");
             request.setAttribute("cuponeras", listCuponeras);
 
 

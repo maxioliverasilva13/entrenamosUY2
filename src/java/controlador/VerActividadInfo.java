@@ -90,9 +90,10 @@ public class VerActividadInfo extends HttpServlet {
                     request.setAttribute("modalIsOpen", modalOpen.equals("true") ? "true" : "false");
                 }
                 if (verInfoPagoOpen != null) {
+                    UsuarioDTO userLogged = (UsuarioDTO)session.getAttribute("currentSessionUser");
                     request.setAttribute("infoPagoModal", verInfoPagoOpen.equals("true") ? "true" : "false");
                                         InterfaceCuponeraBo  cupBO = new CuponeraBo();
-                    HashMap<Integer, DtCuponera> cuponerasDisp = cupBO.listarCuponerasDisponiblesBySocio(loggUser.getId(),Integer.parseInt(actID));
+                    HashMap<Integer, DtCuponera> cuponerasDisp = cupBO.listarCuponerasDisponiblesBySocio(userLogged.getId(),Integer.parseInt(actID));
                     request.setAttribute("cuponerasDisp", cuponerasDisp);
                 }
                 request.getRequestDispatcher("/actividadInfo.jsp").forward(request, response);
