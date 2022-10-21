@@ -11,17 +11,17 @@ package customsDtos;
 public class ResponseServer {
     private int status;
     private String message;
-    
+
     public ResponseServer(int status,String message){
         this.status = status;
         this.message = message;
     }
-    
+
     public int getStatus(){
         return this.status;
     }
     public String getMessage(){
         return this.message;
     }
-    
+
 }

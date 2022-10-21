@@ -16,7 +16,7 @@ public class CreateActividadDTO {
     private float duracion;
     private float costo;
     private List<Integer> categoriasId;
-    
+
     public CreateActividadDTO(String nombre,String descripcion,float duracion,float costo, List<Integer> categoriasId){
       this.nombre = nombre;
       this.descripcion = descripcion;
@@ -24,7 +24,7 @@ public class CreateActividadDTO {
       this.costo = costo;
       this.categoriasId= categoriasId;
     }
-    
+
     public String getNombre(){
         return this.nombre;
     }

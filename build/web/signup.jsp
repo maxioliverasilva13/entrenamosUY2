@@ -304,44 +304,8 @@
                 }
             }
             
-             /*   var loadFile = function (event) {
-
-            const imgContainer = document.getElementById("imgContainer");
-            imgContainer.classList.remove("hidden");
-            imgContainer.classList.add("flex");
-            imgContainer.classList.add("justify-center");
-            const inputFileContainer = document.getElementById("inputFileContainer");
-            inputFileContainer.classList.add("hidden");
-
-            var output = document.getElementById('img');
-            output.src = URL.createObjectURL(event.target.files[0]);
-            output.onload = function () {
-                URL.revokeObjectURL(output.src) // free memory
-            }
-        };
-
-        function quitImage() {
-            
-  
-            const imgContainer = document.getElementById("imgContainer");
-            imgContainer.classList.add("hidden");
-            imgContainer.classList.remove("flex");
-
-            const inputFileContainer = document.getElementById("inputFileContainer");
-            
-            const inputFile = document.getElementById("input_file");
-            
-            inputFileContainer.classList.add("flex");
-            inputFileContainer.classList.remove("hidden");
-            inputFile.setAttribute("src","");
-            
-           
-            $('#input_file').val("");
-           
-        }*/
-            
             var loadFile = function(event) {
-              
+                alert("event");
                 const avatarContainer = document.getElementById("avatarContainer");
                 avatarContainer.classList.remove("hidden");
                 avatarContainer.classList.add("flex");
@@ -361,12 +325,7 @@
                 const avatarContainer = document.getElementById("avatarContainer");
                 avatarContainer.classList.add("hidden");
                 avatarContainer.classList.remove("flex");
-                
-                
-       
                 $('#inputFile').val("");
-                 
-                 
                 const inputFileContainer = document.getElementById("inputFileContainer");
                 inputFileContainer.classList.add("flex");
                 inputFileContainer.classList.remove("hidden");

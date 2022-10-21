@@ -156,7 +156,7 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("apellido", dtProfesor.getApellido());
             request.setAttribute("correo", dtProfesor.getEmail());
             request.setAttribute("institucion", dtIns.getNombre());
-            request.setAttribute("fnacimiento", dtProfesor.getNacimiento().toString());
+            request.setAttribute("fnacimiento", dtProfesor.getNacimiento() != null ? dtProfesor.getNacimiento().toString() : "");
             request.setAttribute("website", dtProfesor.getLinkSitioWeb());
             request.setAttribute("biografia", dtProfesor.getBiografia());
             request.setAttribute("descripcion", dtProfesor.getdescripcionGeneral());

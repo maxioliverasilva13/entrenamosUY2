@@ -108,6 +108,8 @@
                 <a href="actividadesInfo" class=" cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "actividades" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Actividades</a>
                 <a class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Clases</a>
                 <a href="listarCuponeras?openModal=true" class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Cuponeras</a>
+                <a href="Usuarios" class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "usuarios" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}"">Usuarios</a>
+
             </ul>
         </div>
         <%-- Login icon --%>
