@@ -12,7 +12,6 @@ import Clase.ClaseDao;
 import Clase.DtClase;
 import Cuponera.CuponeraBo;
 import Cuponera.DtCuponera;
-import Cuponera.InterfaceCuponeraBo;
 import Profesor.dtos.ProfesorDTO;
 import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
@@ -59,6 +58,7 @@ public class VerActividadInfo extends HttpServlet {
             }
 
         }
+
         try {
             if (claseId != null) {
                 ClaseBO clasebo = new ClaseBO();
@@ -73,10 +73,8 @@ public class VerActividadInfo extends HttpServlet {
             }
 
             if (actID == null || actID.equals("")) {
-              
                 response.sendRedirect("NotFound.jsp");
             } else {
-  
                 ActividadBO actBO = new ActividadBO();
                 ActividadDTO actInfo = actBO.consultarById(Integer.parseInt(actID));
                 request.setAttribute("actInfo", actInfo);
@@ -92,14 +90,10 @@ public class VerActividadInfo extends HttpServlet {
                 }
                 if (verInfoPagoOpen != null) {
                     request.setAttribute("infoPagoModal", verInfoPagoOpen.equals("true") ? "true" : "false");
-                    InterfaceCuponeraBo  cupBO = new CuponeraBo();
-                    HashMap<Integer, DtCuponera> cuponerasDisp = cupBO.listarCuponerasDisponiblesBySocio(loggUser.getId(),Integer.parseInt(actID));
-                    request.setAttribute("cuponerasDisp", cuponerasDisp);
                 }
                 request.getRequestDispatcher("/actividadInfo.jsp").forward(request, response);
             }
         } catch (Exception e) {
-      
             System.out.println(e.getMessage());
             response.sendRedirect("NotFound.jsp");
         }

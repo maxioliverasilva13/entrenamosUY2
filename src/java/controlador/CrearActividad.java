@@ -4,36 +4,21 @@
  */
 package controlador;
 
-import Actividad.ActividadBO;
-import Actividad.IActividadBO;
-import Actividad.dtos.ActividadCreateDTO;
 import Categoria.CategoriaBO;
 import Categoria.DtCategoria;
 import Categoria.ICategoriaBO;
 import Institucion.DtInstitucion;
-import Institucion.InstitucionBO;
 import Profesor.Profesor;
 import Profesor.dtos.ProfesorDTO;
 import Usuario.dtos.UsuarioDTO;
-import com.google.gson.Gson;
-import customsDtos.CreateActividadDTO;
 import customsDtos.getCreateActividadDataDTO;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-import util.BlobToImage;
 
 import util.JSONConverter;
 
@@ -41,7 +26,6 @@ import util.JSONConverter;
  *
  * @author rodrigo
  */
-@MultipartConfig(maxFileSize = 160177215) 
 public class CrearActividad extends HttpServlet {
 
     /**
@@ -116,52 +100,7 @@ public class CrearActividad extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-        response.setContentType("text/html");
-       Gson gson = new Gson();
-       try {
-            String nombre = request.getParameter("nombre");
-            String descripcion = request.getParameter("descripcion");
-            float duracion =   Float.parseFloat(request.getParameter("duracion"));
-            float costo =   Float.parseFloat(request.getParameter("costo"));
-            String[] categoriasIdArrStr = request.getParameterValues("categoriasId");
-             
-           
-            Part filePart = request.getPart("image");
-            InputStream fileContent = null;
-            File image = null;
-            if(filePart != null){
-                String fileName = filePart.getName();
-                BlobToImage blobToImg = new BlobToImage();
-                fileContent = filePart.getInputStream();
-                byte[] targetArray = new byte[fileContent.available()];
-                image = blobToImg.writeBytesToFile(fileName, targetArray);
-            }else{
-                System.out.println("No se envio imagen");
-            }
-            
-           // int institucion_id,int profesor_id, float costo, String nombre, String descripcion, Date fecha_registro, int duracion, File file, List<DtCategoria> catsInThisActividad, String estado
-            List<DtCategoria> categorias  = new ArrayList<DtCategoria>();
-            for(int i=0; i< categoriasIdArrStr.length; i++){
-                Integer categoriaID = Integer.parseInt(categoriasIdArrStr[i]);
-                categorias.add(new DtCategoria(categoriaID,null));
-            }
-            int institucion_id = 2;
-            int profesor_id = 2;
-                    // public ActividadCreateDTO(int institucion_id,int profesor_id, float costo, String nombre, String descripcion, Date fecha_registro, int duracion, File file, List<DtCategoria> catsInThisActividad, String estado){
-            ActividadCreateDTO act = new ActividadCreateDTO(institucion_id,profesor_id,costo,nombre,descripcion,new Date(),(int)duracion,image,categorias,"Ingresada");
-            IActividadBO actBo = new ActividadBO();
-           
-           actBo.crear(act, institucion_id, profesor_id);
-            
-     
-           
-       }catch(Exception e){
-           System.out.println(e.getMessage());
-           response.sendError(500,e.getMessage());
-       }
-       
-       
+        processRequest(request, response);
     }
 
     /**
