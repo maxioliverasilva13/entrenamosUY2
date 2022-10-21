@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/java/controlador/InsertarClase.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>129</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/TestServelet.java</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/imports.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/src/java/controlador/ComprarClase.java</file>
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/components/pagarClase.jsp</file>
             <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/index.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/signup.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/verActividades.jsp</file>
+            <file>file:/C:/Users/feder/Documents/NetBeansProjects/entrenamosUY3/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
 </project-private>
