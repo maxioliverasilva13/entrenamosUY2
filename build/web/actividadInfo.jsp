@@ -109,10 +109,13 @@
         
         <%
             if (openPagoModal) {
-        %> 
-        <jsp:include page='/components/pagarClase.jsp' >
-            <jsp:param name="path" value="index" />
-        </jsp:include>
+        %>
+       
+            <jsp:include page='/components/pagarClase.jsp' >
+                <jsp:param name="path" value="index" />
+            </jsp:include>
+       
+            
         <%
             }
         %>

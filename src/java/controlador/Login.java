@@ -77,6 +77,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
                 String email = (String)request.getParameter("email");
                 String password = request.getParameter("password");
                 
@@ -93,7 +94,7 @@ public class Login extends HttpServlet {
                     HttpSession session = request.getSession(true);	    
                     session.setAttribute("currentSessionUser",user);
                     session.setAttribute("typeOfUser", typeofUser);
-                    response.sendRedirect("TestServelet");
+                    response.sendRedirect("Inicio");
                     
                 }catch(UnauthorizedException e){
                     request.setAttribute("status", "Correo o Contraseña incorrectos");

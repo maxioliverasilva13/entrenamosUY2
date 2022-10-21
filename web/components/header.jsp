@@ -1,15 +1,11 @@
 
-<<<<<<< HEAD
 <%@page import="util.BlobToImage"%>
 <%@page import="Usuario.dtos.UsuarioDTO"%>
-=======
 <%@page import="Cuponera.DtCuponera"%>
->>>>>>> a529be1330cca3d5a4e583064cff8b28e12ba0dd
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page='../imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
-<<<<<<< HEAD
 
 <script>
     const toggleSidebar = () => {

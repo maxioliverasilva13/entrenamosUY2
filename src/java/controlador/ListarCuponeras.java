@@ -37,7 +37,7 @@ public class ListarCuponeras extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CuponeraBo cup = new CuponeraBo();
         HashMap<Integer, DtCuponera> res = new HashMap<Integer, DtCuponera>();
-        res = cup.listarCuponerasBySocio(1);
+        // res = cup.listarCuponerasBySocio(1);
         
         
         String prueba = request.getParameter("id");

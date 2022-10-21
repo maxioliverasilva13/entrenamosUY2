@@ -12,6 +12,8 @@ import Clase.ClaseDao;
 import Clase.DtClase;
 import Cuponera.CuponeraBo;
 import Cuponera.DtCuponera;
+import Cuponera.InterfaceCuponeraBo;
+import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -44,7 +47,10 @@ public class VerActividadInfo extends HttpServlet {
         String claseId = request.getParameter("claseId");
         String verInfoPagoOpen = request.getParameter("verInfoPago");
         String cupId = request.getParameter("cupId");
-
+        HttpSession session = request.getSession(true);
+        UsuarioDTO user = (UsuarioDTO)session.getAttribute("currentSessionUser");
+        
+        
         try {
             if (claseId != null) {
                 ClaseBO clasebo = new ClaseBO();
@@ -59,8 +65,10 @@ public class VerActividadInfo extends HttpServlet {
             }
 
             if (actID == null || actID.equals("")) {
+              
                 response.sendRedirect("NotFound.jsp");
             } else {
+  
                 ActividadBO actBO = new ActividadBO();
                 ActividadDTO actInfo = actBO.consultarById(Integer.parseInt(actID));
                 request.setAttribute("actInfo", actInfo);
@@ -69,10 +77,14 @@ public class VerActividadInfo extends HttpServlet {
                 }
                 if (verInfoPagoOpen != null) {
                     request.setAttribute("infoPagoModal", verInfoPagoOpen.equals("true") ? "true" : "false");
+                    InterfaceCuponeraBo  cupBO = new CuponeraBo();
+                    HashMap<Integer, DtCuponera> cuponerasDisp = cupBO.listarCuponerasDisponiblesBySocio(user.getId(),Integer.parseInt(actID));
+                    request.setAttribute("cuponerasDisp", cuponerasDisp);
                 }
                 request.getRequestDispatcher("/actividadInfo.jsp").forward(request, response);
             }
         } catch (Exception e) {
+      
             System.out.println(e.getMessage());
             response.sendRedirect("NotFound.jsp");
         }

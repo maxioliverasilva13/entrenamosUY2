@@ -47,7 +47,7 @@ public class InfoCuponera extends HttpServlet {
         List<DtCuponeraXActividad> cupxa = cupo.consultarCuponera(id).getCuponerasXActividad();
         File foto = cupo.consultarCuponera(id).getImage();
         
-        DtCuponera res = new DtCuponera(id, nom, des, vig, desc, precio, cupxa, foto);
+        DtCuponera res = new DtCuponera(id, nom, des, vig, desc, precio, cupxa, foto, null);
         
         String openModal=request.getParameter("openModal");
         System.out.println(openModal + "estfgg");
