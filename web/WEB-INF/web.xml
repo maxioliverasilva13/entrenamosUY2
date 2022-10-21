@@ -19,10 +19,14 @@
     <servlet>
         <servlet-name>Usuarios</servlet-name>
         <servlet-class>controlador.Usuarios</servlet-class>
-    </servlet> 
+    </servlet>
     <servlet>
         <servlet-name>CrearActividad</servlet-name>
         <servlet-class>controlador.CrearActividad</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ComprarClase</servlet-name>
+        <servlet-class>controlador.ComprarClase</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Inicio</servlet-name>
@@ -67,6 +71,10 @@
     <servlet-mapping>
         <servlet-name>CrearActividad</servlet-name>
         <url-pattern>/CrearActividad</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ComprarClase</servlet-name>
+        <url-pattern>/ComprarClase</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
