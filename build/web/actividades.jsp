@@ -59,7 +59,10 @@
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="actividades" />
         </jsp:include>
+        
+        
         <div class="w-full h-full flex-grow px-8 py-6 max-h-full overflow-auto flex flex-row items-center justify-between gap-x-32 p-10">
+           
             <div class="w-96 h-full flex flex-col items-center justify-start gap-y-2">
                 <p class="text-gray-500 w-full text-left font-medium text-md">Categorias</p>
 
@@ -197,6 +200,12 @@
                 </div>
             </div>
         </div>
+                    
+          
+        </div>
     </body>
+    
+    
+   
 </html>
 
