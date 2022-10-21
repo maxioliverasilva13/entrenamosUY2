@@ -70,7 +70,7 @@
     console.log('<%=infoAct.getImageBlob().toString() %>')
 
     const handleGetItem = (itemId) => {
-        const url = '/entrenamosUY34//cuponeraById?cupId=' + itemId;
+        const url = '/entrenamosUY3/cuponeraById?cupId=' + itemId;
         const cuponeraModal = document.getElementById("cuponeraInfoModal");
         window.cuponeraInfo = "Loading";
         cuponeraModal.style.cssText = "display: flex";
@@ -88,7 +88,7 @@
     }
 
     const handleGetClase = (itemId) => {
-        const url = '/entrenamosUY34//claseById?claseId=' + itemId;
+        const url = '/entrenamosUY3/claseById?claseId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
         if (window.claseInfo !== "Loading") {
             window.claseInfo = "Loading";
