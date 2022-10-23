@@ -4,6 +4,7 @@
     Author     : mandi
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="java.util.HashMap"%>
@@ -173,18 +174,21 @@
                             for (HashMap.Entry<Integer, ActividadDTO> en : listAct.entrySet()) {
                                 Integer key = en.getKey();
                                 ActividadDTO val = en.getValue();
+                                
+                                SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+                                String dateRegistro = DATE_FORMAT.format(val.getFechaRegistro());
                         %>
                         <tr class="bg-white border-b ">
                             <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
                                 <%=val.getNombre()%>
                             </th>
                             <td class="py-4 px-6">
-                                <%=val.getFechaRegistro()%>
+                                <%=dateRegistro%>
                             </td>
                             <td class="py-4 px-6">
                                 <%=val.getDuracion()%>
                             </td>
-                            <td class="py-4 px-6">
+                            <td class="py-4 px-6 space-x-5 space-y-6">
                                 <%-- Badge Aceptada --%>
                                 <%
                                     if (val.getEstado().equals("Aceptada")) {
@@ -192,6 +196,9 @@
                                 <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
                                     Aceptada
                                 </span>
+                                <a href="verActividadInfo?actId=<%= val.getId() %>">
+                                    <i class="fa-solid fa-chevron-right text-gray-900 cursor-pointer px-4"></i>
+                                </a>
                                 <%
                                     }
                                 %>
