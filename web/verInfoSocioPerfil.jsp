@@ -112,6 +112,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
+        <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
     </head>
                         <script>
                             const handleEditInfo = () => {
@@ -270,7 +271,7 @@
                                 <jsp:param name="institucion" value="<%= institucion%>" />
                                 <jsp:param name="name" value="<%= nombre%>" />
                                 <jsp:param name="lastname" value="<%= apellido%>" />
-                                <jsp:param name="fnacimiento" value="<%= userDT.getNacimiento()%>" />
+                                <jsp:param name="fnacimiento" value="<%= fnacimiento %>" />
                                 <jsp:param name="biografia" value="<%= biografia%>" />
                                 <jsp:param name="description" value="<%= descripcion%>" />
                                 <jsp:param name="utype" value="<%= userDT.getType()%>" />

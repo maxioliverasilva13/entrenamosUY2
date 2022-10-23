@@ -67,7 +67,6 @@
     var idProfesor;
     var profesorNombre;
     
-    console.log('<%=infoAct.getImageBlob().toString() %>')
 
     const handleGetItem = (itemId) => {
         const url = '/entrenamosUY3/cuponeraById?cupId=' + itemId;
