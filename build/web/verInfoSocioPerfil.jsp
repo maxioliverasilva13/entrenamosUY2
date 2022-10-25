@@ -51,7 +51,6 @@
     try {
         listCups = (HashMap<Integer, DtCuponera>) request.getAttribute("cuponeras");
     } catch (Exception e) {
-        System.out.println(e.getMessage());
     }
 %>
 

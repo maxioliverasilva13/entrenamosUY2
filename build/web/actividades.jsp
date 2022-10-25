@@ -24,7 +24,6 @@
     Boolean hasInstitucionInfo = ins != null;
 
     Boolean hasFilteredCategories = request.getAttribute("filteredActividades") != null;
-    System.out.println("tengo " + hasFilteredCategories);
 
     if (!hasInstitucionInfo) {
         instituciones = (HashMap<Integer, DtInstitucion>) request.getAttribute("instituciones");
@@ -101,7 +100,6 @@
                                 Integer key = en.getKey();
                                 DtCategoria val = en.getValue();
                                 boolean isChecked = appliedFilters.contains(val.getNombre());
-                                System.out.println(isChecked);
                         %>
                         <jsp:include page='/components/categoriaCard.jsp' >
                             <jsp:param name="categoria" value="<%=val.getNombre()%>" />

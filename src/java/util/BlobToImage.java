@@ -30,7 +30,6 @@ public class BlobToImage {
                 str = str + (char) b;
             }
         }
-        System.out.println(str);
         return str;
      }
     

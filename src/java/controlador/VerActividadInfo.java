@@ -55,7 +55,6 @@ public class VerActividadInfo extends HttpServlet {
         if (session.getAttribute("currentSessionUser") != null && session.getAttribute("typeOfUser") != null) {
             if (session.getAttribute("typeOfUser").equals("Profesor")) {
                 loggUser = (ProfesorDTO)session.getAttribute("currentSessionUser");
-                System.out.println("El logueado es un profe");
             }
 
         }
@@ -99,7 +98,6 @@ public class VerActividadInfo extends HttpServlet {
                 request.getRequestDispatcher("/actividadInfo.jsp").forward(request, response);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             response.sendRedirect("NotFound.jsp");
         }
     }

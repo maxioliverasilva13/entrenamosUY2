@@ -64,7 +64,6 @@
     try {
         listAct = (HashMap<Integer, ActividadDTO>) request.getAttribute("actividades");
     } catch (Exception e) {
-        System.out.println(e.getMessage());
     }
 %>
 

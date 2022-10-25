@@ -137,10 +137,9 @@ public class CrearActividad extends HttpServlet {
                 String fileName = filePart.getName();
                 BlobToImage blobToImg = new BlobToImage();
                 fileContent = filePart.getInputStream();
-                byte[] targetArray = new byte[fileContent.available()];
+                byte[] targetArray = fileContent.readAllBytes();
                 image = blobToImg.writeBytesToFile(fileName, targetArray);
             }else{
-                System.out.println("No se envio imagen");
             }
             
            // int institucion_id,int profesor_id, float costo, String nombre, String descripcion, Date fecha_registro, int duracion, File file, List<DtCategoria> catsInThisActividad, String estado
@@ -160,8 +159,6 @@ public class CrearActividad extends HttpServlet {
      
            
        }catch(Exception e){
-           System.out.println(e.getMessage());
-           System.out.println(e);
            response.sendError(500,e.getMessage());
        }
        

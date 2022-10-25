@@ -126,7 +126,6 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             }
 
         } catch (Exception e) {
-            System.out.println("ERROR CATCHED: " + e.getMessage());
         }
 
         // Validar si es profesor o socio
@@ -149,7 +148,6 @@ public class ServletVerPerfilUsuario extends HttpServlet {
                 });
 
             } catch (Exception e) {
-                System.out.println("ERROR CATCHED: " + e.getMessage());
                 response.sendRedirect("NotFound.jsp");
                 return;
             }
@@ -202,8 +200,6 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             dtSocio.getRegistros().forEach((DtRegistro r) -> {
                 listClasesOfUser.add(r.getClase());
                 int idActividad = r.getClase().getIdActividad();                
-                System.out.println("idActividad");
-                System.out.println(idActividad);
                 if (idActividad != 0) {
                     Actividad.Actividad act = actDao.getById(idActividad);
                     if (act != null) {
