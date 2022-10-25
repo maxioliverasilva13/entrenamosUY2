@@ -27,10 +27,21 @@
             //desktopHeader.classList.toggle("outHeader");
         }
     }
+    
+    const toggleModalCuponera = (id) => {
+        var element = document.getElementById(id);
+        if (getComputedStyle(element).display === "none") {
+            element.style.cssText = "display:flex";
+            element.onload();
+        } else {
+            element.style.cssText = "display: none";
+        }
+    }
 </script>
 
 <%
     UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
+    String typeOfUser = (String) session.getAttribute("typeOfUser");
     boolean hasUser = userInfo != null;
     BlobToImage bltimg = new BlobToImage();
 
@@ -41,7 +52,6 @@
         openCuponeraModal = true;
 
     }
-    System.out.println(arr + "dfdf112");
 
     DtCuponera cuponeraInfo = null;
     if (request.getAttribute("cuponera") != null) {
@@ -101,13 +111,26 @@
         <jsp:include page='./verCuponerasDisponibles.jsp'/>
         <%
             }%> 
+        <%
+            if (userInfo != null && typeOfUser != null && typeOfUser.equals("Socio")) {
+        %>
+        <jsp:include page='./listadoCuponerasDisponibles.jsp'/>
+        <%
+            }
+        %>
         <div class="w-auto h-full flex flex-row items-center justify-start gap-x-6">
             <p class="text-white font-semibold text-xl">Entrenamos<span class="bg-[#E5E2C9] py-1 px-2 rounded-xs mx-1 rounded-md">UY</span></p>
             <ul class="w-auto h-full items-center justify-start gap-x-4 md:flex hidden">
                 <a href="Inicio" class="text-white cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "index" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Inicio</a> 
                 <a href="actividadesInfo" class=" cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "actividades" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Actividades</a>
                 <a class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Clases</a>
-                <a href="listarCuponeras?openModal=true" class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Cuponeras</a>
+                <%
+                    if (userInfo != null && typeOfUser != null && typeOfUser.equals("Socio")) {
+                %>
+                <p onclick="toggleModalCuponera('cuponerasDisponiblesModalView')" class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Cuponeras</p>
+                <%
+                    }
+                %>
                 <a href="Usuarios" class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "usuarios" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}"">Usuarios</a>
 
             </ul>

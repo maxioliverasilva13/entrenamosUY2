@@ -123,15 +123,6 @@ public class ComprarClase extends HttpServlet {
             res = new ResponseServer(200,"Has comprado la clase correctamente!");
             responseStr = gson.toJson(res);
             pw.print(responseStr);
-        } catch (MaxClasesForCuponera ex) {
-            res = new ResponseServer(400,"Maximo de cuponera por clase");
-            responseStr = gson.toJson(res);
-            pw.print(responseStr);
-
-        } catch (CompraCuponeraNotFoundException ex) {
-            res = new ResponseServer(400,ex.getMessage());  
-            responseStr = gson.toJson(res);
-            pw.print(responseStr);
         } catch (ClassHasMaxOfReg ex) { 
             response.sendError(400,ex.getMessage());
         } catch (SocioAlreadyAreInClass ex) {
@@ -143,13 +134,6 @@ public class ComprarClase extends HttpServlet {
             responseStr = gson.toJson(res);
             pw.print(responseStr);
         }
-
-
-
-
-
-
-
     }
 
     /**

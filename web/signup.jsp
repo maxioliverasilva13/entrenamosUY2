@@ -20,9 +20,7 @@
             request.setAttribute("instituciones", ins);
         }
        
-       
     } catch (Exception e) {
-        System.out.println("Error");
     }
 %>
 

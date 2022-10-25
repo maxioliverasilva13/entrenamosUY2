@@ -38,7 +38,6 @@
     List<DtCuponeraXActividad> cuponerasXAct = infoAct.getCuponerasXActivdad();
     DtInstitucion instAct = infoAct.getInstitucion();
     DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");
-    System.out.println("cupInfo is" + cupInfo);
     
 
 %>
@@ -67,8 +66,6 @@
     var idProfesor;
     var profesorNombre;
     
-    console.log('<%=infoAct.getImageBlob().toString() %>')
-
     const handleGetItem = (itemId) => {
         const url = '/entrenamosUY3/cuponeraById?cupId=' + itemId;
         const cuponeraModal = document.getElementById("cuponeraInfoModal");

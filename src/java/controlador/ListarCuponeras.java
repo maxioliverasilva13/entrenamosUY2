@@ -4,9 +4,12 @@
  */
 package controlador;
 
-
 import Cuponera.CuponeraBo;
 import Cuponera.DtCuponera;
+import Socio.dtos.SocioDTO;
+import Usuario.dtos.UsuarioDTO;
+import com.google.gson.Gson;
+import controlador.utils.ResponseUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -15,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -22,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ListarCuponeras", urlPatterns = {"/listarCuponeras"})
 public class ListarCuponeras extends HttpServlet {
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,28 +36,37 @@ public class ListarCuponeras extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CuponeraBo cup = new CuponeraBo();
-        HashMap<Integer, DtCuponera> res = new HashMap<Integer, DtCuponera>();
-        res = cup.listarCuponerasBySocio(1);
-        
-        
-        String prueba = request.getParameter("id");
-        
-        if (prueba != null && prueba != "") {
-        DtCuponera cuponera = cup.consultarCuponera(Integer.parseInt(prueba));
-        request.setAttribute("cuponera", cuponera);
+        HttpSession session = request.getSession(true);
+        String typeOfUser = (String) session.getAttribute("typeOfUser");
+        System.out.println("llego");
+
+        if (typeOfUser != null && typeOfUser.equals("Socio")) {
+            SocioDTO userinfo = (SocioDTO)session.getAttribute("currentSessionUser");
+
+            CuponeraBo cup = new CuponeraBo();
+            HashMap<Integer, DtCuponera> res = new HashMap<Integer, DtCuponera>();
+            res = cup.listarCuponerasBySocio(userinfo.getId());
+            ResponseUtil respUtil = new ResponseUtil(false, "Datos obtenidos correctamente", res);
+
+            PrintWriter out = response.getWriter();
+            String claseJSON = new Gson().toJson(respUtil);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(claseJSON);
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            ResponseUtil respUtil = new ResponseUtil(false, "Permisos insificientes", null);
+            PrintWriter out = response.getWriter();
+            String claseJSON = new Gson().toJson(respUtil);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(claseJSON);
+            response.setStatus(HttpServletResponse.SC_OK);
         }
-        String openModal=request.getParameter("openModal");
-        request.setAttribute("open", openModal);
-        request.setAttribute("cuponerasDisp", res);
-        //System.out.println(openModal + "hasdf");
-        
-        request.getRequestDispatcher("InfoCuponera?openModal=true&id=2").forward(request, response);
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -62,7 +75,7 @@ public class ListarCuponeras extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet PaginaInicio</title>");            
+            out.println("<title>Servlet PaginaInicio</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet PaginaInicio at " + request.getContextPath() + "</h1>");
@@ -70,6 +83,7 @@ public class ListarCuponeras extends HttpServlet {
             out.println("</html>");
         }
     }
+
     /**
      * Returns a short description of the servlet.
      *

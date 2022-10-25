@@ -31,7 +31,6 @@
     loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
     typeOfUser = (String) session.getAttribute("typeOfUser");
 
-    System.out.println(typeOfUser);
 
     // Id del user q quiero consultar
     int usrId = 52;
@@ -40,7 +39,6 @@
         instituciones = (HashMap<Integer, DtInstitucion>) request.getAttribute("instituciones");
         actividades = (HashMap<Integer, ActividadDTO>) request.getAttribute("actividades");
     } catch (Exception e) {
-        System.out.println("Error");
     }
     String nameOfUser = "Usuario";
     UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
@@ -68,7 +66,7 @@
         <jsp:include page='./components/header.jsp'>
             <jsp:param name="path" value="index"/>
         </jsp:include> 
-        <div id="defaultModal" class="w-full h-full fixed max-h-full z-[99999] overflow-auto top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 mx-auto justify-center transition-all" id="modalComponent" >
+        <div id="defaultModal" style="display: none" class="w-full h-full fixed max-h-full z-[99999] overflow-auto top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 mx-auto justify-center transition-all" id="modalComponent" >
             <div tabindex="-1" aria-hidden="true" class=" px-10 w-3/5 mx-auto">
                 <div class="relative p-4 w-full  h-full md:h-auto px-10">
                     <!-- Modal content -->

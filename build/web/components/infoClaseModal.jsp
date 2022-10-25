@@ -23,7 +23,6 @@
 
     boolean isLoggedAndSocio = false;
     String typeOfUser = (String) session.getAttribute("typeOfUser");
-    System.out.println("typeOfUser is " + typeOfUser);
     if (typeOfUser != null) {
         if (typeOfUser.equalsIgnoreCase("Socio")) {
             isLoggedAndSocio = true;

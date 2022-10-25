@@ -17,9 +17,9 @@
         const listOfClasesDiv = document.getElementById("clasesListadoFromActInfo");
         if (listOfClasesDiv != null) {
             const clase = data;
-            var imgsrc = "data:image/jpg;base64," + btoa(new Uint8Array(clase.imageBlob).reduce(function (data, byte) {
+            var imgsrc = data?.imageBlob ? "data:image/jpg;base64," + btoa(new Uint8Array(clase.imageBlob).reduce(function (data, byte) {
                 return data + String.fromCharCode(byte);
-            }, ''));
+            }, '')) : "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png";
 
             var div = document.createElement('template');
             div.innerHTML = `
@@ -88,7 +88,7 @@
         })
     }
 
-    const urlToCreateClass = "/entrenamosUY34/insertarClase";
+    const urlToCreateClass = "/entrenamosUY3/insertarClase";
     const handleCreateClase = (imgSrc) => {
         const nombre = $("#nombreClase").val();
         const sociosMin = $("#sociosMinClase").val();
@@ -154,6 +154,7 @@
 </script>
 
 <!DOCTYPE html>
+<jsp:include page="../imports.jsp" />
 <style>
     .mainModal {
         animation: opac .2s ease;
@@ -193,8 +194,11 @@
 </div>
 
 <div id="addClaseModal" style="display: none" class="w-full h-full z-[99999] max-h-full overflow-auto transition-all delay-150 fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 items-center justify-center transition-all">
-    <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
+       <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
+    </head>
     <div class="w-auto min-w-[600px] px-4 py-6 h-auto bg-white relative flex flex-col items-center justify-start rounded-2xl shadow-lg delay-500 transition-opacity mainModal">
         <button onclick="toggleOpenModal('addClaseModal')" id="closeAddClaseButton"  class="w-10 outline-none transition-all h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>

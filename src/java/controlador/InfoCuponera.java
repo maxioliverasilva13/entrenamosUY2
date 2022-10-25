@@ -43,7 +43,6 @@ public class InfoCuponera extends HttpServlet {
         DtCuponera res = cupo.consultarCuponera(id);
         
         String openModal=request.getParameter("openModal");
-        System.out.println(openModal + "estfgg");
         request.setAttribute("open", openModal);
         request.setAttribute("infoCupo", res);
         
