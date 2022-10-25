@@ -278,6 +278,9 @@
                     inputFile.setAttribute("src", "");
                     $('#input_file').val("");
                 }
+                
+               
+    
                 $(function () {
                     const form = $("#add-activity").validate({
                         // Specify validation rules
@@ -344,6 +347,8 @@
                                 errorCatLbl.innerHTML = "Debes seleccionar al menos una categoria";
                             }
                             const image = $('#input_file')[0].files[0];
+                            
+                          
                             var data = new FormData();
                             data.append("nombre", nombre);
                             data.append("descripcion", descripcion);
