@@ -54,7 +54,7 @@
 	       	   	   	   	<br>
 	       	   	   	   	<div class="mt-1">
 	       	   	   	   		<span class="text-white"></span>
-	       	   	   	   		<a class="text-[#709FE6]  font-['Inter'] font-medium hover:text-white hover:cursor-pointer"> Crear una cuenta gratuita</a>
+	       	   	   	   		<a class="text-[#709FE6]  font-['Inter'] font-medium hover:text-white hover:cursor-pointer" onclick="onClickCrearUnaCuenta()"> Crear una cuenta gratuita</a>
 	       	   	   	   	</div>      	   	   	   
                                    </p>
                                    
@@ -76,14 +76,12 @@
                                                           <%
                                                         }
                                                       %>
-                                                <div class="flex justify-between">
+                                                <div class="flex justify-end">
                                                         <div>
                                                                 <input type="checkbox"  class="rounded-[10px]">
                                                                 <label class="text-white font-['Inter'] font-normal text-xs md:text-sm">Remember password</label>
                                                         </div>
-                                                        <div>
-                                                                <a class="text-[#709FE6]  font-['Inter'] font-medium text-xs md:text-sm hover:text-white hover:cursor-pointer">Forgot your password?</a>
-                                                        </div>
+                                                       
                                                 </div>
 
                                                     <div class="">
@@ -102,4 +100,11 @@
        </div>
     </div>
 </body>
+
+<script>
+    function onClickCrearUnaCuenta(){
+        window.location.href = 'SignUp';
+
+    }
+ </script>
 </html>

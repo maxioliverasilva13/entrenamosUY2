@@ -123,15 +123,14 @@ public class SignUp extends HttpServlet {
         if(filePart.getSize() > 0){
             BlobToImage blobToImg = new BlobToImage();
             fileContent = filePart.getInputStream();
-            byte[] targetArray = new byte[fileContent.available()];
-            // byte[] bytes = fileContent.readAllBytes();
-            avatar = blobToImg.writeBytesToFile(nickname, targetArray);
+            byte[] bytes = fileContent.readAllBytes();
+            avatar = blobToImg.writeBytesToFile(nickname, bytes);
         }
         IUsuarioBO usuarioBo = new UsuarioBO();
         try{
             fechaNacimientoDate =new SimpleDateFormat("dd/MM/yyyy").parse(fechaNacimiento); 
         }catch(Exception e){
-            response.sendError(500,"Ha ocurrido un error inesperadoooooooooo");
+            response.sendError(500,"Ha ocurrido un error inesperado");
         }
         UsuarioCreateDTO userData;
         if(tipoUsuario.equals("Socio")){
