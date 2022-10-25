@@ -37,20 +37,15 @@
     </head>
 
     <%        if (actividadesToShow.size() == 0) {
-            %>
-            <div class="w-full h-full flex-grow flex items-center flex-col justify-center gap-y-2">
-                <img src=" https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
-                <p class="text-gray-800 font-medium text-base">No encontramos ningun resultado!</p>
-            </div>
-            <%
-            } else {
-            %> 
+    %>
+    <div class="w-full h-full flex-grow flex items-center flex-col justify-center gap-y-2">
+        <img src=" https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+        <p class="text-gray-800 font-medium text-base">No encontramos ningun resultado!</p>
+    </div>
+    <%
+    } else {
+    %> 
     <div class="w-full flex-grow h-full grid grid-cols-4 gap-4 auto-rows-max min-h-[400px]">
-        <!-- Main modal --> 
-     
-
-
-
         <% for (HashMap.Entry<Integer, ActividadDTO> en : actividadesToShow.entrySet()) {
                 Integer key = en.getKey();
                 ActividadDTO val = en.getValue();
@@ -69,6 +64,4 @@
     <%
         }
     %>
-
-    
 </html>

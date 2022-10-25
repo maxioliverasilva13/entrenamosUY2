@@ -28,9 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import util.BlobToImage;
@@ -42,6 +44,7 @@ import util.JSONConverter;
  * @author rodrigo
  */
 @MultipartConfig(maxFileSize = 160177215) 
+@WebServlet(name = "CrearActividad", urlPatterns = {"/crearActividad"})
 public class CrearActividad extends HttpServlet {
 
     /**
@@ -90,7 +93,6 @@ public class CrearActividad extends HttpServlet {
             response.sendError(401);
             return;
         }
-        
           
         ICategoriaBO catBo = new CategoriaBO();
         HashMap<Integer,DtCategoria> categorias = catBo.listarCategorias();
@@ -120,12 +122,13 @@ public class CrearActividad extends HttpServlet {
         response.setContentType("text/html");
        Gson gson = new Gson();
        try {
+            HttpSession session = request.getSession(true);
             String nombre = request.getParameter("nombre");
             String descripcion = request.getParameter("descripcion");
             float duracion =   Float.parseFloat(request.getParameter("duracion"));
             float costo =   Float.parseFloat(request.getParameter("costo"));
             String[] categoriasIdArrStr = request.getParameterValues("categoriasId");
-             
+            ProfesorDTO prof = (ProfesorDTO)session.getAttribute("currentSessionUser");
            
             Part filePart = request.getPart("image");
             InputStream fileContent = null;
@@ -146,8 +149,8 @@ public class CrearActividad extends HttpServlet {
                 Integer categoriaID = Integer.parseInt(categoriasIdArrStr[i]);
                 categorias.add(new DtCategoria(categoriaID,null));
             }
-            int institucion_id = 2;
-            int profesor_id = 2;
+            int institucion_id = prof.getInstituciones().get(0).getId();
+            int profesor_id = prof.getId();
                     // public ActividadCreateDTO(int institucion_id,int profesor_id, float costo, String nombre, String descripcion, Date fecha_registro, int duracion, File file, List<DtCategoria> catsInThisActividad, String estado){
             ActividadCreateDTO act = new ActividadCreateDTO(institucion_id,profesor_id,costo,nombre,descripcion,new Date(),(int)duracion,image,categorias,"Ingresada");
             IActividadBO actBo = new ActividadBO();
@@ -158,6 +161,7 @@ public class CrearActividad extends HttpServlet {
            
        }catch(Exception e){
            System.out.println(e.getMessage());
+           System.out.println(e);
            response.sendError(500,e.getMessage());
        }
        

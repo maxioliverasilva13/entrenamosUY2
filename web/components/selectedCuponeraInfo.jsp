@@ -27,6 +27,11 @@
 
     $(document).ready(function () {
         document.getElementById("cuponeraInfoModal").onload = () => {
+             const categoriasContent = document.getElementById("categoriasContent");
+             while(categoriasContent.hasChildNodes()) {
+                categoriasContent.removeChild(categoriasContent.lastChild);
+             }
+            
             const cuponeraInfo = window?.cuponeraInfo;
             let parentNode = document.getElementById("tablaContent");
             if (cuponeraInfo === "Loading") {
@@ -71,8 +76,6 @@
 `;
                     parentNode.appendChild(div.content)
                 })
-
-                const categoriasContent = document.getElementById("categoriasContent");
                 allCategorias.map((categoria, index) => {
                     var div = document.createElement('template');
                     div.innerHTML = `

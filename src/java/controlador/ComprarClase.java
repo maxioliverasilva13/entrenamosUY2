@@ -90,29 +90,29 @@ public class ComprarClase extends HttpServlet {
         String cuponeraIdStr = request.getParameter("choosedCupID");
         HttpSession session = request.getSession(true);	    
         UsuarioDTO user = (UsuarioDTO) session.getAttribute("currentSessionUser");
-        
+
         if(claseIdStr == null || precioFinalStr == null){
            response.sendError(400,"Datos invalidos");
            return;
         }
         int socioID = user.getId();
-    
-     
+
+
         float precioFinalFlt = Float.parseFloat(precioFinalStr);
         int claseId = Integer.parseInt(claseIdStr);
-        
+
         List<Integer> clases = new ArrayList<Integer>();
         clases.add(claseId);
-        
+
         DtRegistro registro = new DtRegistro(0,precioFinalFlt,new Date(),user.getNickname(),null);
         InterfaceRegistroBO regBo = new RegistroBO();
-        
-        
+
+
         Integer cuponeraID = null;
         if(!cuponeraIdStr.equals("") && !(cuponeraIdStr == null)){
             cuponeraID = Integer.parseInt(cuponeraIdStr);
         }
-      
+
         Gson gson = new Gson();
         ResponseServer res;
         PrintWriter pw = response.getWriter();
@@ -127,7 +127,7 @@ public class ComprarClase extends HttpServlet {
             res = new ResponseServer(400,"Maximo de cuponera por clase");
             responseStr = gson.toJson(res);
             pw.print(responseStr);
-            
+
         } catch (CompraCuponeraNotFoundException ex) {
             res = new ResponseServer(400,ex.getMessage());  
             responseStr = gson.toJson(res);
@@ -143,13 +143,13 @@ public class ComprarClase extends HttpServlet {
             responseStr = gson.toJson(res);
             pw.print(responseStr);
         }
-        
-            
-       
-        
-        
-        
-       
+
+
+
+
+
+
+
     }
 
     /**

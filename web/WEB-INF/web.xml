@@ -17,16 +17,16 @@
         <servlet-class>controlador.Institucion</servlet-class>
     </servlet>
     <servlet>
+            <servlet-name>ComprarClase</servlet-name>
+        <servlet-class>controlador.ComprarClase</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Usuarios</servlet-name>
         <servlet-class>controlador.Usuarios</servlet-class>
-    </servlet>
+    </servlet> 
     <servlet>
-        <servlet-name>CrearActividad</servlet-name>
-        <servlet-class>controlador.CrearActividad</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ComprarClase</servlet-name>
-        <servlet-class>controlador.ComprarClase</servlet-class>
+        <servlet-name>EditInfo</servlet-name>
+        <servlet-class>controlador.EditInfo</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Inicio</servlet-name>
@@ -44,6 +44,16 @@
         <servlet-name>ListarCuponeras</servlet-name>
         <url-pattern>/listarCuponeras</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>InfoCuponera</servlet-name>
+        <servlet-class>controlador.InfoCuponera</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InfoCuponera</servlet-name>
+        <url-pattern>/InfoCuponera</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>actividadesInfo</servlet-name>
         <url-pattern>/actividadesInfo</url-pattern>
@@ -69,11 +79,11 @@
         <url-pattern>/Usuarios</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CrearActividad</servlet-name>
-        <url-pattern>/CrearActividad</url-pattern>
+        <servlet-name>EditInfo</servlet-name>
+        <url-pattern>/EditInfo</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ComprarClase</servlet-name>
+         <servlet-name>ComprarClase</servlet-name>
         <url-pattern>/ComprarClase</url-pattern>
     </servlet-mapping>
     <session-config>

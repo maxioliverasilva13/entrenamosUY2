@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<div class="w-screen h-screen absolute top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 flex items-center justify-center transition-all">
+<div class="w-screen h-screen fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 flex items-center justify-center transition-all">
     <div class="bg-white rounded-2xl py-8 px-14 border-gray-300 border flex flex-row items-start justify-start gap-x-12 relative">
         <%-- Close Button --%>
         <a href="verPerfil?userID=${param.usrIdConsultado}" class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">

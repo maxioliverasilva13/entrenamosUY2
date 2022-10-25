@@ -3,10 +3,7 @@
 <%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="Cuponera.DtCuponera"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page='../imports.jsp'>
-    <jsp:param name="" value=""/>
-</jsp:include>
-
+<jsp:include page='../imports.jsp' />
 <script>
     const toggleSidebar = () => {
         var element = document.getElementById("mobile-menu");
@@ -36,23 +33,24 @@
     UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
     boolean hasUser = userInfo != null;
     BlobToImage bltimg = new BlobToImage();
-    
+
     String openModalstr = (String) request.getAttribute("open");
     Boolean arr = new Boolean(openModalstr);
     boolean openCuponeraModal = false;
     if (arr.equals(true)) {
         openCuponeraModal = true;
+
     }
-    System.out.println(openModalstr + "dfdf");
-    
+    System.out.println(arr + "dfdf112");
+
     DtCuponera cuponeraInfo = null;
-    if (request.getAttribute("cuponera")!= null) {
-        cuponeraInfo=(DtCuponera)request.getAttribute("cuponera");
+    if (request.getAttribute("cuponera") != null) {
+        cuponeraInfo = (DtCuponera) request.getAttribute("cuponera");
     }
 %>
 
 <!DOCTYPE html>
-<div class="z-[3000] relative">
+<div class="z-[3000] w-screen max-w-screen relative">
     <style>
         .animationHeader {
             transition: .3s all ease;
@@ -98,7 +96,11 @@
 
     </style>
     <header id="desktopHeader" class="w-screen overflow-hidden h-16 bg-[#1F2937] flex flex-row items-center justify-between overflow-y-visible md:px-6 px-2 max-w-full overflow-x-hidden enterHeader">
-
+        <% if (openCuponeraModal == true || cuponeraInfo != null) {
+        %>
+        <jsp:include page='./verCuponerasDisponibles.jsp'/>
+        <%
+            }%> 
         <div class="w-auto h-full flex flex-row items-center justify-start gap-x-6">
             <p class="text-white font-semibold text-xl">Entrenamos<span class="bg-[#E5E2C9] py-1 px-2 rounded-xs mx-1 rounded-md">UY</span></p>
             <ul class="w-auto h-full items-center justify-start gap-x-4 md:flex hidden">
@@ -106,6 +108,8 @@
                 <a href="actividadesInfo" class=" cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "actividades" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Actividades</a>
                 <a class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Clases</a>
                 <a href="listarCuponeras?openModal=true" class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Cuponeras</a>
+                <a href="Usuarios" class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "usuarios" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}"">Usuarios</a>
+
             </ul>
         </div>
         <%-- Login icon --%>
@@ -139,8 +143,16 @@
                     <i class="fa-regular fa-bell text-xl text-white"></i>
                     <div class="">
                         <img onclick="toggleModalUser('claseModal')" class="w-8 cursor-pointer h-8 min-w-8 min-h-8 rounded-full overflow-hidden object-cover" src="<%=bltimg.getBase64StringImage(userInfo.getBlobImage())%>" />
-                        <div  id="claseModal" style="display: none" class="w-64 h-auto px-4 py-4 shadow-lg bg-gray-50 absolute top-12 right-12 border rounded-2xl border-gray-300 items-center justify-cecnter">
+                        <div  id="claseModal" style="display: none" class="w-64 h-auto gap-y-2 px-4 py-4 shadow-lg bg-gray-50 absolute top-12 right-12 border rounded-2xl border-gray-300 flex-col items-center justify-cecnter">
+                            <% if (userInfo != null) {
+                            %>
+                            <a href="verPerfil?&userID=<%=userInfo.getId()%>" class="w-full h-auto bg-gray-700 text-white px-4 py-2 font-medium cursor-pointer rounded-xl text-center">Mi Perfil</a>
+                            <%
+                                }
+                            %>
                             <a href="logout" class="w-full h-auto bg-red-600 text-white px-4 py-2 font-medium cursor-pointer rounded-xl text-center">Logout</a>
+
+
                         </div>
                     </div>
                 </div>

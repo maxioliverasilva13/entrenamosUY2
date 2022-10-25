@@ -31,8 +31,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        
-        
+        <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
+
     </head>
     <body class=" w-full h-full bg-cover bg-no-repeat " style="background-image: url('https://res.cloudinary.com/dwh8j7fys/image/upload/v1665238297/natacion_twsiuc.jpg');">
         <form action="SignUp" method="post"  id="registration" enctype="multipart/form-data">
@@ -303,44 +304,8 @@
                 }
             }
             
-             /*   var loadFile = function (event) {
-
-            const imgContainer = document.getElementById("imgContainer");
-            imgContainer.classList.remove("hidden");
-            imgContainer.classList.add("flex");
-            imgContainer.classList.add("justify-center");
-            const inputFileContainer = document.getElementById("inputFileContainer");
-            inputFileContainer.classList.add("hidden");
-
-            var output = document.getElementById('img');
-            output.src = URL.createObjectURL(event.target.files[0]);
-            output.onload = function () {
-                URL.revokeObjectURL(output.src) // free memory
-            }
-        };
-
-        function quitImage() {
-            
-  
-            const imgContainer = document.getElementById("imgContainer");
-            imgContainer.classList.add("hidden");
-            imgContainer.classList.remove("flex");
-
-            const inputFileContainer = document.getElementById("inputFileContainer");
-            
-            const inputFile = document.getElementById("input_file");
-            
-            inputFileContainer.classList.add("flex");
-            inputFileContainer.classList.remove("hidden");
-            inputFile.setAttribute("src","");
-            
-           
-            $('#input_file').val("");
-           
-        }*/
-            
             var loadFile = function(event) {
-              
+                alert("event");
                 const avatarContainer = document.getElementById("avatarContainer");
                 avatarContainer.classList.remove("hidden");
                 avatarContainer.classList.add("flex");
@@ -360,12 +325,7 @@
                 const avatarContainer = document.getElementById("avatarContainer");
                 avatarContainer.classList.add("hidden");
                 avatarContainer.classList.remove("flex");
-                
-                
-       
                 $('#inputFile').val("");
-                 
-                 
                 const inputFileContainer = document.getElementById("inputFileContainer");
                 inputFileContainer.classList.add("flex");
                 inputFileContainer.classList.remove("hidden");

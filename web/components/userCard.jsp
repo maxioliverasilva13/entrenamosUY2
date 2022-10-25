@@ -16,7 +16,7 @@
            
         </div>
     </div>
-    <a href="verActividadInfo?actId=${param.actID}" class="w-full h-auto py-4 flex items-center justify-center border-t border-gray-300">
+    <a href="verPerfil?&userID=${param.uid}" class="w-full h-auto py-4 flex items-center justify-center border-t border-gray-300">
         <p class="text-sm decoration-none font-medium text-gray-700">Ver Perfil</p>
     </a>
 </div>
