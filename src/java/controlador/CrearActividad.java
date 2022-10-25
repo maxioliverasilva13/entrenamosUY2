@@ -137,7 +137,7 @@ public class CrearActividad extends HttpServlet {
                 String fileName = filePart.getName();
                 BlobToImage blobToImg = new BlobToImage();
                 fileContent = filePart.getInputStream();
-                byte[] targetArray = new byte[fileContent.available()];
+                byte[] targetArray = fileContent.readAllBytes();
                 image = blobToImg.writeBytesToFile(fileName, targetArray);
             }else{
                 System.out.println("No se envio imagen");
