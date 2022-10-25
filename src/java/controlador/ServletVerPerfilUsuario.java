@@ -12,6 +12,7 @@ import Cuponera.CuponeraBo;
 import Cuponera.DtCuponera;
 import Institucion.DtInstitucion;
 import Institucion.InstitucionBO;
+import ParseDate.ParseDate;
 import Profesor.ProfesorBO;
 import Profesor.dtos.ProfesorDTO;
 import Registro.DtRegistro;
@@ -21,7 +22,9 @@ import Usuario.UsuarioBO;
 import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -54,8 +57,8 @@ public class ServletVerPerfilUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //request.setAttribute("usrId", getRequestParameter(request, "usrId"));
-        // ANDANDO    int userAconsultar = Integer.parseInt(getRequestParameter(request, "usrId"));
+        ParseDate parse = new ParseDate();
+
         HttpSession session = request.getSession(true);
         UsuarioDTO loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
 
@@ -154,7 +157,11 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("apellido", dtProfesor.getApellido());
             request.setAttribute("correo", dtProfesor.getEmail());
             request.setAttribute("institucion", dtIns.getNombre());
-            request.setAttribute("fnacimiento", dtProfesor.getNacimiento() != null ? dtProfesor.getNacimiento().toString() : "");
+            if(dtProfesor.getNacimiento() != null){
+                SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+                String date = DATE_FORMAT.format(dtProfesor.getNacimiento());
+                request.setAttribute("fnacimiento", date);
+            }
             request.setAttribute("website", dtProfesor.getLinkSitioWeb());
             request.setAttribute("biografia", dtProfesor.getBiografia());
             request.setAttribute("descripcion", dtProfesor.getdescripcionGeneral());
@@ -213,7 +220,11 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("apellido", dtSocio.getApellido());
             request.setAttribute("correo", dtSocio.getEmail());
             request.setAttribute("nickname", dtSocio.getNickname());
-            request.setAttribute("fnacimiento", dtSocio.getNacimiento() != null ? dtSocio.getNacimiento().toString() : "");
+            if(dtSocio.getNacimiento() != null){
+                SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+                String date = DATE_FORMAT.format(dtSocio.getNacimiento());
+                request.setAttribute("fnacimiento", date);
+            }
             request.setAttribute("cuponeras", listCuponeras);
 
 

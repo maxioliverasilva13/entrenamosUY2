@@ -3,13 +3,13 @@
 
 <!DOCTYPE html>
 
-<div class="w-full h-80 border border-gray-200 shadow-md rounded-xl flex flex-col items-start justify-start">
+<div class="w-full h-80 max-h-80 border border-gray-200 shadow-md rounded-xl flex flex-col items-start justify-start">
     <div class="flex-grow h-full w-full flex flex-col items-center justify-center gap-y-6">
         <img 
           class="rounded-full w-32 h-32 overflow-hidden object-cover"
           src="${param.image}"
         />
-        <div class="w-full h-auto flex flex-col items-center justify-center gap-y-1">
+        <div class="w-full h-auto flex flex-col items-center text-center justify-center gap-y-1">
             <p class="text-gray-900 font-medium text-sm">${param.nombre}</p>
             <p class="text-gray-500 font-normal text-sm">${param.descripcion}</p>
         </div>

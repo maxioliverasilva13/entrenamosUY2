@@ -3,6 +3,7 @@
     Created on : 2 oct. 2022, 14:50:35
     Author     : pedri
 --%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Clase.DtClase"%>
 <%@page import="Actividad.dtos.ActividadDTO"%>
 <%@page import="Usuario.dtos.UsuarioDTO"%>
@@ -56,7 +57,7 @@
 
 <script>
     const handleGetClase = (itemId) => {
-        const url = '/entrenamosUY34//claseById?claseId=' + itemId;
+        const url = '/entrenamosUY3//claseById?claseId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
         if (window.claseInfo !== "Loading") {
             window.claseInfo = "Loading";
@@ -83,7 +84,7 @@
     }
     
     const handleGetCuponera = (itemId) => {
-        const url = '/entrenamosUY34//cuponeraById?cupId=' + itemId;
+        const url = '/entrenamosUY3//cuponeraById?cupId=' + itemId;
         const cuponeraModal = document.getElementById("cuponeraInfoModal");
         window.cuponeraInfo = "Loading";
         cuponeraModal.style.cssText = "display: flex";
@@ -111,6 +112,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
+        <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
     </head>
                         <script>
                             const handleEditInfo = () => {
@@ -219,12 +221,15 @@
                                     <%
                                         for (DtClase en : listClasesOfUser) {
                                             DtClase val = en;
+                                            
+                                            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+                                            String dateRegistro = DATE_FORMAT.format(val.getFecha());
                                     %>
                                     <a onclick="handleGetClase('<%=val.getId()%>')" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
                                         <img src="<%=btimg.getBase64StringImage(val.getImageBlob())%>" alt="Girl in a jacket" class="rounded-full w-[40px] h-[40px] object-cover"/>
                                         <div class="text-gray-500 text-[12px] font-medium flex-grow h-full flex flex-col item-start justify-start flex-col">
                                             <p><%=val.getNombre()%> (<%=val.getRegistros().size()%> Inscripto/s)</p>
-                                            <p class="mt-1">Fecha: <%=val.getFecha()%></p>
+                                            <p class="mt-1">Fecha: <%=dateRegistro%></p>
                                         </div>
                                         <button class="border border-gray-300 py-[1px] px-[10px] rounded-[14px] font-medium text-[14px] text-gray-700 shadow-sm">View</button>
                                     </a> 
@@ -269,7 +274,7 @@
                                 <jsp:param name="institucion" value="<%= institucion%>" />
                                 <jsp:param name="name" value="<%= nombre%>" />
                                 <jsp:param name="lastname" value="<%= apellido%>" />
-                                <jsp:param name="fnacimiento" value="<%= userDT.getNacimiento()%>" />
+                                <jsp:param name="fnacimiento" value="<%= fnacimiento %>" />
                                 <jsp:param name="biografia" value="<%= biografia%>" />
                                 <jsp:param name="description" value="<%= descripcion%>" />
                                 <jsp:param name="utype" value="<%= userDT.getType()%>" />

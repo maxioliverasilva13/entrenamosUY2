@@ -9,7 +9,7 @@
 <div id="editarInfoSocioModal" style="display: none;" class="w-screen h-screen fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 flex items-center justify-center transition-all">
     <div class="bg-white rounded-2xl py-6 px-8 border-gray-300 border flex flex-row items-start justify-start gap-x-12 relative">
         <%-- Close Button --%>
-        <button onclick="closeModal()" class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
+        <button onclick="closeModalInfoSocio()" class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>
         </button>
 
@@ -39,7 +39,7 @@
             </div>
 
             <div class="relative z-0 mb-6 w-full group">
-                <input datepicker="" name="fechaNacimiento" id="fechaNacimiento" value="${param.fnacimiento}" class="hover:cursor-pointer block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer date-picker" placeholder=" " required />
+                <input datepicker datepicker-format="dd/mm/yyyy" name="fechaNacimiento" id="fechaNacimiento" value="${param.fnacimiento}" class="hover:cursor-pointer block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer datepicker-input" placeholder=" " required />
                 <label for="fechaNacimiento" class="peer-focus:font-medium absolute text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Fecha de Nacimiento</label>
             </div>
             <div class="flex gap-x-4 mx-4">
@@ -71,7 +71,7 @@
     </div>
 </div>
 <script>
-    const closeModal = () => {
+    const closeModalInfoSocio = () => {
         document.getElementById("editarInfoSocioModal").style.cssText = "display: none";
     };
 

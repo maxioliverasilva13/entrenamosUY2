@@ -58,11 +58,10 @@
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="actividades" />
         </jsp:include>
-        <div class="w-full h-full flex-grow px-8 py-6 max-h-full overflow-auto flex flex-row items-center justify-between gap-x-32 p-10">
-            <div class="w-96 h-full flex flex-col items-center justify-start gap-y-2">
-                <p class="text-gray-500 w-full text-left font-medium text-md">Categorias</p>
-
-                <form onsubmit="handleSubmit(event);" method="POST" class="w-full h-full flex-grow flex flex-col items-start justify-start gap-y-4">
+        <div class="w-full h-full flex-grow px-8 py-6 max-h-full flex flex-col overflow-auto md:flex-row items-center gap-x-6 p-10 gap-y-4">
+            <div class="w-full md:w-max h-max md:h-full flex flex-col items-center justify-center gap-y-2">
+                <form onsubmit="handleSubmit(event);" method="POST" class="w-full md:w-4/5 h-full flex-grow flex flex-col items-start justify-start gap-y-4 self-center">
+                    <p class="text-gray-500 w-full text-left font-medium text-md">Categorias</p>
                     <div class="w-full h-auto flex flex-row items-center justify-between">
                         <input type="submit" class="bg-[#E5E2C9] py-1 px-2 cursor-pointer text-sm font-medium text-[#294557] rounded-md" value="Aplicar Filtros" />
                         <%                            if (hasAppliedFilters) {
@@ -91,7 +90,7 @@
                         %>
                     </div>
 
-                    <div class="w-full h-full flex-grow flex flex-col items-center justify-start gap-y-5">
+                    <div class="flex flex-wrap flex-flow md:flex-nowrap items-center justify-center md:flex-col h-max w-full md:h-full md:max-h-full md:justify-start gap-2">
                         <%-- ForEach Categorias --%>
                         <% 
                         int iterator = 0;
@@ -119,9 +118,9 @@
                 </form>
             </div>
 
-
-            <div class="w-full flex-grow h-full flex flex-col items-center justify-start gap-y-12">
-                <p class="text-gray-900 text-2xl text-left w-full font-medium pb-5 border-b border-gray-300 w-full">
+                    
+            <div class="w-full flex-grow h-full flex flex-col items-center justify-start gap-y-6">
+                <p class="text-gray-900 sm:text-xl md:text-2xl text-left w-full font-medium pb-3 border-b border-gray-300">
                     <%=hasInstitucionInfo == true ? "Actividades Filtradas" : "Haz click sobre una categoria o institucion para ver sus actividades y cuponeras "%>
 
                 </p>
@@ -160,21 +159,24 @@
                             DtInstitucion val = en.getValue();
 
                     %>
-                    <div class="w-full h-20 border-b border-gray-300 px-6 py-4 flex flex-row items-center justify-start gap-x-4">
-                        <img 
-                            src="<%=bltim.getBase64StringImage(val.getImageBlob())%>"
-                            class="w-12 h-12 rounded-full overflow-hidden"   
-                            />
-                        <div class="w-[30%] h-full flex flex-col items-start justify-between">
-                            <p class="text-[#4F46E5] font-medium text-sm"><%=val.getNombre()%></p>
-                            <div class="flex items-center justify-start gap-x-2">
-                                <i class="fa-solid fa-comment text-gray-300"></i>
-                                <p class="text-gray-500 font-normal text-sm "><%=val.getDescripcion()%></p>
+                    <a href="actividadesInfo?instId=<%=val.getId()%>">
+                    <div class="flex flex-row max-[430px]:flex-col w-full h-max border-b border-gray-300 px-6 py-4 items-center justify-start gap-x-4"> <!-- FILA de INSTITUCION -->
+                        <div class="flex gap-2 w-max">
+                            <img 
+                                src="<%=bltim.getBase64StringImage(val.getImageBlob())%>"
+                                class="w-12 h-12 max-h-[48px] max-w-[48px] rounded-full object-cover overflow-hidden"   
+                                />
+                            
+                            <div class="w-max h-full flex flex-col items-start justify-between">
+                                <p class="text-[#4F46E5] font-medium text-sm"><%=val.getNombre()%></p>
+                                <div class="flex items-center justify-start gap-x-2">
+                                    <i class="fa-solid fa-comment text-gray-300"></i>
+                                    <p class="text-gray-500 font-normal text-sm "><%=val.getDescripcion()%></p>
+                                </div>
                             </div>
-
                         </div>
 
-                        <div class="flex-grow h-full flex flex-col items-start justify-between">
+                        <div class="flex-grow h-full flex flex-col max-[430px]:items-center items-start justify-between">
                             <p class="text-gray-900 font-medium text-sm">Total Actividades: <%=val.getTotalActividadesAceptadas()%> </p>
                             <div class="flex items-center justify-start gap-x-2">
                                 <i class="fa-solid fa-circle-check text-sm text-green-600"></i>
@@ -182,10 +184,9 @@
                             </div>
 
                         </div>
-                        <a href="actividadesInfo?instId=<%=val.getId()%>">
                             <i class="fa-solid fa-chevron-right text-gray-900 cursor-pointer px-4"></i>
-                        </a>
                     </div>
+                        </a>
                     <%                        }
                     %>
                     <%
