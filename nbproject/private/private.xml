@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/java/controlador/InsertarClase.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>129</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/angel/OneDrive/Documents/EntrenamosUY/entrenamosUY2/src/java/controlador/ComprarCuponera.java</file>
-            <file>file:/C:/Users/angel/OneDrive/Documents/EntrenamosUY/entrenamosUY2/web/components/listadoCuponerasDisponibles.jsp</file>
-            <file>file:/C:/Users/angel/OneDrive/Documents/EntrenamosUY/entrenamosUY2/web/components/modalComprarCuponera.jsp</file>
-=======
-            <file>file:/C:/Users/rodrigo/entrenamosUY2/src/java/controlador/Login.java</file>
-            <file>file:/C:/Users/rodrigo/entrenamosUY2/src/java/VerInfoClaseModal.java</file>
->>>>>>> d9797fb412d03565ccd59f5bf9fa1cfcbe7f51df
+            <file>file:/C:/Users/angel/OneDrive/Documents/EntrenamosUY/entrenamosUY2/src/java/controlador/ComprarClase.java</file>
+            <file>file:/C:/Users/angel/OneDrive/Documents/EntrenamosUY/entrenamosUY2/web/components/addClaseModal.jsp</file>
+            <file>file:/C:/Users/angel/OneDrive/Documents/EntrenamosUY/entrenamosUY2/web/actividadInfo.jsp</file>
         </group>
     </open-files>
 </project-private>

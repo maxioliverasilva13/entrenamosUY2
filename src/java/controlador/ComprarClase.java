@@ -119,7 +119,7 @@ public class ComprarClase extends HttpServlet {
         response.setContentType("application/json");
         String responseStr;
         try {
-            regBo.agregarRegistro(socioID, clases,  registro,cuponeraID);
+            regBo.agregarRegistro(socioID, claseId,  registro,cuponeraID);
             res = new ResponseServer(200,"Has comprado la clase correctamente!");
             responseStr = gson.toJson(res);
             pw.print(responseStr);
