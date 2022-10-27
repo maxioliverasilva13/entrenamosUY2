@@ -38,6 +38,16 @@
                 const listOfCuponerasDisponibles = data?.data;
                 const listOfCuponerasDisponiblesKeys = Object.keys(listOfCuponerasDisponibles);
                 if (elementCuponeraList) {
+                    if (listOfCuponerasDisponiblesKeys?.length == 0){
+                        var div = document.createElement('template');
+                        div.innerHTML = `
+                        <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
+                            <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                            <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Cuponera!</p>
+                        </div>
+                        `;
+                        elementCuponeraList.appendChild(div.content);
+                    }
                     listOfCuponerasDisponiblesKeys?.forEach((item) => {
                         var itemInfo = listOfCuponerasDisponibles[item];
                         var totalClasesCuponera = 0;
@@ -85,36 +95,13 @@
         </a>
         <jsp:include page="./modalComprarCuponera.jsp" />
         <div class="flex transition-all flex-col w-full items-center max-w-[720px] h-auto justify-start flex-grow px-2 md:px-12 gap-y-4 w-full h-full">
-            <p class="text-center text-3xl w-full text-gray-900 font-medium border-b-2 border-gray-300 pb-2">Cuponeras Disponibles</p>
+            <p class="text-center text-3xl w-full text-gray-900 font-medium pb-2">Cuponeras Disponibles</p>
 
             <div id="cuponerasList" class="w-full h-auto rounded-md border border-gray-300 shadow-md flex flex-col items-center justify-start max-h-[700px] overflow-auto">
 
-                <%-- item --%>
+                <%-- CONTENT... --%>
 
-                <%--
-                <% for (HashMap.Entry<Integer, DtCuponera> en : cuponera.entrySet()) {
-                            Integer key = en.getKey();
-                            DtCuponera val = en.getValue();
-                    %> 
-                <a href="listarCuponeras?openModal=true&id=<%=val.getId()%>" class="w-full h-[108px] min-h-[108px] p-4 flex flex-col items-center justify-start border-b border-gray-300 cursor-pointer" >
-                    <div class="flex-grow w-full h-auto flex flex-row items-center justify-between">
-                        <p class="text-[##4F46E5] text-sm font-medium"><%=val.getNombre()%></p>
-                        <div class="w-auto h-auto px-[10px] py-[2px] rounded-2xl bg-[#D1FAE5] flex items-center justify-center">
-                            <p class="text-[#065F46] font-medium text-xs"><%=val.getDescuento()%>%</p>
-                        </div>
-                    </div>
-                    <div class="flex-grow w-full flex items-end justify-start gap-x-2">
-                        <i class="fa-solid fa-calendar text-gray-500"></i>
-                        <p class="text-gry-500 font-normal text-sm">Valido hasta el <%=val.getPeriodoVigencia()%></p>
-                    </div>
-                </a>
-                <%
-                }
-                %>
-                --%>
-
-
-
+                
             </div>
         </div>
     </div>

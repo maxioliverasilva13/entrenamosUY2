@@ -46,16 +46,10 @@
         
         <div class="flex flex-col items-center min-w-[720px] h-auto justify-start flex-grow px-12 gap-y-4 w-full h-full">
             <p class="text-3xl w-full text-gray-900 font-medium border-b border-gray-300 pb-6">Cuponeras Disponibles</p>
-            <%-- Sort --%>
-            <div class="w-full h-auto flex items-center justify-end">
-                <div class="w-auto h-full px-4 border rounded-md border-gray-300 py-1 bg-[#F9FAFB] py-2 px-4 gap-x-2 flex items-center justify-end">
-                    <i class="fa-solid fa-arrow-down-short-wide flex items-center h-full"></i>
-                    <div class="flex items-center justify-center gap-x-2">
-                        <p class="text-[#374151] font-normal text-sm">Sort</p>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                </div>
-            </div>
+                   
+            
+
+            
             
             <div class="w-full h-auto rounded-md border border-gray-300 shadow-md flex flex-col items-center justify-start max-h-[700px] overflow-auto">
                 
@@ -80,10 +74,10 @@
                 <%
                 }
                 %>
-            
-                
-                
             </div>
+                <%
+                }    
+                %>
         </div>
     </div>
      <%

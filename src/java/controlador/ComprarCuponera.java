@@ -94,6 +94,7 @@ public class ComprarCuponera extends HttpServlet {
                 try {
                     cupBo.comprarCuponera(socio.getId(), cuponerasProps.getCuponeraId(), actId.intValue());
                 } catch (CuponeraAlreadyPurchaseBySocio ex) {
+                    System.out.println(ex);
                     ResponseUtil respUtil = new ResponseUtil(false, ex.getMessage(), this);
                     String claseJSON = new Gson().toJson(respUtil);
                     response.setContentType("application/json");
@@ -113,7 +114,7 @@ public class ComprarCuponera extends HttpServlet {
 
         } catch (Exception e) {
             System.out.println("Error");
-            System.out.println(e);
+            System.out.println("error2 "+e);
             ResponseUtil respUtil = new ResponseUtil(false, e.getMessage(), this);
             PrintWriter out = response.getWriter();
             String claseJSON = new Gson().toJson(respUtil);
