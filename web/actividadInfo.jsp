@@ -163,7 +163,7 @@
         %>
 
 
-        <div class="w-full h-full flex-grow flex flex-col items-start justify-start px-20 gap-y-4 my-6">
+        <div class="w-full h-full flex-grow flex flex-col items-start justify-start md:px-20 px-4 gap-y-4 my-6">
             <div class="w-full flex flex-col items-center md:flex-row md:items-start md:justify-between gap-x-20 gap-y-4">
                 <div class='w-[420px] h-full flex flex-col items-center justify-start gap-y-6'>
                     <img

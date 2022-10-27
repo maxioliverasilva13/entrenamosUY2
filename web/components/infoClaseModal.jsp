@@ -70,33 +70,33 @@
 
 
 <!DOCTYPE html>
-<div id="infoClaseModal" style="display: none;" class="w-full h-full min-h-screen z-[9999] fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 items-center justify-center transition-all">
-    <div class="bg-white transition-all transition-opacity rounded-2xl p-12 border-gray-300 border w-3/5 h-auto flex flex-row items-start justify-start gap-x-12 relative">
+<div id="infoClaseModal" style="display: none;" class="w-full h-full min-h-screen z-[9999] py-6 fixed top-0 left-0 right-0 bottom-0 max-h-full overflow-auto bg-[#6B7280] bg-opacity-60 transition-all">
+    <div class="bg-white transition-all transition-opacity rounded-2xl p-12 border-gray-300 border m-auto lg:w-3/5 w-auto h-auto min-w-4/5 flex md:flex-row flex-col md:items-start items-center justify-start gap-x-12 relative">
         <%-- Close Button --%>
         <button onclick="closeModalClase()" class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>
         </button>
 
-        <img id="imageClase" class="w-40 h-40 rounded-full overflow-hidden"/>
-        <div id="contentInfo" class="flex-col items-center justify-start flex-grow gap-y-16">
+        <img id="imageClase" class="w-40 h-40 my-4 min-w-40 min-h-40 rounded-full overflow-hidden"/>
+        <div id="contentInfo" class="flex-col items-center justify-start md:w-auto xs:w-[300px] flex-grow w-[400] gap-y-16">
             <div class='flex flex-col flex-grow w-full h-auto rounded-md border border-gray-300 shadow-sm items-start justify-start'>
                 <div class="w-full h-auto p-6 gap-y-1 border-b border-gray-300">
-                    <p class="text-2xl font-medium text-gray-900">Informacion de <span id="claseNombre"></span></p>
-                    <p class="text-gray-500 font-normal text-base">Inscriptos: <span id="inscriptosClase"></span></p>
+                    <p class="text-2xl font-medium text-gray-900">Informacion de</p>
+                    <p id="claseNombre" class="text-gray-500 font-normal text-base">Inscriptos: <span id="inscriptosClase"></span></p>
                 </div>
 
                 <div class="w-full h-auto p-6 gap-y-1 border-b border-gray-300 flex flex-row items-center justify-start">
-                    <p class="text-sm font-medium text-gray-900 w-1/3">Fecha de inicio: <span id="fechaInicioClase"></span></p>
-                    <p class="text-gray-500 font-normal text-sm flex-grow"></p>
+                    <p class="text-sm font-medium text-gray-900 w-1/3">Fecha de inicio: </p>
+                    <p id="fechaInicioClase" class="text-gray-500 font-normal text-sm flex-grow"></p>
                 </div>
 
                 <div class="w-full h-auto p-6 gap-y-1 border-b border-gray-300 flex flex-row items-center justify-start">
-                    <p class="text-sm font-medium text-gray-900 w-1/3">Profesor <span id="profesorClase"></span></p>
-                    <p class="text-gray-500 font-normal text-sm flex-grow"></p>
+                    <p class="text-sm flex font-medium text-gray-900 w-1/3">Profesor</p>
+                    <p id="profesorClase" class="text-gray-500 font-normal text-sm flex-grow"></p>
                 </div>
                 <div class="w-full h-auto p-6 gap-y-1 border-b border-gray-300 flex flex-row items-center justify-start">
-                    <p class="text-sm font-medium text-gray-900 w-1/3">Socios Minimos  <span id="sociosMinimosClase"></span></p>
-                    <p class="text-gray-500 font-normal text-sm flex-grow"></p>
+                    <p class="text-sm font-medium text-gray-900 w-1/3">Socios Minimos</p>
+                    <p id="sociosMinimosClase" class="text-gray-500 font-normal text-sm flex-grow"></p>
                 </div>
                 <div class="w-full h-auto p-6 gap-y-1 border-b border-gray-300 flex flex-row items-center justify-start">
                     <p class="text-sm font-medium text-gray-900 w-1/3">Socios Maximos <span id="sociosMaximosClase"></span></p>
@@ -117,7 +117,7 @@
                 Seleccionar medio de pago
             </a>
             <%
-                }
+            }
             %>
 
         </div>

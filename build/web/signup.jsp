@@ -33,12 +33,12 @@
         <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
 
     </head>
-    <body class=" w-full h-full bg-cover bg-no-repeat " style="background-image: url('https://res.cloudinary.com/dwh8j7fys/image/upload/v1665238297/natacion_twsiuc.jpg');">
+    <body class=" w-full h-full bg-cover bg-no-repeat md:bg-[url('https://res.cloudinary.com/dwh8j7fys/image/upload/v1665238297/natacion_twsiuc.jpg')] "">
         <form action="SignUp" method="post"  id="registration" enctype="multipart/form-data">
                <div class="w-full w-h flex justify-end">
-            <div class="bg-white basis-3/4 ">
+            <div class="bg-white md:basis-3/4 w-full">
                 <div class="w-full flex justify-center mt-5 " id="form" >
-                    <div class="basis-3/4 overflow-y-auto pb-20 min-h-[100vh] mb-5">
+                    <div class="w-3/4 overflow-y-auto pb-20 min-h-[100vh] mb-5">
                         <%
                         if(request.getAttribute("invalid-signup") != null){
                         %>
@@ -58,7 +58,7 @@
                             <br>
                             This information will be displayed publicy so be careful what you share
                         </p>
-                        <div class="flex gap-5 mt-5 ">
+                        <div class="flex md:flex-row flex-col gap-5 my-5 ">
                             <div>
                                 <label class="font-['Inter']">Tipo Usuario</label>
                                 <select onchange="handleSelectChange()" id="selectTipoUsuario" name="tipoUsuario" class="form-select form-select-lg mb-3
@@ -123,7 +123,7 @@
                         <div class="mt-10 ">
                             <span class="font-['Inter'] text-1xl ">Personal Information</span>
                             <p class=" text-[#6B7280]">Use a permanent address where you can receive a email</p>
-                            <div class="flex justify-between gap-10">
+                            <div class="flex md:flex-row flex-col  justify-between gap-10">
                                  <div class="flex-1">
                                     <label for="Nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nombre</label>
                                     <input type="text" id="Nombre" name="Nombre" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" >
@@ -133,19 +133,19 @@
                                     <input type="text" id="Apellido" name="Apellido" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pedredrol" >
                                 </div>
                              </div>
-                            <div class="flex mt-3">
-                                <div class="basis-3/4">
+                            <div class="flex md:flex-row flex-col  mt-3">
+                                <div class="flex-grow">
                                      <label for="Email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
                                     <input type="text" id="Email" name="Email" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john@gmail.com" >
                                 </div>
                             </div>
                             
-                            <div class="flex mt-3 gap-10">
-                                <div class="basis-2/6">
+                            <div class="flex md:flex-row flex-col mt-3 gap-10 w-full">
+                                <div class="flex-grow">
                                      <label for="Contraseña" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Contraseña</label>
                                     <input type="password" id="Contraseña" name="Contraseña" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" >
                                 </div>
-                                <div class="basis-2/6">
+                                <div class="flex-grow">
                                      <label for="confirmPassword" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Confirmar contraseña</label>
                                     <input type="password" id="confirmPassword" name="confirmPassword" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" >
                                 </div>

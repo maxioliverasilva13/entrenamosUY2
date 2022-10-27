@@ -27,7 +27,7 @@
             //desktopHeader.classList.toggle("outHeader");
         }
     }
-    
+
     const toggleModalCuponera = (id) => {
         var element = document.getElementById(id);
         if (getComputedStyle(element).display === "none") {
@@ -61,6 +61,19 @@
 
 <!DOCTYPE html>
 <div class="z-[3000] w-screen max-w-screen relative">
+    
+            <% if (openCuponeraModal == true || cuponeraInfo != null) {
+        %>
+        <jsp:include page='./verCuponerasDisponibles.jsp'/>
+        <%
+            }%> 
+        <%
+            if (userInfo != null && typeOfUser != null && typeOfUser.equals("Socio")) {
+        %>
+        <jsp:include page='./listadoCuponerasDisponibles.jsp'/>
+        <%
+            }
+        %>
     <style>
         .animationHeader {
             transition: .3s all ease;
@@ -106,18 +119,7 @@
 
     </style>
     <header id="desktopHeader" class="w-screen overflow-hidden h-16 bg-[#1F2937] flex flex-row items-center justify-between overflow-y-visible md:px-6 px-2 max-w-full overflow-x-hidden enterHeader">
-        <% if (openCuponeraModal == true || cuponeraInfo != null) {
-        %>
-        <jsp:include page='./verCuponerasDisponibles.jsp'/>
-        <%
-            }%> 
-        <%
-            if (userInfo != null && typeOfUser != null && typeOfUser.equals("Socio")) {
-        %>
-        <jsp:include page='./listadoCuponerasDisponibles.jsp'/>
-        <%
-            }
-        %>
+
         <div class="w-auto h-full flex flex-row items-center justify-start gap-x-6">
             <p class="text-white font-semibold text-xl">Entrenamos<span class="bg-[#E5E2C9] py-1 px-2 rounded-xs mx-1 rounded-md">UY</span></p>
             <ul class="w-auto h-full items-center justify-start gap-x-4 md:flex hidden">
@@ -196,6 +198,18 @@
     </header>
     <%-- Mobile Header --%>
     <header style="display: none" id="mobile-menu" class="w-screen h-screen absolute top-0 right-0 z-40 animationHeader flex-row items-center justify-start">
+        <% if (openCuponeraModal == true || cuponeraInfo != null) {
+        %>
+        <jsp:include page='./verCuponerasDisponibles.jsp'/>
+        <%
+            }%> 
+        <%
+            if (userInfo != null && typeOfUser != null && typeOfUser.equals("Socio")) {
+        %>
+        <jsp:include page='./listadoCuponerasDisponibles.jsp'/>
+        <%
+            }
+        %>
         <div onclick="toggleSidebar()" class="flex-grow h-full"></div>
         <div  class="w-[300px] gap-y-4 h-screen bg-[#1F2937] flex flex-col items-start justify-start">
 
@@ -229,7 +243,7 @@
                 <a href="Inicio" class="text-white w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl ${param.path == "index" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Inicio</a> 
                 <a href="actividadesInfo" class=" cursor-pointer w-full text-base font-normal py-2 px-4 rounded-xl ${param.path == "actividades" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Actividades</a>
                 <a class="text-[#D1D5DB] w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl">Clases</a>
-                <a href="listarCuponeras?openModal=true" class="text-[#D1D5DB] w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl">Cuponeras</a>
+                <p onclick="toggleModalCuponera('cuponerasDisponiblesModalView')" class="text-[#D1D5DB] w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl">Cuponeras</p>
             </ul>
 
         </div>

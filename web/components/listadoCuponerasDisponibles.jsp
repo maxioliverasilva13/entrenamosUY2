@@ -77,8 +77,8 @@
     });
 </script>
 
-<div id="cuponerasDisponiblesModalView" style="display: none" class="w-full transition-all max-h-screen h-screen fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 transition-all items-center justify-center">
-    <div class="w-5/6 sm:w-4/5 md:max-w-[800px] bg-white rounded-2xl p-6 md:p-12 border-gray-300 transition-all border flex flex-row gap-x-12 justify-center items-center min-h-max h-max">
+<div id="cuponerasDisponiblesModalView" style="display: none" class="w-full z-[99999] transition-all max-h-screen h-screen fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 transition-all items-center justify-center">
+    <div class="w-5/6 sm:w-4/5 md:max-w-[800px] relative bg-white rounded-2xl p-6 md:p-12 border-gray-300 transition-all border flex flex-row gap-x-12 justify-center items-center min-h-max h-max">
         <%-- Close Button --%>
         <a onclick="toggleModalCuponera('cuponerasDisponiblesModalView')" class="cursor-pointer w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>

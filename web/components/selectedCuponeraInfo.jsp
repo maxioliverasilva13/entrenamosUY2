@@ -27,11 +27,11 @@
 
     $(document).ready(function () {
         document.getElementById("cuponeraInfoModal").onload = () => {
-             const categoriasContent = document.getElementById("categoriasContent");
-             while(categoriasContent.hasChildNodes()) {
+            const categoriasContent = document.getElementById("categoriasContent");
+            while (categoriasContent.hasChildNodes()) {
                 categoriasContent.removeChild(categoriasContent.lastChild);
-             }
-            
+            }
+
             const cuponeraInfo = window?.cuponeraInfo;
             let parentNode = document.getElementById("tablaContent");
             if (cuponeraInfo === "Loading") {
@@ -99,8 +99,8 @@
 </script>
 
 <!DOCTYPE html>
-<div id="cuponeraInfoModal" style="display: none;" class="w-screen transition-all h-screen min-h-screen  fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 items-center justify-center transition-all">
-    <div class="bg-white transition-all transition-opacity transition-all rounded-2xl p-12 border-gray-300 border w-3/5 h-auto flex flex-col items-start justify-start gap-x-12 gap-y-6 relative">
+<div id="cuponeraInfoModal" style="display: none;" class="w-screen transition-all h-screen min-h-screen md:p-0 p-4  fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 items-center justify-center transition-all">
+    <div class="bg-white transition-all transition-opacity transition-all rounded-2xl md:p-12 p-4 border-gray-300 border md:w-3/5 w-full h-auto flex flex-col items-start justify-start gap-x-12 gap-y-6 relative">
         <%-- Close Button --%>
         <button id="closeButton" onclick="closeModal()" class="w-10 transition-all h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>
@@ -114,16 +114,18 @@
         <div id="categoriasContent" class="w-full min-w-full h-auto my-4 flex flex-row items-center justify-start flex-wrap gap-2">
             <p class="w-fit h-auto text-gray-700 font-semibold text-base">Categorias:</p>
         </div>
+        
+        <p id="cupTitle" class="text-gray-700 font-medium text-xl">Actividades: </p>
 
-        <div  class="w-full transition-all flex-grow h-full rounded-md border border-gray-300 shadow-sm flex flex-col max-h-[550px] items-center bg-whit justify-start overflow-auto">
-            <div class="w-full flex flex-row items-center justify-start min-h-12 h-12 bg-gray-50 border-b border-gray-300 px-6">
-                <p class="w-[30%] h-auto text-sm text-gray-500 font-medium">Nombre</p>
-                <p class="w-[30%] h-auto text-sm text-gray-500 font-medium">Institucion</p>
-                <p class="w-[15%] h-auto text-sm text-gray-500 font-medium">Duracion</p>
-                <p class="w-[15%] h-auto text-sm text-gray-500 font-medium">Cant.Clases</p>
-                <p class="w-[10%] h-auto text-sm text-gray-500 font-medium">Descuento</p>
+        <div  class="w-full max-w-full transition-all flex-grow h-full rounded-md border border-gray-300 shadow-sm flex flex-col max-h-[550px] items-center bg-whit justify-start overflow-auto">
+            <div class="w-full flex flex-row  max-w-full items-center justify-start min-h-12 h-12 bg-gray-50 border-b border-gray-300 px-6">
+                <p class="min-w-[30%] w-[30%] truncate h-auto text-sm text-gray-500 font-medium">Nombre</p>
+                <p class="min-w-[30%] w-[30%] truncate h-auto text-sm text-gray-500 font-medium">Institucion</p>
+                <p class="min-w-[15%] w-[15%] truncate h-auto text-sm text-gray-500 font-medium">Duracion</p>
+                <p class="min-w-[15%] w-[15%] truncate h-auto text-sm text-gray-500 font-medium">Cant.Clases</p>
+                <p class="min-w-[10%] w-[10%] truncate h-auto text-sm text-gray-500 font-medium">Descuento</p>
             </div>
-            <div id="tablaContent" class="w-full transition-all h-auto flex flex-col items-start justify-start">
+            <div id="tablaContent" class="w-full max-w-full transition-all h-auto flex flex-col items-start justify-start">
 
             </div>
 
