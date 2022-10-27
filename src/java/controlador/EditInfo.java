@@ -4,7 +4,9 @@
  */
 package controlador;
 
+import Profesor.Profesor;
 import Profesor.ProfesorBO;
+import Profesor.dtos.ProfesorDTO;
 import Profesor.dtos.ProfesorEditDTO;
 import Socio.SocioBO;
 import Socio.dtos.SocioDTO;
@@ -21,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import util.BlobToImage;
@@ -95,6 +98,7 @@ public class EditInfo extends HttpServlet {
         String mail = request.getParameter("email");
         String fnacimientoStr = request.getParameter("fechaNacimiento");
         Date fechaNacimientoDate = null;
+        HttpSession session = request.getSession(true);
         try {
             fechaNacimientoDate = new SimpleDateFormat("dd/MM/yyyy").parse(fnacimientoStr);
         } catch (Exception e) {
@@ -138,6 +142,9 @@ public class EditInfo extends HttpServlet {
                     //System.out.println("profesor editado correctamente! (SI editaste password)");
                     response.sendRedirect("verPerfil");
                 }
+                ProfesorBO profeBO = new ProfesorBO();
+                ProfesorDTO profe = profeBO.getProfesorById(userId);
+                session.setAttribute("currentSessionUser", profe);
             } catch (Exception e) {
             }
         }
@@ -169,6 +176,9 @@ public class EditInfo extends HttpServlet {
                     socioBO.editar(userId, dataSocio);
                     response.sendRedirect("verPerfil");
                 }
+                SocioBO socBO = new SocioBO();
+                SocioDTO socio = socBO.consultarSocio(userId);
+                session.setAttribute("currentSessionUser", socio);
             } catch (Exception e) {
             }
         }
