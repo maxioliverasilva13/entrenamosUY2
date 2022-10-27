@@ -14,20 +14,12 @@
     ActividadDTO infoAct = (ActividadDTO) request.getAttribute("actInfo");
     HashMap<Integer, DtCuponera> cuponerasDisp = (HashMap<Integer, DtCuponera>) request.getAttribute("cuponerasDisp");
     cuponerasDisp.forEach(( key,  
-          
-          
-          
-          
-          
-          
-          
         item) ->{
-     System.out.println("cuponera con id: " + key);
     });
 %>
 <!DOCTYPE html>
 <div class="w-full h-full fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 flex items-center justify-center transition-all" id="modalComponent" >
-    <div class="bg-white w-auto rounded-2xl p-12 px-24 border-gray-300 border  h-auto flex flex-row items-start justify-start gap-x-12 relative">
+    <div class="bg-white w-auto rounded-2xl p-12 md:px-24 px-2 border-gray-300 border  h-auto flex flex-row items-start justify-start gap-x-12 relative">
         <%-- Close Button --%>
         <a href="verActividadInfo?actId=<%=selectedClaseInfo.getIdActividad()%>" class="w-10 h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>
@@ -38,7 +30,7 @@
 
             <hr class="w-full" />
 
-            <div class="w-full h-full flex-grow flex flex-row items-center justify-start gap-x-12">
+            <div class="w-full h-full flex-grow flex md:flex-row flex-col items-center justify-start gap-x-12">
 
                 <% if (cuponerasDisp.size() <= 0) {
                 %> <div class="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
