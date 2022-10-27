@@ -211,7 +211,18 @@
                     <div class="bg-[#DEDEDE] px-[24px] py-[12px]">
                         <p class="text-gray-500 text-[12px] font-medium">ACTIVIDADES</p>
                     </div>
-
+                    
+                    <%
+                    if (actividadesOfUser.size() == 0){
+                    %>
+                        <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
+                            <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                            <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Actividad!</p>
+                        </div>
+                    <%
+                    }else{
+                    %>                    
+                    
                     <%-- ForEach Actividades --%>
                     <%
                         for (ActividadDTO en : actividadesOfUser) {
@@ -227,6 +238,7 @@
                     </a>
                     <%
                         }
+                    }
                     %>
 
                 </div>
@@ -235,6 +247,16 @@
                         <p class="text-gray-500 text-[12px] font-medium ">CLASES</p>
                     </div>
 
+                    <%
+                    if (listClasesOfUser.size() == 0){
+                    %>
+                        <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
+                            <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                            <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
+                        </div>
+                    <%
+                    }else{
+                    %>
                     <%-- ForEach Clases --%>
                     <%
                         for (DtClase en : listClasesOfUser) {
@@ -254,6 +276,7 @@
                     </a> 
                     <%
                         }
+                    }
                     %>
                 </div>
             </div>        
