@@ -69,7 +69,7 @@
 
 <script>
     const handleGetClase = (itemId) => {
-        const url = '/entrenamosUY34//claseById?claseId=' + itemId;
+        const url = '/entrenamosUY3//claseById?claseId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
         if (window.claseInfo !== "Loading") {
             window.claseInfo = "Loading";

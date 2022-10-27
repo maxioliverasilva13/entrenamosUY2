@@ -19,6 +19,7 @@
             src="https://code.jquery.com/jquery-3.6.1.js"
             integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
         crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>    
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>

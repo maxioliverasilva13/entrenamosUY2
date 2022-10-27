@@ -11,6 +11,12 @@
 <%@page import="Clase.DtClase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
+</head>
+
 <script>
 
     const onClaseAddedSuccess = (data) => {
@@ -194,11 +200,6 @@
 </div>
 
 <div id="addClaseModal" style="display: none" class="w-full h-full z-[99999] max-h-full overflow-auto transition-all delay-150 fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 items-center justify-center transition-all">
-       <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
-        <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
-    </head>
     <div class="w-auto min-w-[600px] px-4 py-6 h-auto bg-white relative flex flex-col items-center justify-start rounded-2xl shadow-lg delay-500 transition-opacity mainModal">
         <button onclick="toggleOpenModal('addClaseModal')" id="closeAddClaseButton"  class="w-10 outline-none transition-all h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>
@@ -258,7 +259,7 @@
                     <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                         <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                     </div>
-                    <input required="true" name="fechaClase" id="fechaClase" datepicker="" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 datepicker-input" placeholder="Select date">
+                    <input required="true" datepicker datepicker-format="dd/mm/yyyy" name="fechaClase" id="fechaClase" datepicker="" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 datepicker-input" placeholder="Select date">
                 </div>
             </div>
 
