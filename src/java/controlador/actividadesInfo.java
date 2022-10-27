@@ -60,8 +60,6 @@ public class actividadesInfo extends HttpServlet {
             }
             request.getRequestDispatcher("/actividades.jsp").forward(request, response);
         } catch (Exception e) {
-            System.out.println(e);
-            System.out.println("falle aca");
             response.sendRedirect("NotFound.jsp");
         }
     }
@@ -71,7 +69,6 @@ public class actividadesInfo extends HttpServlet {
         ActividadBO actBO = new ActividadBO();
 
         try {
-            // System.out.println(request.);
             String body = request.getReader().lines().collect(Collectors.joining());
             List<String> categoriasToFilter = new ArrayList<>();
 
@@ -91,7 +88,6 @@ public class actividadesInfo extends HttpServlet {
             }
             doGet(request, response);
         } catch (Exception e) {
-            System.out.println(e);
             response.sendRedirect("NotFound.jsp");
         }
     }

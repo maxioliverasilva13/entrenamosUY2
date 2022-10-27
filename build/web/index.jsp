@@ -27,20 +27,16 @@
     BlobToImage btimg = new BlobToImage();
 
     UsuarioDTO loggedUser = null;
-    String typeOfUser = null;
+    String typeOfUser = "";
     loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
-    typeOfUser = (String) session.getAttribute("typeOfUser");
-
-    System.out.println(typeOfUser);
-
-    // Id del user q quiero consultar
-    int usrId = 52;
+    if (session.getAttribute("typeOfUser") != null) {
+        typeOfUser = (String) session.getAttribute("typeOfUser");
+    }
 
     try {
         instituciones = (HashMap<Integer, DtInstitucion>) request.getAttribute("instituciones");
         actividades = (HashMap<Integer, ActividadDTO>) request.getAttribute("actividades");
     } catch (Exception e) {
-        System.out.println("Error");
     }
     String nameOfUser = "Usuario";
     UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
@@ -68,7 +64,7 @@
         <jsp:include page='./components/header.jsp'>
             <jsp:param name="path" value="index"/>
         </jsp:include> 
-        <div id="defaultModal" class="w-full h-full fixed max-h-full z-[99999] overflow-auto top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 mx-auto justify-center transition-all" id="modalComponent" >
+        <div id="defaultModal" class="w-full h-full hidden max-h-full z-[99999] overflow-auto top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 mx-auto justify-center transition-all" id="modalComponent" >
             <div tabindex="-1" aria-hidden="true" class=" px-10 w-3/5 mx-auto">
                 <div class="relative p-4 w-full  h-full md:h-auto px-10">
                     <!-- Modal content -->
@@ -163,8 +159,6 @@
             </div>
 
 
-
-            <a href="verPerfil?&userID=<%=usrId%>"> Ver Perfil</a>
             <div class="w-full h-full lg:flex-row  flex-col flex-grow px-8 py-6 max-h-full overflow-auto flex items-center justify-between gap-x-8">
                 <aside class="lg:w-96 w-full lg:h-full h-auto min-h-[300px] border max-h-full overflow-auto lg:mb-0 mb-4 border-gray-300 rounded rounded-3xl bg-white shadow-md flex flex-col items-start justify-start">
                     <span class="w-full h-auto px-4 py-2 bg-[#DEDEDE] text-[#6B7280] text-left">Instituciones</span>
@@ -194,6 +188,19 @@
                         <p class="text-[#0F225E] text-xl font-semibold">Buenas tardes <%=nameOfUser%>, esperamos que estes teniendo un buen dia! </p>
                         <p class="text-[#1E40AF] text-xl font-medium">Tenemos un monton de actividades y clases para ti !</p>
                     </div>
+
+                    <%
+                        if (typeOfUser.equals("Profesor") == true) {
+                    %>
+                    <div class="w-full h-auto flex flex-row items-center justify-end my-2 ">
+                        <button onclick="openModal()" class="w-auto h-auto px-4 py-2 rounded-md text-white bg-blue-900 ">
+                            Agregar Actividad
+                        </button>
+
+                    </div>
+                    <%
+                        }
+                    %>
                     <p class="text-[#3A5A6E] font-medium lg:my-0 my-3 text-xl">Algunas Estadisticas Que Podrian Interesarte</p>
                     <%-- Estadisticas Div Principal --%>
                     <div class="w-full lg:h-28 h-auto flex lg:flex-row flex-col items-center justify-between gap-x-6 mt-1">
@@ -252,6 +259,7 @@
                 const modal = $("#defaultModal");
                 function openModal() {
                     modal.removeClass("hidden");
+                    modal.addClass("fixed");
                 }
                 function closeModal() {
                     modal.addClass("hidden");
@@ -280,6 +288,9 @@
                     inputFile.setAttribute("src", "");
                     $('#input_file').val("");
                 }
+
+
+
                 $(function () {
                     const form = $("#add-activity").validate({
                         // Specify validation rules
@@ -346,6 +357,8 @@
                                 errorCatLbl.innerHTML = "Debes seleccionar al menos una categoria";
                             }
                             const image = $('#input_file')[0].files[0];
+
+
                             var data = new FormData();
                             data.append("nombre", nombre);
                             data.append("descripcion", descripcion);

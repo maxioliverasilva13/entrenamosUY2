@@ -45,7 +45,7 @@
     <%
     } else {
     %> 
-    <div class="w-full flex-grow h-full grid grid-cols-4 gap-4 auto-rows-max min-h-[400px]">
+    <div class="w-full flex-grow h-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-max min-h-[400px]">
         <% for (HashMap.Entry<Integer, ActividadDTO> en : actividadesToShow.entrySet()) {
                 Integer key = en.getKey();
                 ActividadDTO val = en.getValue();

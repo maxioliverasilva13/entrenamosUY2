@@ -12,7 +12,6 @@
     try {
        cuponera = (HashMap<Integer, DtCuponera>)request.getAttribute("cuponerasDisp");
     } catch (Exception e) {
-        System.out.println("Error");
     }
     
     DtCuponera cuponeraInfo = null;

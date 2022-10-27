@@ -3,6 +3,7 @@
     Created on : 30 set. 2022, 12:14:44
     Author     : mandi
 --%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
@@ -52,7 +53,6 @@
     try {
         listAct = (HashMap<Integer, ActividadDTO>) request.getAttribute("actividades");
     } catch (Exception e) {
-        System.out.println(e.getMessage());
     }
 %>
 
@@ -205,18 +205,21 @@
                             for (HashMap.Entry<Integer, ActividadDTO> en : listAct.entrySet()) {
                                 Integer key = en.getKey();
                                 ActividadDTO val = en.getValue();
+                                
+                                SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+                                String dateRegistro = DATE_FORMAT.format(val.getFechaRegistro());
                         %>
                         <tr class="bg-white border-b ">
                             <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
                                 <%=val.getNombre()%>
                             </th>
                             <td class="py-4 px-6">
-                                <%=val.getFechaRegistro()%>
+                                <%=dateRegistro%>
                             </td>
                             <td class="py-4 px-6">
                                 <%=val.getDuracion()%>
                             </td>
-                            <td class="py-4 px-6">
+                            <td class="py-4 px-6 space-x-5 space-y-6">
                                 <%-- Badge Aceptada --%>
                                 <%
                                     if (val.getEstado().equals("Aceptada")) {
@@ -224,31 +227,12 @@
                                 <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
                                     Aceptada
                                 </span>
+                                <a href="verActividadInfo?actId=<%= val.getId() %>">
+                                    <i class="fa-solid fa-chevron-right text-gray-900 cursor-pointer px-4"></i>
+                                </a>
                                 <%
                                     }
                                 %>
-
-                                <%-- Badge Ingresada --%>
-                                <%
-                                    if (val.getEstado().equals("Ingresada")) {
-                                %>
-                                <span class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-yellow-200 dark:text-yellow-900">
-                                    Ingresada
-                                </span>
-                                <%
-                                    }
-                                %>
-
-                                <%-- Badge Rechazada --%>
-                                <%
-                                    if (val.getEstado().equals("Rechazada")) {
-                                %>
-                                <span class="bg-red-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-red-200 dark:text-red-900">
-                                    Rechazada
-                                </span>
-                                <%
-                                    }
-                                %>            
                             </td>
                         </tr>
                         <%

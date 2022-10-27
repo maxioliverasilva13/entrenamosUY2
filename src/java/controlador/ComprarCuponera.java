@@ -4,10 +4,17 @@
  */
 package controlador;
 
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
+import Cuponera.CuponeraBo;
+import Exceptions.CuponeraAlreadyPurchaseBySocio;
+import Socio.dtos.SocioDTO;
+import com.google.gson.Gson;
+import controlador.utils.ClaseInsertDTO;
+import controlador.utils.ResponseUtil;
+import customsDtos.ComprarCuponeraInput;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,10 +24,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author mandi
+ * @author angel
  */
-@WebServlet(name = "SeguirUsuario", urlPatterns = {"/SeguirUsuario"})
-public class SeguirUsuario extends HttpServlet {
+@WebServlet(name = "ComprarCuponera", urlPatterns = {"/comprarCuponera"})
+public class ComprarCuponera extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +46,10 @@ public class SeguirUsuario extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SeguirUsuario</title>");
+            out.println("<title>Servlet ComprarCuponera</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SeguirUsuario at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ComprarCuponera at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,20 +67,7 @@ public class SeguirUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession session = request.getSession(true);
-        UsuarioBO userBO = new UsuarioBO();
-        
-        int usrIDConsultado = Integer.parseInt(request.getParameter("idConsultado"));
-        UsuarioDTO loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
-        
-        boolean loggSigueAconsultado = false;
-        
-        try {
-            loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), usrIDConsultado);
-            request.setAttribute("sigoAlConsultado", loggSigueAconsultado);
-        } catch (Exception e) {
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -87,27 +81,47 @@ public class SeguirUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+        HttpSession session = request.getSession(true);
+
         try {
-            UsuarioBO userBO = new UsuarioBO();
-            HttpSession session = request.getSession(true);
-            UsuarioDTO loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
+            SocioDTO socio = (SocioDTO) session.getAttribute("currentSessionUser");
+            CuponeraBo cupBo = new CuponeraBo();
+            PrintWriter out = response.getWriter();
 
-            int idConsultado = Integer.parseInt(request.getParameter("idConsultado"));
-            boolean sigoAconsultado = (boolean)request.getAttribute("sigoAlConsultado");
+            ComprarCuponeraInput cuponerasProps = new Gson().fromJson(request.getReader(), ComprarCuponeraInput.class);
 
-            if (!sigoAconsultado) {
-                userBO.seguirAUsuario(loggedUser.getId(), idConsultado);
-            } else {
+            cuponerasProps.getActividadesIds().forEach(((Integer actId) -> {
                 try {
-                    userBO.dejarSeguirUsuario(loggedUser.getId(), idConsultado);
-                } catch (Exception e) {
+                    cupBo.comprarCuponera(socio.getId(), cuponerasProps.getCuponeraId(), actId.intValue());
+                } catch (CuponeraAlreadyPurchaseBySocio ex) {
+                    ResponseUtil respUtil = new ResponseUtil(false, ex.getMessage(), this);
+                    String claseJSON = new Gson().toJson(respUtil);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    out.print(claseJSON);
+                    response.setStatus(HttpServletResponse.SC_OK);
                 }
-            }
-        response.sendRedirect("verPerfil?&userID="+idConsultado);
+            }));
+
+            ResponseUtil respUtil = new ResponseUtil(true, "Se compro la clase correctamente", this);
+
+            String claseJSON = new Gson().toJson(respUtil);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(claseJSON);
+            response.setStatus(HttpServletResponse.SC_OK);
 
         } catch (Exception e) {
-            response.sendRedirect("NotFound.jsp");
+            System.out.println("Error");
+            System.out.println(e);
+            ResponseUtil respUtil = new ResponseUtil(false, e.getMessage(), this);
+            PrintWriter out = response.getWriter();
+            String claseJSON = new Gson().toJson(respUtil);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(claseJSON);
+            response.setStatus(HttpServletResponse.SC_OK);
+
         }
     }
 

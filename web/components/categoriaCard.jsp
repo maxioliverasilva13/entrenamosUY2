@@ -33,13 +33,13 @@
 
 %>
    
-<div class="h-14 w-full flex flex-row items-center justify-start rounded-xl border border-gray-300 shadow overflow-hidden">
+<div class="h-16 w-max flex flex-row items-center justify-start rounded-xl border border-gray-300 shadow overflow-hidden">
     <div class="w-16 h-full flex items-center justify-center text-white"
          style="background: <%=getColor(paramIndex)%>"
     >
         <%=formatName(categoriaName) %>
     </div>
-    <div class="px-4 py-2 h-full flex-grow flex flex-col items-start justify-start">
+    <div class="px-4 py-2 h-max flex-grow flex flex-col items-start justify-start">
         <p class="text-gray-900 font-medium text-xs ">${param.categoria}</p>
         <p class="font-normal text-gray-400 text-sm">Total de actividades: ${param.totalActividades}</p>
     </div>

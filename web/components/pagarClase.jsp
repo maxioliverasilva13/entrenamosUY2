@@ -2,22 +2,19 @@
     Document   : infoClaseModal
     Created on : 29/09/2022, 08:26:58 PM
     Author     : Maximiliano Olivera
-
     Esta pagina es solo para socios logueados
 --%>
-
 <%@page import="Cuponera.DtCuponera"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="Actividad.dtos.ActividadDTO"%>
 <%@page import="Clase.DtClase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <%
     DtClase selectedClaseInfo = (DtClase) request.getAttribute("selectedClaseInfo");
     ActividadDTO infoAct = (ActividadDTO) request.getAttribute("actInfo");
     HashMap<Integer, DtCuponera> cuponerasDisp = (HashMap<Integer, DtCuponera>) request.getAttribute("cuponerasDisp");
-
     cuponerasDisp.forEach(( key,  
+          
           
           
           
@@ -27,7 +24,6 @@
         item) ->{
      System.out.println("cuponera con id: " + key);
     });
-
 %>
 <!DOCTYPE html>
 <div class="w-full h-full fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 flex items-center justify-center transition-all" id="modalComponent" >
@@ -45,7 +41,6 @@
             <div class="w-full h-full flex-grow flex flex-row items-center justify-start gap-x-12">
 
                 <% if (cuponerasDisp.size() <= 0) {
-
                 %> <div class="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
                     <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.432 0c1.34 0 2.01.912 2.01 1.957 0 1.305-1.164 2.512-2.679 2.512-1.269 0-2.009-.75-1.974-1.99C9.789 1.436 10.67 0 12.432 0zM8.309 20c-1.058 0-1.833-.652-1.093-3.524l1.214-5.092c.211-.814.246-1.141 0-1.141-.317 0-1.689.562-2.502 1.117l-.528-.88c2.572-2.186 5.531-3.467 6.801-3.467 1.057 0 1.233 1.273.705 3.23l-1.391 5.352c-.246.945-.141 1.271.106 1.271.317 0 1.357-.392 2.379-1.207l.6.814C12.098 19.02 9.365 20 8.309 20z"/></svg>
                     <p>No tienes cuponeras disponibles.</p>
@@ -111,8 +106,6 @@
     </div>
 
     <script>
-
-
         var choosedCup = false;
         var choosedCupID = null;
         var finalPriceDesc = null;
@@ -126,7 +119,6 @@
                 finalPriceElem.text("$" + newPriceFinal);
                 finalPriceDesc = newPriceFinal;
                 choosedCupID = id;
-
             } else {
                 changeBtnStyleToChoose(btnCup);
                 const price = parseInt(finalPriceElem.text());
@@ -138,31 +130,20 @@
             }
             choosedCup = !choosedCup;
         }
-
         function changeBtnStyleToCancel(btn) {
             btn.removeClass("bg-[#4F7994]");
             btn.removeClass("text-white");
-
-
             btn.addClass("text-gray-700");
             btn.addClass("bg-gray-200");
-
             btn.text("Quitar");
-
         }
-
         function changeBtnStyleToChoose(btn) {
-
             btn.removeClass("text-gray-700");
             btn.removeClass("bg-gray-200");
             btn.addClass("bg-[#4F7994]");
             btn.addClass("text-white");
             btn.text("Elejir");
-
-
         }
-
-
         function  buyCuponera(claseId, costoClase) {
             let precioFinal;
             if (finalPriceDesc) {
@@ -170,20 +151,17 @@
             } else {
                 precioFinal = costoClase;
             }
-
             const data = {
                 claseId: claseId,
                 precioFinal: costoClase,
                 choosedCupID: choosedCupID
             }
-
             var req = $.post("ComprarClase", data, function (data, status) {
                 if (data.status == 200) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Felicidades!',
                         text: data.message,
-
                     })
                     $("#modalComponent").css("display", "none");
                 } else if (data.status == 400) {
@@ -191,29 +169,20 @@
                         icon: 'error',
                         title: 'Oops...',
                         text: data.message,
-                        footer: '<a href="">Why do I have this issue?</a>'
                     })
-
                 } else if (data.status == 500) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: "Ha ocurrido un error inesperado",
-                        footer: '<a href="">Why do I have this issue?</a>'
+                        text: data.message,
                     })
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: "Ha ocurrido un error inesperado",
-                        footer: '<a href="">Why do I have this issue?</a>'
+                        text: data.message,
                     })
-
                 }
-
             })
-
-
         }
-
     </script>

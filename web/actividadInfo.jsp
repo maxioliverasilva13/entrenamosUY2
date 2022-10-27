@@ -4,6 +4,7 @@
     Author     : angel
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Cuponera.DtCuponera"%>
 <%@page import="java.util.Random"%>
 <%@page import="util.BlobToImage"%>
@@ -38,7 +39,6 @@
     List<DtCuponeraXActividad> cuponerasXAct = infoAct.getCuponerasXActivdad();
     DtInstitucion instAct = infoAct.getInstitucion();
     DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");
-    System.out.println("cupInfo is" + cupInfo);
     
 
 %>
@@ -57,6 +57,18 @@
         return acronym;
     }
 
+    public String formatDate(Object x) {
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+            String date;
+        try {
+            date = DATE_FORMAT.format(x);
+        } catch (Exception e) {
+            System.out.println("Error catcheado en: actividadInfo.jsp formatDate()");
+            return "error";
+        }
+        return date;
+    }
+
     public String getColor(int index) {
         return listOfColors[index % 4];
     }
@@ -67,8 +79,6 @@
     var idProfesor;
     var profesorNombre;
     
-    console.log('<%=infoAct.getImageBlob().toString() %>')
-
     const handleGetItem = (itemId) => {
         const url = '/entrenamosUY3/cuponeraById?cupId=' + itemId;
         const cuponeraModal = document.getElementById("cuponeraInfoModal");
@@ -125,9 +135,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Actividad <%=infoAct.getNombre()%></title>
     </head>
-    <body class="w-screen h-screen flex items-start flex-col justify-start ">
+    <body class="w-screen h-full flex items-start flex-col justify-start ">
         <jsp:include page='/components/header.jsp' >
             <jsp:param name="path" value="index" />
         </jsp:include>
@@ -153,15 +163,15 @@
         %>
 
 
-        <div class="w-full h-full flex-grow flex flex-col items-start justify-start px-20 my-8 gap-y-4">
-            <div class="w-full h-[450px] flex flex-row items-start justify-between gap-x-20">
+        <div class="w-full h-full flex-grow flex flex-col items-start justify-start px-20 gap-y-4 my-6">
+            <div class="w-full flex flex-col items-center md:flex-row md:items-start md:justify-between gap-x-20 gap-y-4">
                 <div class='w-[420px] h-full flex flex-col items-center justify-start gap-y-6'>
                     <img
                         src="<%=btimg.getBase64StringImage(infoAct.getImageBlob())%>"
                         class="w-full h-[300px] object-cover rounded-md overflow-hidden"
                         />
 
-                    <p class="text-gray-900 text-xl font-medium pb-5 border-b w-full border-gray-300">Categorias</p>
+                    <p class="text-gray-900 text-lg font-medium pb-5 border-b w-full border-gray-300">Categorias</p>
 
                     <div class="w-full h-auto flex flex-row items-center justify-start gap-2 flex-wrap">
                         <% int indexCat = 0; %>
@@ -184,16 +194,16 @@
 
                     <p class="py-5 border-b border-gray-300 w-full text-left">Nombre Actividad: <%=infoAct.getNombre()%></p>
                     <div class="flex w-full flex-row items-center justify-start py-5 border-b border-gray-300">
-                        <p class="w-1/3 text-gray-500 text-sm font-medium">Insttucion</p>
+                        <p class="w-1/3 text-gray-500 text-sm font-medium">Institución</p>
                         <p class="w-2/3 text-sm font-normal text-gray-900"><%=instAct.getNombre()%></p>
                     </div>
                     <div class="flex w-full flex-row items-center justify-start py-5 border-b border-gray-300">
-                        <p class="w-1/3 text-gray-500 text-sm font-medium">Duracion</p>
+                        <p class="w-1/3 text-gray-500 text-sm font-medium">Duración</p>
                         <p class="w-2/3 text-sm font-normal text-gray-900"><%=infoAct.getDuracion()%></p>
                     </div>
                     <div class="flex w-full flex-row items-center justify-start py-5 border-b border-gray-300">
                         <p class="w-1/3 text-gray-500 text-sm font-medium">Fecha Alta</p>
-                        <p class="w-2/3 text-sm font-normal text-gray-900"><%=infoAct.getFechaRegistro()%></p>
+                        <p class="w-2/3 text-sm font-normal text-gray-900"><%=formatDate(infoAct.getFechaRegistro())%></p>
                     </div>
                     <div class="flex w-full flex-row items-start justify-start py-5 h-auto">
                         <p class="w-1/3 text-gray-500 text-sm font-medium">Descripcion</p>
@@ -212,27 +222,29 @@
                 }
             %>
 
-            <div class="w-full h-auto pb-4 my-12 flex-grow flex flex-row items-start justify-center gap-x-16">
-
-                <div class="w-full flex-grow mb-8 h-auto  min-h-[400px] overflow-auto rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start  overflow-hidden">
-                    <div class="w-full flex flex-row items-center justify-start h-12 bg-gray-50 border-b border-gray-300 px-6">
-                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Cuponeras</p>
-                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Descripcion</p>
-                        <p class="w-[20%] h-auto text-sm text-gray-500 font-medium">Clases</p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium">Descuento</p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium">Status</p>
+            <div class="w-full h-auto flex-grow flex flex-col lg:flex-row items-start justify-center gap-x-16 gap-y-4">
+                <p class="md:hidden text-gray-900 text-lg font-medium pb-2 border-b w-max border-gray-300 self-center">
+                    Cuponeras
+                </p>
+                <div class="w-full flex-grow h-auto min-h-[350px] overflow-auto rounded-md border border-gray-300 shadow-md flex flex-col items-center bg-whit justify-start  overflow-hidden">
+                    <div class="w-full flex flex-row items-center justify-between h-12 bg-gray-50 border-b border-gray-300 px-6 2xl:px-20">
+                        <p class="w-max h-auto text-sm text-gray-500 font-medium">Nombre</p>
+                        <p class="w-max h-auto text-sm text-gray-500 font-medium">Descripcion</p>
+                        <p class="w-max h-auto text-sm text-gray-500 font-medium">Clases</p>
+                        <p class="w-max h-auto text-sm text-gray-500 font-medium">Descuento</p>
+                        <p class="w-max h-auto text-sm text-gray-500 font-medium">Status</p>
                     </div>
 
 
                     <% for (DtCuponeraXActividad cat : cuponerasXAct) {
                             DtCuponeraXActividad val = cat;
                     %>
-                    <a onclick="handleGetItem('<%=cat.getCuponera().getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-6">
-                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getNombre()%></p>
-                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescripcion()%></p>
-                        <p class="w-[20%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCantClases()%></p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescuento()%></p>
-                        <div class="w-[15%] h-auto text-sm font-medium">
+                    <a onclick="handleGetItem('<%=cat.getCuponera().getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 gap-x-2 px-4">
+                        <p class="truncate w-[25%] max-w-[25%] h-auto text-center text-sm text-gray-500 font-medium"><%=cat.getCuponera().getNombre()%></p>
+                        <p class="break-words w-[25%] max-w-[25%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescripcion()%></p>
+                        <p class="w-[20%] max-w-[20%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCantClases()%></p>
+                        <p class="w-[15%] max-w-[15%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescuento()%> %</p>
+                        <div class="w-[15%] max-w-[15%] h-auto text-sm font-medium">
                             <p class="bg-green-100 w-fit h-auto text-green-800 rounded-xl py-0.5 px-3 ">Activa</p>
                         </div>
                     </a>
@@ -242,30 +254,31 @@
 
                 </div>
 
-
-                <div id="clasesListadoFromActInfo" class="w-full flex-grow mb-8  min-h-[400px] overflow-auto h-auto rounded-md border border-gray-300 shadow-sm flex flex-col items-center bg-whit justify-start overflow-hidden">
-                    <div class="w-full flex flex-row items-center justify-start h-12 bg-gray-50 border-b border-gray-300 px-6">
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium"></p>
+                <p class="md:hidden text-gray-900 text-lg font-medium pb-2 border-b w-max border-gray-300 self-center">
+                    Clases
+                </p>
+                <div id="clasesListadoFromActInfo" class="w-full flex-grow min-h-[350px] overflow-auto h-auto rounded-md border border-gray-300 shadow-md flex flex-col items-center bg-whit justify-start overflow-hidden">
+                    <div class="w-full flex flex-row items-center text-center justify-between h-12 bg-gray-50 border-b border-gray-300 px-6">
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Clase</p>
-                        <p class="w-[20%] h-auto text-sm text-gray-500 font-medium">Profesor</p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Profesor</p>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Inscriptos</p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium">Fecha</p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Fecha</p>
                     </div>
 
 
                     <% for (DtClase clase : clasesAct) {
                     %>
-                    <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-6">
-                        <div class="w-[15%] h-auto flex items-center justify-center">
+                    <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
+                        <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
                             <img
                             src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
                             class="w-8 h-8 object-cover rounded-full overflow-hidden"
                             />
+                        <p class="w-[10%]4 h-auto "t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
                         </div>
-                        <p class="w-[25%] h-auto tex%>')"t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
-                        <p class="w-[20%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getRegistros().size()%></p>
-                        <p class="w-[15%] h-auto text-sm text-gray-500 font-medium"><%=clase.getFecha().toLocaleString()%></p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=formatDate(clase.getFecha())%></p>
                     </a>
                     <%
                         }

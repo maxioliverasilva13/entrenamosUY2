@@ -115,7 +115,6 @@ public class EditInfo extends HttpServlet {
                 String website = request.getParameter("website");
                 
                 Part filePart = request.getPart("selected_file");
-                System.out.println(filePart.getSize());
                 InputStream fileContent = null;
                 File avatar = null;
                 if(filePart.getSize() > 0){
@@ -136,12 +135,10 @@ public class EditInfo extends HttpServlet {
                     char[] charPass = request.getParameter("confirmPassword").toCharArray();
                     data = new ProfesorEditDTO(name, lastname, nickname, charPass, description, biography, website, mail, fechaNacimientoDate, avatar != null ? avatar : null);
                     profBO.editProfesorById(userId, data);
-                    System.out.println("PASS: " + request.getParameter("confirmPassword"));
                     //System.out.println("profesor editado correctamente! (SI editaste password)");
                     response.sendRedirect("verPerfil");
                 }
             } catch (Exception e) {
-                System.out.println("ERROR EN SERVLET EditInfo " + e.getMessage());
             }
         }
         
@@ -151,7 +148,6 @@ public class EditInfo extends HttpServlet {
                 SocioBO socioBO = new SocioBO();
 
                 Part filePart = request.getPart("selected_file");
-                System.out.println(filePart.getSize());
                 InputStream fileContent = null;
                 File avatar = null;
                 if(filePart.getSize() > 0){
@@ -165,19 +161,15 @@ public class EditInfo extends HttpServlet {
                     // NO modifico password
                     dataSocio = new SocioEditDTO(name, lastname, nickname, null, mail, fechaNacimientoDate, avatar != null ? avatar : null);
                     socioBO.editar(userId, dataSocio);
-                    System.out.println("profesor editado correctamente! (no editaste password)");
                     response.sendRedirect("verPerfil");
                 } else {
                     // SI modifico password
                     char[] charPass = request.getParameter("confirmPassword").toCharArray();
                     dataSocio = new SocioEditDTO(name, lastname, nickname, charPass, mail, fechaNacimientoDate, avatar != null ? avatar : null);
                     socioBO.editar(userId, dataSocio);
-                    System.out.println("PASS: " + request.getParameter("confirmPassword"));
-                    System.out.println("socio editado correctamente! (SI editaste password)");
                     response.sendRedirect("verPerfil");
                 }
             } catch (Exception e) {
-                System.out.println("ERROR EN SERVLET EditInfo " + e.getMessage());
             }
         }
     }

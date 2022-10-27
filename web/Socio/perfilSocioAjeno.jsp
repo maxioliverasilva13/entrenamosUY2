@@ -3,6 +3,7 @@
     Created on : 19 oct. 2022, 12:17:06
     Author     : mandi
 --%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Clase.DtClase"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="java.util.HashMap"%>
@@ -63,7 +64,6 @@
     try {
         listAct = (HashMap<Integer, ActividadDTO>) request.getAttribute("actividades");
     } catch (Exception e) {
-        System.out.println(e.getMessage());
     }
 %>
 
@@ -239,12 +239,16 @@
                     <%
                         for (DtClase en : listClasesOfUser) {
                             DtClase val = en;
+                            
+
+                            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+                            String dateRegistro = DATE_FORMAT.format(val.getFecha());
                     %>
                     <a onclick="handleGetClase('<%=val.getId()%>')" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
                         <img src="<%=btimg.getBase64StringImage(val.getImageBlob())%>" alt="Girl in a jacket" class="rounded-full w-[40px] h-[40px] object-cover"/>
                         <div class="text-gray-500 text-[12px] font-medium flex-grow h-full flex flex-col item-start justify-start flex-col">
                             <p><%=val.getNombre()%> (<%=val.getRegistros().size()%> Inscripto/s)</p>
-                            <p class="mt-1">Fecha: <%=val.getFecha()%></p>
+                            <p class="mt-1">Fecha: <%=dateRegistro%></p>
                         </div>
                         <button class="border border-gray-300 py-[1px] px-[10px] rounded-[14px] font-medium text-[14px] text-gray-700 shadow-sm">View</button>
                     </a> 
