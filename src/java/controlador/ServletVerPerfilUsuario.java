@@ -189,7 +189,7 @@ public class ServletVerPerfilUsuario extends HttpServlet {
 
             HashMap<Integer, DtCuponera> listCuponeras = new HashMap<>();
             try {
-                listCuponeras = cupBO.listarCuponerasBySocio(userAconsultar);
+                listCuponeras = cupBO.listarCuponerasAdquiridasBySocio(userAconsultar);
             } catch (Exception e) {
                 response.sendRedirect("NotFound.jsp");
                 return;
