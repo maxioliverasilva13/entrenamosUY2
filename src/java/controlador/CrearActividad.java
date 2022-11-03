@@ -118,7 +118,6 @@ public class CrearActividad extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         response.setContentType("text/html");
        Gson gson = new Gson();
        try {

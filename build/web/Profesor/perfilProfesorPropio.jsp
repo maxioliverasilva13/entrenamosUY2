@@ -143,12 +143,28 @@
         </div>
 
         <div class="flex flex-col lg:flex-row gap-8 p-6 md:p-8 w-full">
-            <div class="flex lg:flex-col gap-8 mx-auto flex-wrap justify-center">
-                <textarea readonly id="biografia" rows="8" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo biografía!"><%=biografia%></textarea>
-                <textarea readonly id="descripcion" rows="12" class="block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo descripcion!"><%=descripcion%></textarea>
+            <div class="flex lg:flex-col gap-4 mx-auto flex-wrap justify-center">
+                <div>
+                    <p class="font-[Inter] text-lg">Biografia</p>
+                    <textarea readonly id="biografia" rows="8"  class="max-h-[200px] block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo biografía!"><%=biografia%></textarea>
+                </div>
+                <div>
+                    <p class="font-[Inter] text-lg">Descripción</p>
+                    <textarea readonly id="descripcion" rows="12" class="max-h-[260px] block p-2.5 w-64 md:w-80 text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="No tengo descripcion!"><%=descripcion%></textarea>
+                </div>
             </div>
 
             <div class="overflow-x-auto relative shadow-md sm:rounded-lg h-max w-full">
+            <%
+                if (listAct.size() == 0){
+                %>
+                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
+                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Actividad!</p>
+                    </div>
+                <%
+                }else{
+            %>
                 <table class="w-full text-sm text-left text-gray-500 ">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
                         <tr>
@@ -167,7 +183,6 @@
                         </tr>
                     </thead>
                     <tbody>
-
                         <%-- ForEach Actividades --%>
                         <%
                             for (HashMap.Entry<Integer, ActividadDTO> en : listAct.entrySet()) {
@@ -227,6 +242,7 @@
                         </tr>
                         <%
                             }
+                        }
                         %>
                     </tbody>  
                 </table>

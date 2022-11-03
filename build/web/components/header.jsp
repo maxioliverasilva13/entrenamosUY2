@@ -125,7 +125,6 @@
             <ul class="w-auto h-full items-center justify-start gap-x-4 md:flex hidden">
                 <a href="Inicio" class="text-white cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "index" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Inicio</a> 
                 <a href="actividadesInfo" class=" cursor-pointer text-base font-normal py-2 px-4 rounded-md ${param.path == "actividades" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Actividades</a>
-                <a class="text-[#D1D5DB] cursor-pointer text-base font-normal py-2 px-4 rounded-md">Clases</a>
                 <%
                     if (userInfo != null && typeOfUser != null && typeOfUser.equals("Socio")) {
                 %>
@@ -242,8 +241,8 @@
             <ul class="w-full h-auto flex flex-col items-start justify-start gap-y-2 p-2">
                 <a href="Inicio" class="text-white w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl ${param.path == "index" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Inicio</a> 
                 <a href="actividadesInfo" class=" cursor-pointer w-full text-base font-normal py-2 px-4 rounded-xl ${param.path == "actividades" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}">Actividades</a>
-                <a class="text-[#D1D5DB] w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl">Clases</a>
                 <p onclick="toggleModalCuponera('cuponerasDisponiblesModalView')" class="text-[#D1D5DB] w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl">Cuponeras</p>
+                <a href="Usuarios" class="text-white w-full cursor-pointer text-base font-normal py-2 px-4 rounded-xl ${param.path == "usuarios" ? "bg-[#111827] text-white" : "text-[#D1D5DB]"}"">Usuarios</a>
             </ul>
 
         </div>

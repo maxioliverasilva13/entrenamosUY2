@@ -30,5 +30,9 @@
         max-width: 100%!important;
         overflow-x: hidden!important;
     }
+    
+    .swal2-container {
+        z-index: 9999999999999999999;
+    }
 
 </style>
