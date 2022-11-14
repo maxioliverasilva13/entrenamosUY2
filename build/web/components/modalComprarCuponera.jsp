@@ -41,7 +41,10 @@
                     idCuponera,
                     actividadesIds,
                 })
+            }).then((res) => {
+                return res.json();
             }).then((data) => {
+                console.log(data);
                 if (data?.success) {
                     Swal.fire({
                         position: 'center',
@@ -174,7 +177,7 @@
                     </div>
                     <div class="border-b-[1px] w-full h-[60px] flex items-center">
                         <p class="text-[14px] text-[#6B7280] font-medium ml-4 w-16">Descuento</p>
-                        <p id="cuponeraDescuento" class="text-[14px] text-[#111827] ml-3 md:ml-10"></p>
+                        <p id="cuponeraDescuento" class="text-[14px] text-[#111827] ml-3 md:ml-10 truncate"></p>
                     </div>
                 </div>    
             </div>
