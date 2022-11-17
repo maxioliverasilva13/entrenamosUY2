@@ -6,14 +6,18 @@ package controlador;
 
 import Usuario.UsuarioBO;
 import Usuario.dtos.UsuarioDTO;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import util.FollowData;
 
 /**
  *
@@ -70,8 +74,16 @@ public class SeguirUsuario extends HttpServlet {
         boolean loggSigueAconsultado = false;
         
         try {
-            loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), usrIDConsultado);
-            request.setAttribute("sigoAlConsultado", loggSigueAconsultado);
+            PrintWriter out = response.getWriter();
+            int seguidores = userBO.getSeguidores(usrIDConsultado);
+            int seguidos = userBO.getSeguidos(usrIDConsultado);
+            FollowData fd = new FollowData(seguidores, seguidos);
+            String JSONdata = new Gson().toJson(fd);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(JSONdata);
+            response.setStatus(HttpServletResponse.SC_OK);
+//            request.setAttribute("sigoAlConsultado", loggSigueAconsultado);
         } catch (Exception e) {
         }
     }
@@ -87,20 +99,23 @@ public class SeguirUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+        //doGet(request, response);
         try {
             UsuarioBO userBO = new UsuarioBO();
             HttpSession session = request.getSession(true);
             UsuarioDTO loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
 
             int idConsultado = Integer.parseInt(request.getParameter("idConsultado"));
-            boolean sigoAconsultado = (boolean)request.getAttribute("sigoAlConsultado");
 
-            if (!sigoAconsultado) {
+            boolean loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), idConsultado);
+
+            if (!loggSigueAconsultado) {
                 userBO.seguirAUsuario(loggedUser.getId(), idConsultado);
+                System.out.println("LLEGO 1");
             } else {
                 try {
                     userBO.dejarSeguirUsuario(loggedUser.getId(), idConsultado);
+                    System.out.println("LLEGO 2");
                 } catch (Exception e) {
                 }
             }
