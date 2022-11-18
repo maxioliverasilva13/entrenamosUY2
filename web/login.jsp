@@ -61,7 +61,7 @@
                         <form action="Login" method="post" class="w-full">
 
                             <div class="flex w-full flex-col gap-10 mt-10">
-                                <input name="email"   type="email"   class="bg-gray-50 outline-none  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "  placeholder="Correo" />
+                                <input name="email" type="text" class="bg-gray-50 outline-none  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "  placeholder="Correo" />
                                 <input name="password" type="password"    class="bg-gray-50 outline-none  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  " placeholder="Contraseña"/>
                                 <%
                                     if (request.getAttribute("status") != null) {
@@ -78,7 +78,7 @@
                                 %>
                                 <div class="flex justify-end">
                                     <div>
-                                        <input type="checkbox"  class="rounded-[10px]">
+                                        <input name="remember" type="checkbox" class="rounded-[10px]">
                                         <label class="text-white font-['Inter'] font-normal text-xs md:text-sm">Remember password</label>
                                     </div>
 
