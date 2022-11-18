@@ -104,7 +104,7 @@ public class Login extends HttpServlet {
                 session.setAttribute("currentSessionUser", socio);
             }
 
-            response.sendRedirect("TestServelet");
+            response.sendRedirect("Inicio");
 
         } catch (UnauthorizedException e) {
             request.setAttribute("status", "Correo o Contraseña incorrectos");

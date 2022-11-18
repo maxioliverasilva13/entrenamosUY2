@@ -29,7 +29,7 @@
 
             var div = document.createElement('template');
             div.innerHTML = `
-                <a onclick="handleGetClase(` + clase?.id + `)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-6">
+                <a onclick="handleGetClase(` + clase?.id + `, true)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-6">
                     <div class="w-[15%] h-auto flex items-center justify-center">
                         <img
                         src="` + imgsrc + `"
@@ -56,13 +56,24 @@
         output.src = null;
     }
 
-    const toggleOpenModal = (id) => {
+    const toggleItem = (id, onlyHide) => {
         const element = document.getElementById(id);
-        if (element.style.display === "none") {
-            element.style.cssText = "display: flex";
+        if (onlyHide === true) {
+            if (element.style.display === "block") {
+                element.style.cssText = "display: none";
+            }
+        } else if (onlyHide === false) {
+            if (element.style.display === "none" || element.style.display === "") {
+                element.style.cssText = "display: block";
+            }
         } else {
-            element.style.cssText = "display: none";
+            if (element.style.display === "none") {
+                element.style.cssText = "display: block";
+            } else {
+                element.style.cssText = "display: none";
+            }
         }
+
     }
 
     var loadSelectedFile = function (event) {
@@ -101,6 +112,39 @@
         const sociosMax = $("#sociosMaxClase").val();
         const urlAcceso = $("#urlAccesoClase").val();
         const fechaClase = $("#fechaClase").val();
+        const cantidadSorteados = $("#cantidadSorteados").val();
+        const nombrePremio = $("#nombrePremio").val();
+
+        const needsValidation = (nombrePremio != "" && nombrePremio != null) || ((cantidadSorteados != "" && cantidadSorteados != null) || cantidadSorteados > 0)
+        if (needsValidation) {
+            if (nombrePremio != "" || nombrePremio != null) {
+                if (cantidadSorteados == 0 || cantidadSorteados == null) {
+                    $("#errorCantidadCreados").text("Debes ingresar una cantidad de sorteados");
+                    toggleItem("errorCantidadCreados", false)
+                    return;
+                } else {
+                    toggleItem("errorCantidadCreados", true)
+                }
+            }
+            if (cantidadSorteados != 0 || cantidadSorteados != null) {
+                if (nombrePremio == "" || nombrePremio == null) {
+                    $("#errorNombrePremio").text("Debes ingresar un nombre de sorteo");
+                    toggleItem("errorNombrePremio", false)
+                    return;
+                }
+                toggleItem("errorNombrePremio", true)
+            }
+
+            if (!(parseInt(cantidadSorteados) <= parseInt(sociosMax) && parseInt(cantidadSorteados) >= parseInt(sociosMin))) {
+                $("#errorCantidadCreados").text("Los sorteados no cumple con el rango de socios aceptados");
+                toggleItem("errorCantidadCreados", false)
+                return;
+            }
+        }
+
+        toggleItem("errorNombrePremio", true)
+        toggleItem("errorCantidadCreados", true)
+
         fetch(urlToCreateClass, {
             method: "POST",
             body: JSON.stringify({
@@ -113,26 +157,31 @@
                 idProfesor,
                 profesorNombre,
                 fileToSend: imgSrc,
+                cantidadSorteados,
+                nombrePremio
             })
         })
                 .then((response) => {
                     return response.json();
                 })
                 .then((data) => {
-                    console.log(data?.success);
-                    console.log(data);
-                    if (data?.success === true) {
-                        document.getElementById("modalTitle").innerHTML = `<i class="fa-solid fa-circle-check text-green-600"></i> Clase Agregada`;
-                        onClaseAddedSuccess(data?.data);
-                    } else {
-                        document.getElementById("modalTitle").innerHTML = `<i class="fa-sharp fa-solid fa-circle-exclamation text-red-700"></i> Clase no Agregada`
+                    Swal.fire({
+                        icon: data?.success ? 'success' : 'error',
+                        title: data?.success ? 'Clase insertada correctamente' : "Error insertando la clase",
+                        text: data.message
+                    });
+                    if (data?.success) {
+                        onClaseAddedSuccess(data?.data)
                     }
-                    document.getElementById("modalDescription").innerHTML = data?.message;
-                    toggleOpenModal("responseModal");
-                    toggleOpenModal("addClaseModal");
+                    toggleItem("addClaseModal");
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.log(data);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error agregando la actividad',
+                        text: err.message
+                    });
                 });
     }
 
@@ -188,20 +237,10 @@
         }
     }
 </style>
-<div style="display: none" id="responseModal" class="w-screen h-screen fixed z-[900] flex flex-col items-center justify-center bg-[#6B7280] bg-opacity-50">
-    <div class="w-auto max-w-[500px] h-auto p-12 bg-white relative rounded-md messageModal transition-all border border-gray-300 flex-col items-center justify-start gap-y-4 flex flex-col items-center justify-center">
-        <button onclick="toggleOpenModal('responseModal')" id="closeButton"  class="w-10 outline-none transition-all h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-        <p id="modalTitle" class="text-gray-800 font-medium text-lg"> <i class="fa-solid fa-circle-check text-green-600"></i> Clase agregada correctamente</p>
 
-        <p id="modalDescription" class="text-gray-800 font-medium text-lg">La clase se registro correctamente para esta actividad</p>
-    </div>
-</div>
-
-<div id="addClaseModal" style="display: none" class="w-full h-full z-[99999] max-h-full overflow-auto transition-all delay-150 fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 items-center justify-center transition-all">
-    <div class="w-auto min-w-[600px] px-4 py-6 h-auto bg-white relative flex flex-col items-center justify-start rounded-2xl shadow-lg delay-500 transition-opacity mainModal">
-        <button onclick="toggleOpenModal('addClaseModal')" id="closeAddClaseButton"  class="w-10 outline-none transition-all h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
+<div id="addClaseModal" style="display: none" class="w-full h-full z-[99999] py-4 max-h-full overflow-auto transition-all delay-150 fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 transition-all">
+    <div class="w-auto mx-auto mt-12 min-h-max md:min-w-[600px] min-w-[90%] h-fit px-4 py-6 bg-white relative flex flex-col items-center justify-start rounded-2xl shadow-lg delay-500 transition-opacity mainModal">
+        <button onclick="toggleItem('addClaseModal')" id="closeAddClaseButton"  class="w-10 outline-none transition-all h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>
         </button>
         <p class="text-lg font-medium text-gray-800">Agregar una nueva clase</p>
@@ -231,26 +270,24 @@
                 </figcaption>
             </div>
 
-
-
             <div class="flex-1 w-full ">
                 <label for="nombreClase" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nombre</label>
-                <input required="true" type="text" id="nombreClase" name="nombreClase" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre:" >
+                <input required="true" type="text" id="nombreClase" name="nombreClase" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre:" />
             </div>
 
             <div class="flex-1 w-full ">
                 <label for="sociosMinClase" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Socios Minimos</label>
-                <input required="true" type="number" id="sociosMinClase" name="sociosMinClase" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Socios Minimos:" >
+                <input min="1" required="true" type="number" id="sociosMinClase" name="sociosMinClase" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Socios Minimos:" />
             </div>
 
             <div class="flex-1 w-full ">
                 <label for="sociosMaxClase" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Socios Maximos</label>
-                <input required="true" type="number" id="sociosMaxClase" name="sociosMaxClase" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Socios Maximos:" >
+                <input min="1" required="true" type="number" id="sociosMaxClase" name="sociosMaxClase" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Socios Maximos:" />
             </div>
 
             <div class="flex-1 w-full ">
                 <label for="urlAccesoClase" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Url Acceso</label>
-                <input required="true" type="text" id="urlAccesoClase" name="urlAccesoClase" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="UrlAcceso" >
+                <input required="true" type="text" id="urlAccesoClase" name="urlAccesoClase" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="UrlAcceso" />
             </div>
 
             <div class="flex-1 w-full ">
@@ -259,7 +296,27 @@
                     <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                         <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                     </div>
-                    <input required="true" datepicker datepicker-format="dd/mm/yyyy" name="fechaClase" id="fechaClase" datepicker="" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 datepicker-input" placeholder="Select date">
+                    <input required="true" datepicker datepicker-format="dd/mm/yyyy" name="fechaClase" id="fechaClase" datepicker="" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 datepicker-input" placeholder="Select date" />
+                </div>
+            </div>
+
+
+
+            <div class="w-full h-auto flex flex-col items-start my-4 gap-y-6">
+                <p class="text-gray-900 font-bold text-[20px]">Premios</p>
+
+
+                <div class="flex-1 w-full ">
+                    <label for="nombrePremio" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nombre premio</label>
+                    <input type="text" id="nombrePremio" name="nombrePremio" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nombre premio" />
+                    <p id="errorNombrePremio" class="hidden text-red-600 font-medium text-sm my-2">Error</p>
+
+                </div>
+
+                <div class="flex-1 w-auto">
+                    <label for="cantidadSorteados" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nombre premio</label>
+                    <input min="1" type="number" id="cantidadSorteados" name="cantidadSorteados" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cantidad Sorteados" />
+                    <p id="errorCantidadCreados" class="hidden text-red-600 font-medium text-sm my-2">Error</p>
                 </div>
             </div>
 
