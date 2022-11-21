@@ -65,21 +65,20 @@
 
 <script>
     const handleOpenPremioInfo = (premioId) => {
-            const modalElement = document.getElementById("infoSorteoModal");
+       const modalElement = document.getElementById("infoSorteoModal");
         if (modalElement != null) {
             const url = '/entrenamosUY3/premioById?premioId=' + premioId;
             window.fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
-                console.log(data);
                 modalElement.style.cssText = "display: flex";
+                modalElement.onload(data);
             }).catch((err) => {
-                console.log(err);
                 Swal.fire({
                     position: 'center',
                     icon: 'error',
                     title: 'Error al cargar el premio',
-                    textContent: data?.message,
+                    textContent: err?.message,
                     showConfirmButton: false,
                 });
                 window.cuponeraInfo = "Error";
@@ -221,7 +220,7 @@
                                 </div>
                             </div>
                             <div class="gap-6 grid md:grid-cols-2 grid-cols-1 items-start lg:items-start justify-center p-6 md:p-8 gap-y-4 lg:flex-row w-screen h-max lg:gap-x-12">
-                                <div class="h-max flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
+                                <div class="h-max m-auto flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
                                     <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium">ACTIVIDADES</p>
                                     </div>
@@ -258,7 +257,7 @@
 
 
                                 </div>
-                                <div class="h-max flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
+                                <div class="h-max m-auto flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
                                     <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium ">CLASES</p>
                                     </div>
@@ -296,7 +295,7 @@
 
                                 </div>
 
-                                <div class="h-max flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
+                                <div class="h-max m-auto flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
                                     <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium">CUPONERAS ADQUIRIDAS</p>
                                     </div>
@@ -333,7 +332,7 @@
                                 </div>
 
 
-                                <div class="h-max flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
+                                <div class="h-max m-auto flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
                                     <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium">Premios Ganados</p>
                                     </div>
