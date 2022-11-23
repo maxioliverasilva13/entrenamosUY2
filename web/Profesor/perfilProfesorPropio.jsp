@@ -238,6 +238,20 @@
                                 <%
                                     }
                                 %>            
+                 
+                                <%-- Badge Finalizada --%>
+                                <%
+                                    if (val.getEstado().equals("Finalizada")) {
+                                %>
+                                <span class="bg-purple-300 text-purple-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl">
+                                    Finalizada
+                                </span>
+                                <a href="verActividadInfo?actId=<%= val.getId() %>">
+                                    <i class="fa-solid fa-chevron-right text-gray-900 cursor-pointer px-4"></i>
+                                </a>
+                                <%
+                                    }
+                                %>           
                             </td>
                         </tr>
                         <%

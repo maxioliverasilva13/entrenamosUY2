@@ -133,6 +133,24 @@
         }
 
     }
+    
+    const finalizarActividad = (idAct) => {
+        const url = '/entrenamosUY3/finalizarActividad?actId=' + idAct;
+        const botones = document.getElementById("buttons");
+        
+        window.fetch(url).then((response) => {
+            if (response.status === 200){
+                Swal.fire({
+                        icon: 'success',
+                        title: 'Exito',
+                        text: 'Actividad finalizada correctamente.'
+                })
+                botones.style.cssText = 'display: none';
+            }else{
+                console.log("error al finalizar " + response.statusText)
+            }
+        });
+    };
 </script>
 <!DOCTYPE html>
 <html>
@@ -166,12 +184,12 @@
         %>
 
 
-        <div class="w-full h-full flex-grow flex flex-col items-start justify-start md:px-20 px-4 gap-y-4 my-6">
+        <div class="w-full h-full flex-grow flex flex-col items-start justify-start md:px-20 p-4 gap-y-4">
             <div class="w-full flex flex-col items-center md:flex-row md:items-start md:justify-between gap-x-20 gap-y-4">
-                <div class='w-[420px] h-full flex flex-col items-center justify-start gap-y-6'>
+                <div class='w-max h-full flex flex-col items-center justify-start gap-y-6'>
                     <img
                         src="<%=btimg.getBase64StringImage(infoAct.getImageBlob())%>"
-                        class="w-full h-[300px] object-cover rounded-md overflow-hidden"
+                        class="w-[300px] full h-[300px] min-h-[300px] min-w-[300px] object-cover rounded-md overflow-hidden"
                         />
 
                     <p class="text-gray-900 text-lg font-medium pb-5 border-b w-full border-gray-300">Categorias</p>
@@ -216,10 +234,11 @@
             </div>
             <%-- Solo si es Profesor --%>
             <%
-                if (showAddClassButton == true) {
+                if (showAddClassButton == true && (!infoAct.getEstado().equals("Finalizada")  )   ) {
             %>
-            <div class="w-full h-auto flex flex-row items-center justify-end h-auto my-0">
-                <button onclick="toggleOpenAddClaseModal('<%=infoAct.getId()%>', '<%=infoAct.getProfesor().getId()%>', '<%=infoAct.getProfesor().getNombre()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-[#294557]">Agregar</button>
+            <div id="buttons" class="w-full h-auto flex flex-col-reverse sm:flex-row items-center justify-between sm:px-12 h-auto gap-y-2">
+                <button onclick="finalizarActividad('<%=infoAct.getId()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-red-500">Finalizar Actividad Deportiva</button>
+                <button onclick="toggleOpenAddClaseModal('<%=infoAct.getId()%>', '<%=infoAct.getProfesor().getId()%>', '<%=infoAct.getProfesor().getNombre()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-[#294557]">Agregar Clase</button>
             </div>
             <%
                 }
@@ -238,20 +257,29 @@
                         <p class="w-max h-auto text-sm text-gray-500 font-medium">Status</p>
                     </div>
 
-
-                    <% for (DtCuponeraXActividad cat : cuponerasXAct) {
-                            DtCuponeraXActividad val = cat;
-                    %>
-                    <a onclick="handleGetItem('<%=cat.getCuponera().getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 gap-x-2 px-4">
-                        <p class="truncate w-[25%] max-w-[25%] h-auto text-center text-sm text-gray-500 font-medium"><%=cat.getCuponera().getNombre()%></p>
-                        <p class="break-words w-[25%] max-w-[25%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescripcion()%></p>
-                        <p class="w-[20%] max-w-[20%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCantClases()%></p>
-                        <p class="w-[15%] max-w-[15%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescuento()%> %</p>
-                        <div class="w-[15%] max-w-[15%] h-auto text-sm font-medium">
-                            <p class="bg-green-100 w-fit h-auto text-green-800 rounded-xl py-0.5 px-3 ">Activa</p>
-                        </div>
-                    </a>
                     <%
+                        if (cuponerasXAct.size() == 0){
+                    %>
+                            <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
+                                <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                                <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
+                            </div>
+                    <%
+                        }else{
+                            for (DtCuponeraXActividad cat : cuponerasXAct) {
+                                DtCuponeraXActividad val = cat;
+                    %>
+                        <a onclick="handleGetItem('<%=cat.getCuponera().getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 gap-x-2 px-4">
+                            <p class="truncate w-[25%] max-w-[25%] h-auto text-center text-sm text-gray-500 font-medium"><%=cat.getCuponera().getNombre()%></p>
+                            <p class="break-words w-[25%] max-w-[25%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescripcion()%></p>
+                            <p class="w-[20%] max-w-[20%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCantClases()%></p>
+                            <p class="w-[15%] max-w-[15%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescuento()%> %</p>
+                            <div class="w-[15%] max-w-[15%] h-auto text-sm font-medium">
+                                <p class="bg-green-100 w-fit h-auto text-green-800 rounded-xl py-0.5 px-3 ">Activa</p>
+                            </div>
+                        </a>
+                    <%
+                            }
                         }
                     %>
 
@@ -268,22 +296,31 @@
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Fecha</p>
                     </div>
 
-
-                    <% for (DtClase clase : clasesAct) {
-                    %>
-                    <a onclick="handleGetClase('<%=clase.getId()%>', true)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
-                        <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
-                            <img
-                            src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
-                            class="w-8 h-8 object-cover rounded-full overflow-hidden"
-                            />
-                        <p class="w-[10%]4 h-auto "t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
-                        </div>
-                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
-                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getRegistros().size()%></p>
-                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=formatDate(clase.getFecha())%></p>
-                    </a>
                     <%
+                        if (clasesAct.size() == 0){
+                    %>
+                            <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
+                                <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                                <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
+                            </div>
+                    <%
+                        }else{
+                            for (DtClase clase : clasesAct) {
+                    %>
+                                <a onclick="handleGetClase('<%=clase.getId()%>', true)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
+                                    <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
+                                        <img
+                                        src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
+                                        class="w-8 h-8 object-cover rounded-full overflow-hidden"
+                                        />
+                                    <p class="w-[10%]4 h-auto "t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
+                                    </div>
+                                    <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
+                                    <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getRegistros().size()%></p>
+                                    <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=formatDate(clase.getFecha())%></p>
+                                </a>
+                    <%
+                            }
                         }
                     %>
                 </div>

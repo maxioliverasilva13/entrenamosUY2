@@ -20,8 +20,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    int cantSeguidores = (int) request.getAttribute("cantSeguidores");
-    int cantSeguidos = (int) request.getAttribute("cantSeguidos");
+    //int cantSeguidores = (int) request.getAttribute("cantSeguidores");
+    //int cantSeguidos = (int) request.getAttribute("cantSeguidos");
 
     List<DtClase> listClasesOfUser = new ArrayList<>();
     List<ActividadDTO> actividadesOfUser = new ArrayList<>();
@@ -68,6 +68,31 @@
 %>
 
 <script>
+    var sigoAlconsultado = <%= sigoAlConsultado %>;
+
+    $( window ).on( "load", () => {
+        const url = '/entrenamosUY3/SeguirUsuario?idConsultado=<%=idConsultado%>';
+        const botonF = document.getElementById("btnFollow");
+        const botonU = document.getElementById("btnUnfollow");
+        const followers = document.getElementById("followers");
+        const following = document.getElementById("following");
+        
+        fetch(url).then((response) => {
+            return response.json();
+        }).then((result) => {
+            followers.innerText = result.seguidores;
+            following.innerText = result.seguidos;
+        });
+                    
+        if (sigoAlconsultado === true){
+            botonF.setAttribute('hidden', true);
+            botonU.removeAttribute('hidden');
+        }else if (sigoAlconsultado === false){
+            botonU.setAttribute('hidden', true);
+            botonF.removeAttribute('hidden');
+        }
+    });
+    
     const handleGetClase = (itemId) => {
         const url = '/entrenamosUY3//claseById?claseId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
@@ -93,8 +118,37 @@
                 window.claseInfo = "Error";
             });
         }
-
+        
     }
+    
+    const followUser = (idUser) => {
+        const url = '/entrenamosUY3/SeguirUsuario?idConsultado=' + idUser;
+        const botonF = document.getElementById("btnFollow");
+        const botonU = document.getElementById("btnUnfollow");
+        
+        window.fetch(url, {method: 'POST'}).then(() => {
+            sigoAlconsultado = !sigoAlconsultado;
+            if (!sigoAlconsultado){
+                botonU.setAttribute('hidden', true);
+                botonF.removeAttribute('hidden');
+            }
+            
+            if (sigoAlconsultado){
+                botonF.setAttribute('hidden', true);
+                botonU.removeAttribute('hidden');
+            }
+        }).then(() => {
+            // Get follows & followers
+            fetch(url).then((response) => {
+                return response.json();
+            }).then((result) => {
+                followers.innerText = result.seguidores;
+                following.innerText = result.seguidos;
+            });
+        }).catch((err) => {
+                console.log("Error en funcion followUser (perfilSocioAjeno.jsp): " + err);
+        });
+    };
 </script>
 
 <!DOCTYPE html>
@@ -154,13 +208,13 @@
                         <div class="item container shadow border rounded-xl bg-white p-3">
                             <div class="max-w-40">
                                 <p class="font-[Inter] text-sm text-gray-500 font-medium">Total Followers</p>
-                                <p class="font-[Inter] text-3xl font-bold"><%=cantSeguidores%></p> 
+                                <p id="followers" class="font-[Inter] text-3xl font-bold">0</p> 
                             </div>
                         </div>
                         <div class="item container shadow border rounded-xl bg-white p-3 max-h-24">
                             <div>
                                 <p class="font-[Inter] text-sm text-gray-500 font-medium">Total Following</p>
-                                <p class="font-[Inter] text-3xl font-bold"><%=cantSeguidos%></p>
+                                <p id="following" class="font-[Inter] text-3xl font-bold">0</p>
                             </div>
                         </div>
                     </div>
@@ -172,38 +226,20 @@
                         <p class="text-[#6B7280] text-4xl font-[Inter] font-medium">Last Online</p>
                         <p class="text-7xl text-[#3A5A6F] font-[Inter] font-extrabold">24/7</p>
                     </div>
-                    <form action="SeguirUsuario" method="post">
-                        <input hidden type="text" name="idConsultado" value="<%= idConsultado%>"/>
-                        <input hidden type="text" name="userId" value="${param.usrIdConsultado}"/>
 
-
-                        <%
+                    <%
                             //Si no hay sesion (loggedUser), no le muestro el boton de follow. (Otra opción seria si mostrarlo, pero redirigirlo al login).
-                            if (!userNotLogged) {
-                                if (sigoAlConsultado) {
-                        %>
-                        <button type="submit" class="font-[Inter] font-medium bg-red-500 hover:bg-red-400 text-white mt-8 p-4 rounded-md w-full">
+                        if (!userNotLogged) {
+                    %>
+                        <button hidden="true" onclick="followUser('<%= idConsultado %>')" id="btnUnfollow" class="font-[Inter] font-medium bg-red-500 hover:bg-red-400 text-white mt-8 p-4 rounded-md w-full">
                             Unfollow
                         </button>
-
-                        <%
-                            }
-                        %>
-
-
-                        <%
-                            if (!sigoAlConsultado) {
-                        %>    
-
-                        <button type="submit" class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white mt-8 p-4 rounded-md w-full">
+                        <button hidden="true" onclick="followUser('<%= idConsultado %>')" id="btnFollow" class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white mt-8 p-4 rounded-md w-full">
                             Follow
                         </button>
-
-                        <%
-                                }
-                            }
-                        %>
-                    </form>
+                    <%
+                        }
+                    %>
                 </div>
             </div>
 

@@ -10,6 +10,7 @@ import Actividad.dtos.ActividadCreateDTO;
 import Categoria.CategoriaBO;
 import Categoria.DtCategoria;
 import Categoria.ICategoriaBO;
+import Exceptions.ActividadAlreadyExistsException;
 import Institucion.DtInstitucion;
 import Institucion.InstitucionBO;
 import Profesor.Profesor;
@@ -126,7 +127,12 @@ public class CrearActividad extends HttpServlet {
             String descripcion = request.getParameter("descripcion");
             float duracion =   Float.parseFloat(request.getParameter("duracion"));
             float costo =   Float.parseFloat(request.getParameter("costo"));
-            String[] categoriasIdArrStr = request.getParameterValues("categoriasId");
+            String categoriasIdStr = request.getParameter("categoriasId");
+            
+            if(categoriasIdStr.contains(",")) System.out.println("It does!");
+            String[] categoriasIdArrStr = categoriasIdStr.split(",");
+            //System.out.println("splitted 1: " + categoriasIdArrStr[0]);
+            //System.out.println("splitted 2: " + categoriasIdArrStr[1]);
             ProfesorDTO prof = (ProfesorDTO)session.getAttribute("currentSessionUser");
            
             Part filePart = request.getPart("image");
@@ -154,13 +160,12 @@ public class CrearActividad extends HttpServlet {
             IActividadBO actBo = new ActividadBO();
            
            actBo.crear(act, institucion_id, profesor_id);
-            
-     
            
+       }catch(ActividadAlreadyExistsException a) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST); // status 400, lo controlamos en el front para ver qué mensaje de error mostrar.
        }catch(Exception e){
-           response.sendError(500,e.getMessage());
-           System.out.println("fallo aca");
-           System.out.println(e.getMessage());
+           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+           System.err.println(e.getMessage());
        }
        
        
