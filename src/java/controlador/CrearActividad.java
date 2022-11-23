@@ -159,6 +159,8 @@ public class CrearActividad extends HttpServlet {
            
        }catch(Exception e){
            response.sendError(500,e.getMessage());
+           System.out.println("fallo aca");
+           System.out.println(e.getMessage());
        }
        
        

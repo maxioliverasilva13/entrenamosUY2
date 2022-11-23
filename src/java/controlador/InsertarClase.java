@@ -6,6 +6,7 @@ package controlador;
 
 import Clase.ClaseBO;
 import Clase.DtClase;
+import Premio.PremioBO;
 import Registro.DtRegistro;
 import com.google.gson.Gson;
 import controlador.utils.ClaseInsertDTO;
@@ -92,7 +93,6 @@ public class InsertarClase extends HttpServlet {
         byte[] data = null;
         try {
             ClaseInsertDTO claseToInsert = new Gson().fromJson(request.getReader(), ClaseInsertDTO.class);
-
             String crntImage = claseToInsert.getFileToSend();
 
             if (crntImage != null && crntImage != "") {
@@ -122,11 +122,22 @@ public class InsertarClase extends HttpServlet {
             List<DtRegistro> registros = null;
             Integer idActividad = Integer.parseInt(claseToInsert.getIdActividad());
             Integer idInstitucion = null;
+            Integer cantidadSorteados = 0;
+            if (claseToInsert.getCantidadSorteados() != null && !claseToInsert.getCantidadSorteados().equals("")) {
+                cantidadSorteados = Integer.parseInt(claseToInsert.getCantidadSorteados());
+            }
+                                        System.out.println("si3");
+
+            String nombrePremio = claseToInsert.getNombrePremio();
 
             ClaseBO claseBo = new ClaseBO();
-
             DtClase claseToInsertDt = new DtClase(0, claseNombre, fechaClase, profesorNombre, profesorId, capMinima, capMaxima, urlAcceso, fechaRegistro, registros, idActividad, null, idInstitucion, outputFile, data);
-            claseBo.insertarClase(claseToInsertDt.getIdActividad(), claseToInsertDt);
+            if (nombrePremio == null || nombrePremio.equals("")) {
+               claseBo.insertarClase(claseToInsertDt.getIdActividad(), claseToInsertDt);
+            } else {
+                claseBo.insertarClaseAndPremio(claseToInsertDt.getIdActividad(), claseToInsertDt, nombrePremio, cantidadSorteados);
+            }
+
             ResponseUtil respUtil = new ResponseUtil(true, "Clase insertada correctamente", claseToInsertDt);
 
             PrintWriter out = response.getWriter();
@@ -136,6 +147,7 @@ public class InsertarClase extends HttpServlet {
             out.print(claseJSON);
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
+            System.out.println(e);
             ResponseUtil respUtil = new ResponseUtil(false, e.getMessage(), this);
 
             PrintWriter out = response.getWriter();

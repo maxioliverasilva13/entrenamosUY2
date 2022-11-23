@@ -4,8 +4,6 @@
  */
 package controlador.utils;
 
-import java.io.File;
-
 /**
  *
  * @author Maximiliano Olivera
@@ -21,12 +19,30 @@ public class ClaseInsertDTO {
     String idProfesor;
     String profesorNombre;
     String fileToSend;
+    String nombrePremio;
+    String cantidadSorteados;
+
+    public String getNombrePremio() {
+        return nombrePremio;
+    }
+
+    public void setNombrePremio(String nombrePremio) {
+        this.nombrePremio = nombrePremio;
+    }
+
+    public String getCantidadSorteados() {
+        return cantidadSorteados;
+    }
+
+    public void setCantidadSorteados(String cantidadSorteados) {
+        this.cantidadSorteados = cantidadSorteados;
+    }
 
     public String getFileToSend() {
         return fileToSend;
     }
 
-    public ClaseInsertDTO(String nombre, String sociosMin, String sociosMax, String urlAcceso, String fechaClase, String idActividad, String idProfesor, String profesorNombre, String fileToSend) {
+    public ClaseInsertDTO(String nombre, String sociosMin, String sociosMax, String urlAcceso, String fechaClase, String idActividad, String idProfesor, String profesorNombre, String fileToSend, String nombrePremio, String cantidadSorteados) {
         this.nombre = nombre;
         this.sociosMin = sociosMin;
         this.sociosMax = sociosMax;
@@ -36,6 +52,8 @@ public class ClaseInsertDTO {
         this.idProfesor = idProfesor;
         this.profesorNombre = profesorNombre;
         this.fileToSend = fileToSend;
+        this.nombrePremio = nombrePremio;
+        this.cantidadSorteados = cantidadSorteados;
     }
 
     public void setFileToSend(String fileToSend) {
