@@ -365,6 +365,7 @@
                             data.append("costo", costo);
                             data.append("duracion", duracion);
                             data.append("categoriasId", categoriasId.toString());
+                            console.log(categoriasId.toString());
                             if (image) {
                                 data.append("image", image);
                             }
@@ -381,7 +382,7 @@
                                     $("#costo").val("");
                                     $("#descripcion").val("");
                                     Swal.fire({
-                                        icon: 'info',
+                                        icon: 'success',
                                         title: 'Nueva actividad',
                                         text: "Actividad creada con exito.Debes esperar a que un administrador la de de alta"
                                     });
@@ -393,11 +394,19 @@
                                     })
                                 },
                                 error: function (error) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Error',
-                                        text: "Ha ocurrido un error inesperado"
-                                    });
+                                    if (error.status === 400){
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: "Ya existe una actividad con ese nombre."
+                                        });
+                                    }else{
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: "Ha ocurrido un error."
+                                        });
+                                    }
                                 }
                             });
                             return;
@@ -406,7 +415,6 @@
                     const loadingCategoriesElem = $("#loadingCategories");
                     const containerCategorias = $("#categoriasContainer");
                     $.get('/entrenamosUY3/crearActividad', function (data, status) {
-                        console.log(status);
                         if (status !== "success") {
                             return;
                         }
