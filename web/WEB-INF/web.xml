@@ -17,16 +17,36 @@
         <servlet-class>controlador.Institucion</servlet-class>
     </servlet>
     <servlet>
-            <servlet-name>ComprarClase</servlet-name>
+        <servlet-name>ComprarClase</servlet-name>
         <servlet-class>controlador.ComprarClase</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Usuarios</servlet-name>
         <servlet-class>controlador.Usuarios</servlet-class>
-    </servlet> 
+    </servlet>
     <servlet>
         <servlet-name>EditInfo</servlet-name>
         <servlet-class>controlador.EditInfo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>puntuarProfesor</servlet-name>
+        <servlet-class>controlador.puntuarProfesor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>getValoracionProfesor</servlet-name>
+        <servlet-class>controlador.getValoracionProfesor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProfesorPuntuacionesDTO</servlet-name>
+        <servlet-class>customsDtos.ProfesorPuntuacionesDTO</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>getPuntuacionesByProfesor</servlet-name>
+        <servlet-class>controlador.getPuntuacionesByProfesor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>getPuntuacionGeneralByClass</servlet-name>
+        <servlet-class>controlador.getPuntuacionGeneralByClass</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Inicio</servlet-name>
@@ -44,7 +64,6 @@
         <servlet-name>ListarCuponeras</servlet-name>
         <url-pattern>/listarCuponeras</url-pattern>
     </servlet-mapping>
-    
     <servlet>
         <servlet-name>InfoCuponera</servlet-name>
         <servlet-class>controlador.InfoCuponera</servlet-class>
@@ -53,7 +72,6 @@
         <servlet-name>InfoCuponera</servlet-name>
         <url-pattern>/InfoCuponera</url-pattern>
     </servlet-mapping>
-    
     <servlet-mapping>
         <servlet-name>actividadesInfo</servlet-name>
         <url-pattern>/actividadesInfo</url-pattern>
@@ -83,8 +101,28 @@
         <url-pattern>/EditInfo</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-         <servlet-name>ComprarClase</servlet-name>
+        <servlet-name>ComprarClase</servlet-name>
         <url-pattern>/ComprarClase</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>puntuarProfesor</servlet-name>
+        <url-pattern>/puntuarProfesor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getValoracionProfesor</servlet-name>
+        <url-pattern>/getValoracionProfesor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfesorPuntuacionesDTO</servlet-name>
+        <url-pattern>/ProfesorPuntuacionesDTO</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getPuntuacionesByProfesor</servlet-name>
+        <url-pattern>/getPuntuacionesByProfesor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getPuntuacionGeneralByClass</servlet-name>
+        <url-pattern>/getPuntuacionGeneralByClass</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

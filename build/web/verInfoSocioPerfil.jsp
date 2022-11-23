@@ -3,6 +3,7 @@
     Created on : 2 oct. 2022, 14:50:35
     Author     : pedri
 --%>
+<%@page import="Registro.DtRegistro"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Clase.DtClase"%>
 <%@page import="Actividad.dtos.ActividadDTO"%>
@@ -22,7 +23,7 @@
     int cantSeguidores = (int) request.getAttribute("cantSeguidores");
     int cantSeguidos = (int) request.getAttribute("cantSeguidos");
 
-    List<DtClase> listClasesOfUser = new ArrayList<>();
+    List<DtRegistro> listRegistrosOfUser = new ArrayList<>();
     List<ActividadDTO> actividadesOfUser = new ArrayList<>();
     UsuarioDTO userDT = (UsuarioDTO) request.getAttribute("userDT");
     String nombre = (String) request.getAttribute("nombre");
@@ -34,8 +35,8 @@
     String biografia = (String) request.getAttribute("biografia");
     String descripcion = (String) request.getAttribute("descripcion");
 
-    if (request.getAttribute("listClasesOfUser") != null) {
-        listClasesOfUser = (List<DtClase>) request.getAttribute("listClasesOfUser");
+    if (request.getAttribute("listRegistrosOfUser") != null) {
+        listRegistrosOfUser = (List<DtRegistro>) request.getAttribute("listRegistrosOfUser");
     }
 
     if (request.getAttribute("actividadesOfUser") != null) {
@@ -57,27 +58,27 @@
 
 <script>
     const handleGetClase = (itemId) => {
-        const url = '/entrenamosUY3//claseById?claseId=' + itemId;
+     
+     
+        const url = '/entrenamosUY3//RegistroById?registroId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
-        if (window.claseInfo !== "Loading") {
-            window.claseInfo = "Loading";
+        if (window.registroInfo !== "Loading") {
+            window.registroInfo = "Loading";
             claseModal.onload();
-
+            
             if (document.getElementById("seleccionarMedioPagoModal")) {
                 document.getElementById("seleccionarMedioPagoModal").style.cssText = "display: none!important;"
-
             }
-
+            
             window.fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
                 claseModal.style.cssText = "display: flex";
-                window.claseInfo = data;
-
+                window.registroInfo = data;
                 claseModal.onload();
-            }).catch((err) => {
+            }).catch((err) => { 
                 console.log(err);
-                window.claseInfo = "Error";
+                window.registroInfo = "Error";
             });
         }
 
@@ -230,7 +231,7 @@
                                         <p class="text-gray-500 text-[12px] font-medium ">CLASES</p>
                                     </div>
                                     <%
-                                    if (listClasesOfUser.size() == 0){
+                                    if (listRegistrosOfUser.size() == 0){
                                     %>
                                         <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
                                             <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
@@ -241,13 +242,13 @@
                                     %>
                                     <%-- ForEach Clases --%>
                                     <%
-                                        for (DtClase en : listClasesOfUser) {
-                                            DtClase val = en;
+                                        for (DtRegistro en : listRegistrosOfUser) {
+                                            DtClase val = en.getClase();
                                             
                                             SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
                                             String dateRegistro = DATE_FORMAT.format(val.getFecha());
                                     %>
-                                    <a onclick="handleGetClase('<%=val.getId()%>')" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
+                                    <a onclick="handleGetClase('<%= en.getId()%>')" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
                                         <img src="<%=btimg.getBase64StringImage(val.getImageBlob())%>" alt="Girl in a jacket" class="rounded-full w-[40px] h-[40px] object-cover"/>
                                         <div class="text-gray-500 text-[12px] font-medium flex-grow h-full flex flex-col item-start justify-start flex-col">
                                             <p><%=val.getNombre()%> (<%=val.getRegistros().size()%> Inscripto/s)</p>
