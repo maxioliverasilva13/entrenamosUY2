@@ -97,7 +97,7 @@
         });
     }
 
-    const handleGetClase = (itemId) => {
+    const handleGetClase = (itemId, isOpen) => {
         const url = '/entrenamosUY3/claseById?claseId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
         if (window.claseInfo !== "Loading") {
@@ -107,9 +107,12 @@
             window.fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
-                claseModal.style.cssText = "display: flex";
-                window.claseInfo = data;
-                claseModal.onload();
+                if (isOpen) {
+                   claseModal.style.cssText = "display: flex";
+                }
+                window.claseInfo = data.claseInfo;
+                window.isProfesorDeClaseAndYaPaso = data.isProfesorDeClaseAndYaPaso;
+                claseModal.onload(isOpen, data?.resultados || []);
             }).catch((err) => {
                 console.log(err);
                 window.claseInfo = "Error";
@@ -304,7 +307,7 @@
                         }else{
                             for (DtClase clase : clasesAct) {
                     %>
-                                <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
+                                <a onclick="handleGetClase('<%=clase.getId()%>', true)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
                                     <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
                                         <img
                                         src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"

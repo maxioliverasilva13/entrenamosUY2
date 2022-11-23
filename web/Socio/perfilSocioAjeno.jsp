@@ -109,7 +109,8 @@
                 return response.json();
             }).then((data) => {
                 claseModal.style.cssText = "display: flex";
-                window.claseInfo = data;
+                window.claseInfo = data.claseInfo;
+                window.isProfesorDeClaseAndYaPaso = data.isProfesorDeClaseAndYaPaso;
 
                 claseModal.onload();
             }).catch((err) => {

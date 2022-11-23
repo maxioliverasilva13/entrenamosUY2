@@ -4,33 +4,24 @@
  */
 package controlador;
 
-import customsDtos.ClaseInfoToReturn;
-import Clase.ClaseBO;
-import Clase.DtClase;
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
-import Profesor.dtos.ProfesorDTO;
-import Socio.dtos.SocioDTO;
+import Premio.PremioDao;
 import com.google.gson.Gson;
+import customsDtos.ClaseInfoToReturn;
+import customsDtos.ResponseServer;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import Registro.DtRegistro;
 
 /**
  *
- * @author Maximiliano Olivera
+ * @author maximilianoolivera
  */
-@WebServlet(name = "ClaseById", urlPatterns = {"/claseById"})
-public class ClaseById extends HttpServlet {
+@WebServlet(name = "PremioById", urlPatterns = {"/premioById"})
+public class PremioById extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,10 +40,10 @@ public class ClaseById extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ClaseById</title>");
+            out.println("<title>Servlet PremioById</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ClaseById at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet PremioById at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -70,42 +61,22 @@ public class ClaseById extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String claseId = request.getParameter("claseId");
-        
-        if (claseId != null) {
-            ClaseBO claseBO = new ClaseBO();
-            request.setAttribute("", this);
-            DtClase claseInfo = claseBO.consultarClase(Integer.parseInt(claseId));
-            // request.setAttribute("selectedCuponeraInfo", cupinfo);
+        try {
+            String premioId = request.getParameter("premioId");
+            PremioDao premDao = new PremioDao();
+            Premio.Premio prem = premDao.existe(Integer.parseInt(premioId));
+
             PrintWriter out = response.getWriter();
-            boolean isProfesorDeClaseAndYaPaso = false;
-            boolean verResultados = false;
-            HttpSession session = request.getSession(true);
-            List<SocioDTO> resultados = new ArrayList<>();
-            String typeofUser = (String) session.getAttribute("typeOfUser");
-            if (typeofUser != null && typeofUser.equals("Profesor")) {
-                ProfesorDTO profe = (ProfesorDTO) session.getAttribute("currentSessionUser");
-                if (claseInfo.getProfesorId() == profe.getId()) {
-                    if (claseInfo.getPremio() != null) {
-                        if (claseInfo.getPremio().getRegistros().size() > 0) {
-                            verResultados = true;
-                            claseInfo.getPremio().getRegistros().forEach((DtRegistro reg) -> {
-                                resultados.add(reg.getSocio());
-                            });
-                        } else {
-                            Date now = new Date();
-                            if (claseInfo.getFecha().before(now) && claseInfo.getPremio() != null) {
-                                if (claseInfo.getPremio().isFueSorteado() == false) {
-                                    isProfesorDeClaseAndYaPaso = true;
-                                }
-                            }
-                        }
+            ResponseServer claseToReturn = new ResponseServer(200, "success", prem.getDtPremio());
+            String claseJSON = new Gson().toJson(claseToReturn);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(claseJSON);
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (Exception e) {
 
-                    }
-
-                }
-            }
-            ClaseInfoToReturn claseToReturn = new ClaseInfoToReturn(claseInfo, isProfesorDeClaseAndYaPaso, verResultados, resultados);
+            PrintWriter out = response.getWriter();
+            ResponseServer claseToReturn = new ResponseServer(500, e.getMessage(), null);
             String claseJSON = new Gson().toJson(claseToReturn);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

@@ -4,10 +4,11 @@
  */
 package controlador;
 
-import Profesor.ProfesorBO;
-import Profesor.dtos.ProfesorDTO;
-import Socio.SocioBO;
-import Socio.dtos.SocioDTO;
+import Premio.PremioDao;
+import com.google.gson.Gson;
+import customsDtos.ResponseServer;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -16,19 +17,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Usuario.IUsuarioBO;
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
-import Usuario.exceptions.UnauthorizedException;
-
-import javax.servlet.http.HttpSession;
-
 /**
  *
- * @author rodrigo
+ * @author maximilianoolivera
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "ImprimirComprobantePremio", urlPatterns = {"/imprimirComprobantePremio"})
+public class ImprimirComprobantePremio extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,10 +41,10 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");
+            out.println("<title>Servlet ImprimirComprobantePremio</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ImprimirComprobantePremio at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,9 +60,39 @@ public class Login extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String premioId = request.getParameter("premioId");
+        String userId = request.getParameter("userID");
+        PremioDao premDao = new PremioDao();
+        if (userId != null && premioId != null) {
+            File pdfComprobante = premDao.imprimirPremio(Integer.parseInt(premioId), Integer.parseInt(userId));
+            // Get PrintWriter object
+            PrintWriter out = response.getWriter();
+
+            // Set the content type and header of the response.
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=\""
+                    + pdfComprobante + "\"");
+
+            // Get FileInputStream object to identify the path
+            FileInputStream inputStream
+                    = new FileInputStream(pdfComprobante);
+
+            // Loop through the document and write into the
+            // output.
+            int in;
+            while ((in = inputStream.read()) != -1) {
+                out.write(in);
+            }
+
+            // Close FileInputStream and PrintWriter object
+            inputStream.close();
+            out.close();
+        }
+
     }
 
     /**
@@ -82,41 +106,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = (String) request.getParameter("email");
-        String password = request.getParameter("password");
-        String remember = request.getParameter("remember");
-
-        if (email == null || password == null) {
-            response.sendError(400, "Email o password invalida");
-        }
-        IUsuarioBO usuarioBo = new UsuarioBO();
-        try {
-            UsuarioDTO user = usuarioBo.authenticarse(email, password);
-            String typeofUser = usuarioBo.getTipoById(user.getId());
-            HttpSession session = request.getSession(true);
-            session.setAttribute("typeOfUser", typeofUser);
-            if (typeofUser.equals("Profesor")) {
-                ProfesorBO profeBO = new ProfesorBO();
-                ProfesorDTO profe = profeBO.getProfesorById(user.getId());
-                session.setAttribute("currentSessionUser", profe);
-            } else if (typeofUser.equals("Socio")) {
-                SocioBO socBO = new SocioBO();
-                SocioDTO socio = socBO.consultarSocio(user.getId());
-                session.setAttribute("currentSessionUser", socio);
-            }
-            
-            if (remember != null){
-            session.setMaxInactiveInterval(999999999*600); // sesion "infinita" si el checkbox esta ON
-            }
-            session.setMaxInactiveInterval(120*60); // sesion de 2 horas si el checkbox esta OFF
-            response.sendRedirect("Inicio");
-        } catch (UnauthorizedException e) {
-            request.setAttribute("status", "Correo o Contraseña incorrectos");
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
-        } catch (Exception e) {
-            response.sendError(500, "Ha ocurrido un error inesperado");
-            response.sendRedirect("login.jsp");
-        }
+        processRequest(request, response);
     }
 
     /**
