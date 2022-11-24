@@ -38,8 +38,8 @@
     List<DtClase> clasesAct = infoAct.getClases();
     List<DtCuponeraXActividad> cuponerasXAct = infoAct.getCuponerasXActivdad();
     DtInstitucion instAct = infoAct.getInstitucion();
-    DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");  
-    
+    DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");
+
 
 %>
 
@@ -59,7 +59,7 @@
 
     public String formatDate(Object x) {
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-            String date;
+        String date;
         try {
             date = DATE_FORMAT.format(x);
         } catch (Exception e) {
@@ -78,7 +78,7 @@
     var idActividad;
     var idProfesor;
     var profesorNombre;
-    
+
     const handleGetItem = (itemId) => {
         const url = '/entrenamosUY3/cuponeraById?cupId=' + itemId;
         const cuponeraModal = document.getElementById("cuponeraInfoModal");
@@ -102,13 +102,14 @@
         const claseModal = document.getElementById("infoClaseModal");
         if (window.claseInfo !== "Loading") {
             window.claseInfo = "Loading";
-            
+
             window.fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
                 if (isOpen) {
-                   claseModal.style.cssText = "display: flex";
+                    claseModal.style.cssText = "display: flex";
                 }
+                console.log(data?.claseInfo)
                 window.claseInfo = data.claseInfo;
                 window.isProfesorDeClaseAndYaPaso = data.isProfesorDeClaseAndYaPaso;
                 claseModal.onload(isOpen, data?.resultados || []);
@@ -132,20 +133,20 @@
         }
 
     }
-    
+
     const finalizarActividad = (idAct) => {
         const url = '/entrenamosUY3/finalizarActividad?actId=' + idAct;
         const botones = document.getElementById("buttons");
-        
+
         window.fetch(url).then((response) => {
-            if (response.status === 200){
+            if (response.status === 200) {
                 Swal.fire({
-                        icon: 'success',
-                        title: 'Exito',
-                        text: 'Actividad finalizada correctamente.'
+                    icon: 'success',
+                    title: 'Exito',
+                    text: 'Actividad finalizada correctamente.'
                 })
                 botones.style.cssText = 'display: none';
-            }else{
+            } else {
                 console.log("error al finalizar " + response.statusText)
             }
         });
@@ -233,7 +234,7 @@
             </div>
             <%-- Solo si es Profesor --%>
             <%
-                if (showAddClassButton == true && (!infoAct.getEstado().equals("Finalizada")  )   ) {
+                if (showAddClassButton == true && (!infoAct.getEstado().equals("Finalizada"))) {
             %>
             <div id="buttons" class="w-full h-auto flex flex-col-reverse sm:flex-row items-center justify-between sm:px-12 h-auto gap-y-2">
                 <button onclick="finalizarActividad('<%=infoAct.getId()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-red-500">Finalizar Actividad Deportiva</button>
@@ -257,26 +258,26 @@
                     </div>
 
                     <%
-                        if (cuponerasXAct.size() == 0){
+                        if (cuponerasXAct.size() == 0) {
                     %>
-                            <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
-                                <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
-                                <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
-                            </div>
+                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
+                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
+                    </div>
                     <%
-                        }else{
-                            for (DtCuponeraXActividad cat : cuponerasXAct) {
-                                DtCuponeraXActividad val = cat;
+                    } else {
+                        for (DtCuponeraXActividad cat : cuponerasXAct) {
+                            DtCuponeraXActividad val = cat;
                     %>
-                        <a onclick="handleGetItem('<%=cat.getCuponera().getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 gap-x-2 px-4">
-                            <p class="truncate w-[25%] max-w-[25%] h-auto text-center text-sm text-gray-500 font-medium"><%=cat.getCuponera().getNombre()%></p>
-                            <p class="break-words w-[25%] max-w-[25%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescripcion()%></p>
-                            <p class="w-[20%] max-w-[20%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCantClases()%></p>
-                            <p class="w-[15%] max-w-[15%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescuento()%> %</p>
-                            <div class="w-[15%] max-w-[15%] h-auto text-sm font-medium">
-                                <p class="bg-green-100 w-fit h-auto text-green-800 rounded-xl py-0.5 px-3 ">Activa</p>
-                            </div>
-                        </a>
+                    <a onclick="handleGetItem('<%=cat.getCuponera().getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 gap-x-2 px-4">
+                        <p class="truncate w-[25%] max-w-[25%] h-auto text-center text-sm text-gray-500 font-medium"><%=cat.getCuponera().getNombre()%></p>
+                        <p class="break-words w-[25%] max-w-[25%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescripcion()%></p>
+                        <p class="w-[20%] max-w-[20%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCantClases()%></p>
+                        <p class="w-[15%] max-w-[15%] h-auto text-sm text-gray-500 font-medium"><%=cat.getCuponera().getDescuento()%> %</p>
+                        <div class="w-[15%] max-w-[15%] h-auto text-sm font-medium">
+                            <p class="bg-green-100 w-fit h-auto text-green-800 rounded-xl py-0.5 px-3 ">Activa</p>
+                        </div>
+                    </a>
                     <%
                             }
                         }
@@ -296,28 +297,28 @@
                     </div>
 
                     <%
-                        if (clasesAct.size() == 0){
+                        if (clasesAct.size() == 0) {
                     %>
-                            <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
-                                <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
-                                <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
-                            </div>
+                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
+                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
+                    </div>
                     <%
-                        }else{
-                            for (DtClase clase : clasesAct) {
+                    } else {
+                        for (DtClase clase : clasesAct) {
                     %>
-                                <a onclick="handleGetClase('<%=clase.getId()%>', true)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
-                                    <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
-                                        <img
-                                        src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
-                                        class="w-8 h-8 object-cover rounded-full overflow-hidden"
-                                        />
-                                    <p class="w-[10%]4 h-auto "t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
-                                    </div>
-                                    <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
-                                    <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getRegistros().size()%></p>
-                                    <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=formatDate(clase.getFecha())%></p>
-                                </a>
+                    <a onclick="handleGetClase('<%=clase.getId()%>', true)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
+                        <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
+                            <img
+                                src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
+                                class="w-8 h-8 object-cover rounded-full overflow-hidden"
+                                />
+                            <p class="w-[10%]4 h-auto "t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
+                        </div>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getRegistros().size()%></p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=formatDate(clase.getFecha())%></p>
+                    </a>
                     <%
                             }
                         }

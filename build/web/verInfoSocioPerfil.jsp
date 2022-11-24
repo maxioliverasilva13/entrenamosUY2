@@ -24,7 +24,6 @@
     int cantSeguidores = (int) request.getAttribute("cantSeguidores");
     int cantSeguidos = (int) request.getAttribute("cantSeguidos");
 
-    List<DtClase> listClasesOfUser = new ArrayList<>();
     List<PremioDTO> listadoPremiosUsuario = new ArrayList<>();
     List<DtRegistro> listRegistrosOfUser = new ArrayList<>();
     List<ActividadDTO> actividadesOfUser = new ArrayList<>();
@@ -88,13 +87,14 @@
         }
 
     }
-    const handleGetClase = (itemId) => {
+    const handleGetClase = (itemId, isOpen) => {
         const url = '/entrenamosUY3//RegistroById?registroId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
+        console.log("xd")
         if (window.registroInfo !== "Loading") {
             window.registroInfo = "Loading";
+            window.claseInfo = "Loading";
             claseModal.onload();
-            
             if (document.getElementById("seleccionarMedioPagoModal")) {
                 document.getElementById("seleccionarMedioPagoModal").style.cssText = "display: none!important;"
             }
@@ -102,9 +102,11 @@
             window.fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
-                conosle.log(data);
+                console.log(data);
                 claseModal.style.cssText = "display: flex";
-                window.claseInfo = data.claseInfo;
+                
+                window.claseInfo = data.clase;
+                window.registroInfo = data;
                 window.isProfesorDeClaseAndYaPaso = data.isProfesorDeClaseAndYaPaso;
                 window.registroInfo = data;
                 claseModal.onload(isOpen, data?.resultados || []);
@@ -264,7 +266,7 @@
                                         <p class="text-gray-500 text-[12px] font-medium ">CLASES</p>
                                     </div>
                                     <%
-                                        if (listClasesOfUser.size() == 0) {
+                                        if (listRegistrosOfUser.size() == 0) {
                                     %>
                                     <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
                                         <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />

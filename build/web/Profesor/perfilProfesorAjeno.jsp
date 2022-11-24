@@ -34,21 +34,20 @@
 
     int idConsultado = (int) request.getAttribute("idConsultado");
 
-    
     BlobToImage btimg = new BlobToImage();
-    
-    byte[] imageBlob = (byte[])request.getAttribute("imagen");
-    
+
+    byte[] imageBlob = (byte[]) request.getAttribute("imagen");
+
     boolean sigoAlConsultado = false;
     boolean userNotLogged = false;
-    if (request.getAttribute("sigoAlConsultado") != null){
-        sigoAlConsultado = (boolean)request.getAttribute("sigoAlConsultado");
+    if (request.getAttribute("sigoAlConsultado") != null) {
+        sigoAlConsultado = (boolean) request.getAttribute("sigoAlConsultado");
     }
-    
-    if (request.getAttribute("userNotLogged") != null){
-        userNotLogged = (boolean)request.getAttribute("userNotLogged");
+
+    if (request.getAttribute("userNotLogged") != null) {
+        userNotLogged = (boolean) request.getAttribute("userNotLogged");
     }
-    
+
     HashMap<Integer, ActividadDTO> listAct = new HashMap<>();
     try {
         listAct = (HashMap<Integer, ActividadDTO>) request.getAttribute("actividades");
@@ -57,64 +56,107 @@
 %>
 
 <script>
-    window.addEventListener('load',()=>{
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('userID');
-        const url = '/entrenamosUY3//getPuntuacionesByProfesor?profId=' + userId;
-        
-     
-        fetch(url).then(response =>response.json()).then(data =>{
-            $("#meanPuntuacion").text(data.meanPuntuacion );
-            printMeanStars(data.meanPuntuacion);
-            
-            console.log(data);
-            
-            printStarsForPercentage(
-                    data.percentageOne,
-                    data.percentageTwo,
-                    data.percentageThree,
-                    data.percentageFour,
-                    data.percentageFive)
-            
-            
-            $("#containerScores").removeClass("hidden");
-            $("#loadingScores").addClass("hidden");
-            
-   
-        })
-        
-        
-       
-        function printMeanStars(cantStars){
-            const roundedCantStars = Math.round(cantStars);
-            for(let i = 0; i < roundedCantStars; i++){
-                
-                $("#star"+(i+1)).addClass("text-yellow-400");
-            }
-        }
-        
-        function printStarsForPercentage(percentageOne,percentageTwo,percentageThree,percentageFour,percentageFive){
-            $("#oneStarPercentage").css("width",percentageOne+"%")
-            $("#twoStarPercentage").css("width",percentageTwo+"%")
-            $("#threeStarPercentage").css("width",percentageThree+"%")
-            $("#fourStarPercentage").css("width",percentageFour+"%")
-            $("#fiveStarPercentage").css("width",percentageFive+"%")
-            
-            $("#oneStarText").text(percentageOne+"%");
-            $("#twoStarText").text(percentageTwo+"%");
-            $("#threeStarText").text(percentageThree+"%");
-            $("#fourStarText").text(percentageFour+"%");
-            $("#fiveStarText").text(percentageFive+"%");
-            
-            
-        }
+    var sigoAlconsultado = <%= sigoAlConsultado%>;
 
-        
-        
-        
+    function printMeanStars(cantStars) {
+        const roundedCantStars = Math.round(cantStars);
+        for (let i = 0; i < roundedCantStars; i++) {
+
+            $("#star" + (i + 1)).addClass("text-yellow-400");
+        }
+    }
+
+    function printStarsForPercentage(percentageOne, percentageTwo, percentageThree, percentageFour, percentageFive) {
+        $("#oneStarPercentage").css("width", percentageOne + "%")
+        $("#twoStarPercentage").css("width", percentageTwo + "%")
+        $("#threeStarPercentage").css("width", percentageThree + "%")
+        $("#fourStarPercentage").css("width", percentageFour + "%")
+        $("#fiveStarPercentage").css("width", percentageFive + "%")
+
+        $("#oneStarText").text(percentageOne + "%");
+        $("#twoStarText").text(percentageTwo + "%");
+        $("#threeStarText").text(percentageThree + "%");
+        $("#fourStarText").text(percentageFour + "%");
+        $("#fiveStarText").text(percentageFive + "%");
+
+
+    }
+
+    $(window).on("load", () => {
+        const url = '/entrenamosUY3/SeguirUsuario?idConsultado=<%=idConsultado%>';
+        const botonF = document.getElementById("btnFollow");
+        const botonU = document.getElementById("btnUnfollow");
+        const followers = document.getElementById("followers");
+        const following = document.getElementById("following");
+
+        fetch(url).then((response) => {
+            return response.json();
+        }).then((data) => {
+            followers.innerText = data.seguidores;
+            following.innerText = data.seguidos;
+        });
+
+        if (sigoAlconsultado === true) {
+            botonF.setAttribute('hidden', true);
+            botonU.removeAttribute('hidden');
+        } else if (sigoAlconsultado === false) {
+            botonU.setAttribute('hidden', true);
+            botonF.removeAttribute('hidden');
+        }
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('userID');
+    const urlPuntuacion = '/entrenamosUY3//getPuntuacionesByProfesor?profId=' + userId;
+    fetch(urlPuntuacion).then(response => response.json()).then(data => {
+        $("#meanPuntuacion").text(data.meanPuntuacion);
+        printMeanStars(data.meanPuntuacion);
+
+        console.log(data);
+
+        printStarsForPercentage(
+                data.percentageOne,
+                data.percentageTwo,
+                data.percentageThree,
+                data.percentageFour,
+                data.percentageFive)
+
+
+        $("#containerScores").removeClass("hidden");
+        $("#loadingScores").addClass("hidden");
+
+
     })
- </script>
 
+    const followUser = (idUser) => {
+        const url = '/entrenamosUY3/SeguirUsuario?idConsultado=' + idUser;
+        const botonF = document.getElementById("btnFollow");
+        const botonU = document.getElementById("btnUnfollow");
+
+        window.fetch(url, {method: 'POST'}).then(() => {
+            sigoAlconsultado = !sigoAlconsultado;
+            if (!sigoAlconsultado) {
+                botonU.setAttribute('hidden', true);
+                botonF.removeAttribute('hidden');
+            }
+
+            if (sigoAlconsultado) {
+                botonF.setAttribute('hidden', true);
+                botonU.removeAttribute('hidden');
+            }
+        }).then(() => {
+            // Get follows & followers
+            fetch(url).then((response) => {
+                return response.json();
+            }).then((result) => {
+                followers.innerText = result.seguidores;
+                following.innerText = result.seguidos;
+            });
+        }).catch((err) => {
+            console.log("Error en funcion followUser (perfilSocioAjeno.jsp): " + err);
+        });
+    };
+</script>
 
 <!DOCTYPE html>
 <html class="h-full">
@@ -189,26 +231,26 @@
                     </div>
                 </div>
             </div>
-                        
+
             <%-- LAST ONLINE & FOLLOW BUTTON --%>
             <div class="mx-auto flex flex-col w-2/6 min-w-max h-max mt-2 lg:mt-0">
                 <div class="flex flex-col container pt-2 pb-5 h-max text-center shadow border rounded-xl">
                     <p class="text-[#6B7280] text-4xl font-[Inter] font-medium">Last Online</p>
                     <p class="text-7xl text-[#3A5A6F] font-[Inter] font-extrabold">24/7</p>
                 </div>
-                    <%
+                <%
                     //Si no hay sesion (loggedUser), no le muestro el boton de follow. (Otra opción seria si mostrarlo, pero redirigirlo al login).
-                    if (!userNotLogged){
-                    %>
-                    <button hidden="true" onclick="followUser('<%= idConsultado %>')" id="btnUnfollow" class="font-[Inter] font-medium bg-red-500 hover:bg-red-400 text-white mt-8 p-4 rounded-md w-full">
-                        Unfollow
-                    </button>
-                    <button hidden="true" onclick="followUser('<%= idConsultado %>')" id="btnFollow" class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white mt-8 p-4 rounded-md w-full">
-                        Follow
-                    </button>
-                    <%
-                        }
-                    %>
+                    if (!userNotLogged) {
+                %>
+                <button hidden="true" onclick="followUser('<%= idConsultado%>')" id="btnUnfollow" class="font-[Inter] font-medium bg-red-500 hover:bg-red-400 text-white mt-8 p-4 rounded-md w-full">
+                    Unfollow
+                </button>
+                <button hidden="true" onclick="followUser('<%= idConsultado%>')" id="btnFollow" class="font-[Inter] font-medium bg-[#3A5A6E] hover:bg-[#50758C] text-white mt-8 p-4 rounded-md w-full">
+                    Follow
+                </button>
+                <%
+                    }
+                %>
             </div>
 
 
@@ -227,16 +269,16 @@
             </div>
 
             <div class="overflow-x-auto relative shadow-md sm:rounded-lg h-max w-full">
-            <%
-                if (listAct.size() == 0){
-                %>
-                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
-                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
-                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Actividad!</p>
-                    </div>
                 <%
-                }else{
-            %>
+                    if (listAct.size() == 0) {
+                %>
+                <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
+                    <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                    <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Actividad!</p>
+                </div>
+                <%
+                } else {
+                %>
                 <table class="w-full text-sm text-left text-gray-500 ">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
                         <tr>
@@ -260,7 +302,7 @@
                             for (HashMap.Entry<Integer, ActividadDTO> en : listAct.entrySet()) {
                                 Integer key = en.getKey();
                                 ActividadDTO val = en.getValue();
-                                
+
                                 SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
                                 String dateRegistro = DATE_FORMAT.format(val.getFechaRegistro());
                         %>
@@ -282,7 +324,7 @@
                                 <span class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded-xl dark:bg-green-200 dark:text-green-900">
                                     Aceptada
                                 </span>
-                                <a href="verActividadInfo?actId=<%= val.getId() %>">
+                                <a href="verActividadInfo?actId=<%= val.getId()%>">
                                     <i class="fa-solid fa-chevron-right text-gray-900 cursor-pointer px-4"></i>
                                 </a>
                                 <%
@@ -291,72 +333,72 @@
                             </td>
                         </tr>
                         <%
+                                }
                             }
-                        }
                         %>
                     </tbody>
                 </table>
             </div>
         </div>
-                    <div class="flex w-full  mt-10 p-6">
-                        <div class="w-full flex justify-center" id="loadingScores">
-                            <div role="status">
-                            <svg aria-hidden="true" class="mr-2 w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                            </svg>
-                            <span class="sr-only">Loading...</span>
-                          </div>
-                        </div>
-                         
-                         <div class="w-full hidden" id="containerScores">
-                            <div class="flex items-center mb-3">
-                                <svg id="star1" aria-hidden="true" class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>First star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg id="star2" aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Second star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg id="star3" aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Third star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg id="star4" aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fourth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <svg id="star5" aria-hidden="true" class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <p class="ml-2 text-sm font-medium text-gray-900 dark:text-white" id="meanPuntuacion"></p>
-                            </div>
-                            
-                            <div class="flex items-center mt-4">
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500">5 star</span>
-                                <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                    <div class="h-5  bg-yellow-400 rounded"  id="fiveStarPercentage"></div>
-                                </div>
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="fiveStarText">70%</span>
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500">4 star</span>
-                                <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                    <div class="h-5 bg-yellow-400 rounded"  id="fourStarPercentage"></div>
-                                </div>
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="fourStarText">17%</span>
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500">3 star</span>
-                                <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                    <div class="h-5 bg-yellow-400 rounded"  id="threeStarPercentage"></div>
-                                </div>
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="threeStarText">8%</span>
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500">2 star</span>
-                                <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                    <div class="h-5 bg-yellow-400 rounded"  id="twoStarPercentage"></div>
-                                </div>
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="twoStarText">4%</span>
-                            </div>
-                            <div class="flex items-center mt-4">
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500">1 star</span>
-                                <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                                    <div class="h-5 bg-yellow-400 rounded"  id="oneStarPercentage"></div>
-                                </div>
-                                <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="oneStarText">1%</span>
-                            </div>   
-                            </div>  
+        <div class="flex w-full  mt-10 p-6">
+            <div class="w-full flex justify-center" id="loadingScores">
+                <div role="status">
+                    <svg aria-hidden="true" class="mr-2 w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                    </svg>
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+
+            <div class="w-full hidden" id="containerScores">
+                <div class="flex items-center mb-3">
+                    <svg id="star1" aria-hidden="true" class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>First star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    <svg id="star2" aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Second star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    <svg id="star3" aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Third star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    <svg id="star4" aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fourth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    <svg id="star5" aria-hidden="true" class="w-5 h-5 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    <p class="ml-2 text-sm font-medium text-gray-900 dark:text-white" id="meanPuntuacion"></p>
+                </div>
+
+                <div class="flex items-center mt-4">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500">5 star</span>
+                    <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
+                        <div class="h-5  bg-yellow-400 rounded"  id="fiveStarPercentage"></div>
                     </div>
-        
-     </body>
-    
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="fiveStarText">70%</span>
+                </div>
+                <div class="flex items-center mt-4">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500">4 star</span>
+                    <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
+                        <div class="h-5 bg-yellow-400 rounded"  id="fourStarPercentage"></div>
+                    </div>
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="fourStarText">17%</span>
+                </div>
+                <div class="flex items-center mt-4">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500">3 star</span>
+                    <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
+                        <div class="h-5 bg-yellow-400 rounded"  id="threeStarPercentage"></div>
+                    </div>
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="threeStarText">8%</span>
+                </div>
+                <div class="flex items-center mt-4">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500">2 star</span>
+                    <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
+                        <div class="h-5 bg-yellow-400 rounded"  id="twoStarPercentage"></div>
+                    </div>
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="twoStarText">4%</span>
+                </div>
+                <div class="flex items-center mt-4">
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500">1 star</span>
+                    <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
+                        <div class="h-5 bg-yellow-400 rounded"  id="oneStarPercentage"></div>
+                    </div>
+                    <span class="text-sm font-medium text-blue-600 dark:text-blue-500" id="oneStarText">1%</span>
+                </div>   
+            </div>  
+        </div>
+
+    </body>
+
 </html>
