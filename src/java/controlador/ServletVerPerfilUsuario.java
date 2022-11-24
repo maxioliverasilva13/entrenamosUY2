@@ -195,15 +195,14 @@ public class ServletVerPerfilUsuario extends HttpServlet {
                 response.sendRedirect("NotFound.jsp");
                 return;
             }
-            List<DtClase> listClasesOfUser = new ArrayList<>();
+            List<DtRegistro> listRegistrosOfUser = new ArrayList<>();
+            List<ActividadDTO> actividadesOfUser = new ArrayList<>();
             PremioBO premBO = new PremioBO();
             List<PremioDTO> premioOfuser = premBO.premiosOfUser(dtSocio.getId());
-            
-            List<ActividadDTO> actividadesOfUser = new ArrayList<>();
 
             dtSocio.getRegistros().forEach((DtRegistro r) -> {
-                listClasesOfUser.add(r.getClase());
-                int idActividad = r.getClase().getIdActividad();
+                listRegistrosOfUser.add(r);
+                int idActividad = r.getClase().getIdActividad();                
                 if (idActividad != 0) {
                     Actividad.Actividad act = actDao.getById(idActividad);
                     if (act != null) {
@@ -216,9 +215,9 @@ public class ServletVerPerfilUsuario extends HttpServlet {
 
                 // actividadesOfUser.add()
             });
-            request.setAttribute("listClasesOfUser", listClasesOfUser);
             request.setAttribute("premioOfuser", premioOfuser);
 
+            request.setAttribute("listRegistrosOfUser", listRegistrosOfUser);
             request.setAttribute("actividadesOfUser", actividadesOfUser);
 
             request.setAttribute("userType", "Profesor");

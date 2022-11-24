@@ -38,7 +38,7 @@
     List<DtClase> clasesAct = infoAct.getClases();
     List<DtCuponeraXActividad> cuponerasXAct = infoAct.getCuponerasXActivdad();
     DtInstitucion instAct = infoAct.getInstitucion();
-    DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");
+    DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");  
     
 
 %>
@@ -102,8 +102,7 @@
         const claseModal = document.getElementById("infoClaseModal");
         if (window.claseInfo !== "Loading") {
             window.claseInfo = "Loading";
-            claseModal.onload();
-
+            
             window.fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
