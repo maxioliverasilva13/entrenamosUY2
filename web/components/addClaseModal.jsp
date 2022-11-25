@@ -187,6 +187,7 @@
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        alert("llego");
         const files = $("#inputFile").prop('files');
         const fileToSend = files[0];
         if (fileToSend != null) {
@@ -245,7 +246,7 @@
         </button>
         <p class="text-lg font-medium text-gray-800">Agregar una nueva clase</p>
 
-        <form id="addClaseForm" method="POST" class="w-full h-auto flex flex-col items-center justify-start gap-4">
+        <form id="addClaseForm" onsubmit="handleSubmit(event)" method="POST" class="w-full h-auto flex flex-col items-center justify-start gap-4">
             <div class="w-full my-4" id="inputFileContainer">
                 <label
                     class="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
