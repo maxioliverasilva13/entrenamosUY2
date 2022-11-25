@@ -4,6 +4,8 @@
     Author     : angel
 --%>
 
+<%@page import="javafx.beans.property.SimpleBooleanProperty"%>
+<%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Cuponera.DtCuponera"%>
 <%@page import="java.util.Random"%>
@@ -39,6 +41,21 @@
     List<DtCuponeraXActividad> cuponerasXAct = infoAct.getCuponerasXActivdad();
     DtInstitucion instAct = infoAct.getInstitucion();
     DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");
+    SimpleBooleanProperty isFavoriteOfUser = new SimpleBooleanProperty(false);
+    boolean deberiaPoderFavoritaActividad = false;
+    if (session.getAttribute("typeOfUser") != null) {
+     deberiaPoderFavoritaActividad = session.getAttribute("typeOfUser").equals("Socio") || false;
+    }
+    if (session.getAttribute("currentSessionUser") != null && deberiaPoderFavoritaActividad) {
+        UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
+        //isFavoriteOfUser = infoAct.getFavoritos().indexOf(userInfo.getId()) == 0;
+        infoAct.getFavoritos().forEach((
+            favorito) -> {
+        if (favorito.getActid() == infoAct.getId()) {
+                isFavoriteOfUser.set(true);
+            }
+        });
+    }
 
 
 %>
@@ -151,6 +168,31 @@
             }
         });
     };
+
+    const handleFavoriteActividad = (actId) => {
+        const url = "/entrenamosUY3/toggleActividadFavorita?actId=" + actId;
+        window.fetch(url).then((response) => response.json()).then((data) => {
+            const isFavorito = data?.data;
+            if (isFavorito) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actividad agregada a favoritos',
+                    text: "Tu actividad se agrego a favoritos correctamente"
+                });
+                $("#favoriteButton").html(`<i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>`)
+            } else {
+                $("#favoriteButton").html(`<i class="fa-regular fa-heart text-[20px]"></i>`)
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Esta actividad ya no es favorita',
+                    text: "Esta actividad ya no esta en las actividades favoritas"
+                });
+            }
+
+        });
+    }
+
+    console.log("<%=infoAct.getFavoritos()%>");
 </script>
 <!DOCTYPE html>
 <html>
@@ -211,9 +253,30 @@
                     </div>
                 </div>
 
-                <div class='w-full flex-grow h-auto border border-gray-300 rounded-md shadow-md flex flex-col items-start justify-start p-6'>
-
-                    <p class="py-5 border-b border-gray-300 w-full text-left">Nombre Actividad: <%=infoAct.getNombre()%></p>
+                <div class='w-full flex-grow h-auto border border-gray-300 rounded-md shadow-md flex flex-col items-start justify-start p-6 relative'>
+                    <% 
+                    if (deberiaPoderFavoritaActividad == true) {
+                    %> 
+                    <button id="favoriteButton" class="right-6 top-10 cursor-pointer absolute" onclick="handleFavoriteActividad('<%=infoAct.getId()%>')" >
+                        <%
+                            if (isFavoriteOfUser.get() == true) {
+                        %> 
+                        <i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>
+                        <%
+                        } else {
+                        %> 
+                        <i class="fa-regular fa-heart text-[20px]"></i>
+                        <%
+                            }
+                        %>
+                    </button>
+                    <%
+                        }
+                    
+                    %>
+                    
+                  
+                    <div class="w-full py-5 border-b border-gray-300 w-full flex flex-row items-center jusitfy-between"><p>Nombre Actividad: <%=infoAct.getNombre()%></p></div>
                     <div class="flex w-full flex-row items-center justify-start py-5 border-b border-gray-300">
                         <p class="w-1/3 text-gray-500 text-sm font-medium">Institución</p>
                         <p class="w-2/3 text-sm font-normal text-gray-900"><%=instAct.getNombre()%></p>
@@ -236,7 +299,7 @@
             <%
                 if (showAddClassButton == true && (!infoAct.getEstado().equals("Finalizada"))) {
             %>
-            <div id="buttons" class="w-full h-auto flex flex-col-reverse sm:flex-row items-center justify-between sm:px-12 h-auto gap-y-2">
+            <div id="buttons" class="w-full h-auto flex flex-col-reverse sm:flex-row items-center justify-between sm:px-0 h-auto gap-y-2">
                 <button onclick="finalizarActividad('<%=infoAct.getId()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-red-500">Finalizar Actividad Deportiva</button>
                 <button onclick="toggleOpenAddClaseModal('<%=infoAct.getId()%>', '<%=infoAct.getProfesor().getId()%>', '<%=infoAct.getProfesor().getNombre()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-[#294557]">Agregar Clase</button>
             </div>

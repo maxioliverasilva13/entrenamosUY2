@@ -314,7 +314,6 @@
                     </table>
                 </div>
 
-
                 <div class="flex w-full  mt-10 p-6">
                     <div class="w-full flex justify-center" id="loadingScores">
                         <div role="status">

@@ -4,6 +4,8 @@
     Author     : Maximiliano Olivera
 --%>
 
+<%@page import="Socio.dtos.SocioDTO"%>
+<%@page import="javafx.beans.property.SimpleBooleanProperty"%>
 <%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="Actividad.dtos.ActividadDTO"%>
 <%@page import="java.util.HashMap"%>
@@ -241,12 +243,24 @@
                                 Integer key = en.getKey();
                                 ActividadDTO val = en.getValue();
 
+                                SimpleBooleanProperty isFavoriteOfUser = new SimpleBooleanProperty(false);
+                                if (session.getAttribute("currentSessionUser") != null && session.getAttribute("typeOfUser").equals("Socio")) {
+                                    SocioDTO socio = (SocioDTO) session.getAttribute("currentSessionUser");
+                                    val.getFavoritos().forEach((
+                                              
+                                        favorito) -> {
+                                        if (favorito.getActid() == key && favorito.getUserId() == socio.getId()) {
+                                            isFavoriteOfUser.set(true);
+                                        }
+                                    });
+                                }
                         %>
                         <jsp:include page='/components/cardActividad.jsp' >
                             <jsp:param name="nombre" value="<%=val.getNombre()%>" />
                             <jsp:param name="image" value="<%=btimg.getBase64StringImage(val.getImageBlob())%>" />
                             <jsp:param name="descripcion" value="<%=val.getDescripcion()%>" />
                             <jsp:param name="actID" value="<%=val.getId()%>" />
+                            <jsp:param name="isFavorita" value="<%=isFavoriteOfUser.get()%>" />
                         </jsp:include>
                         <%
                             }
@@ -394,13 +408,13 @@
                                     })
                                 },
                                 error: function (error) {
-                                    if (error.status === 400){
+                                    if (error.status === 400) {
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Error',
                                             text: "Ya existe una actividad con ese nombre."
                                         });
-                                    }else{
+                                    } else {
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Error',
