@@ -195,20 +195,24 @@ public class ServletVerPerfilUsuario extends HttpServlet {
                 response.sendRedirect("NotFound.jsp");
                 return;
             }
-            List<DtRegistro> listRegistrosOfUser = new ArrayList<>();
-            List<ActividadDTO> actividadesOfUser = new ArrayList<>();
+            List<DtRegistro> listRegistrosOfUserPropio = new ArrayList<>(); // Debe contener solo los registros cuya actividad fue FINALIZADA. (nuevo requerimiento)
+            List<DtRegistro> listRegistrosOfUserAjeno = new ArrayList<>();// Debe contener todos los registros, sin importar el estado. (como estaba antes)
+            HashMap<Integer, ActividadDTO> actividadesOfUserHash = new HashMap<>();
             PremioBO premBO = new PremioBO();
             List<PremioDTO> premioOfuser = premBO.premiosOfUser(dtSocio.getId());
 
             dtSocio.getRegistros().forEach((DtRegistro r) -> {
-                listRegistrosOfUser.add(r);
+                listRegistrosOfUserAjeno.add(r); // Agregar registro solo despues de verificar que el estado de su Actividad, sea "Finalizada"
                 int idActividad = r.getClase().getIdActividad();                
                 if (idActividad != 0) {
                     Actividad.Actividad act = actDao.getById(idActividad);
                     if (act != null) {
                         ActividadDTO actToAdd = act.getDtActividad();
-                        if (!actividadesOfUser.contains(actToAdd)) {
-                            actividadesOfUser.add(act.getDtActividad());
+                        if(actToAdd.getEstado().equals("Finalizada")){
+                            listRegistrosOfUserPropio.add(r); // Agregar registro solo despues de verificar que el estado de su Actividad, sea "Finalizada"
+                        }
+                        if (!actividadesOfUserHash.containsKey(actToAdd.getId())) {
+                            actividadesOfUserHash.put(act.getId(), act.getDtActividad());
                         }
                     }
                 }
@@ -216,9 +220,11 @@ public class ServletVerPerfilUsuario extends HttpServlet {
                 // actividadesOfUser.add()
             });
             request.setAttribute("premioOfuser", premioOfuser);
-
-            request.setAttribute("listRegistrosOfUser", listRegistrosOfUser);
-            request.setAttribute("actividadesOfUser", actividadesOfUser);
+            
+            request.setAttribute("listRegistrosOfUserPropio", listRegistrosOfUserPropio);
+            request.setAttribute("listRegistrosOfUserAjeno", listRegistrosOfUserPropio);
+            List<ActividadDTO> actividadesOfUserList = new ArrayList(actividadesOfUserHash.values());
+            request.setAttribute("actividadesOfUser", actividadesOfUserList);
 
             request.setAttribute("userType", "Profesor");
             request.setAttribute("nombre", dtSocio.getNombre());

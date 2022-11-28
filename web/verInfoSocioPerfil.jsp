@@ -37,8 +37,8 @@
     String biografia = (String) request.getAttribute("biografia");
     String descripcion = (String) request.getAttribute("descripcion");
 
-    if (request.getAttribute("listRegistrosOfUser") != null) {
-        listRegistrosOfUser = (List<DtRegistro>) request.getAttribute("listRegistrosOfUser");
+    if (request.getAttribute("listRegistrosOfUserPropio") != null) {
+        listRegistrosOfUser = (List<DtRegistro>) request.getAttribute("listRegistrosOfUserPropio");
     }
 
     if (request.getAttribute("premioOfuser") != null) {
@@ -263,14 +263,14 @@
                                 </div>
                                 <div class="h-max m-auto flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
                                     <div class="bg-gray-200 px-[24px] py-[12px]">
-                                        <p class="text-gray-500 text-[12px] font-medium ">CLASES</p>
+                                        <p class="text-gray-500 text-[12px] font-medium ">REGISTROS A CLASES (ACT. DEPORTIVA FINALIZADA)</p>
                                     </div>
                                     <%
                                         if (listRegistrosOfUser.size() == 0) {
                                     %>
                                     <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
                                         <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
-                                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
+                                        <p class="text-gray-800 font-medium text-base">¡No encontramos ningún Registro a Clase, con Actividad finalizada!</p>
                                     </div>
                                     <%
                                     } else {
