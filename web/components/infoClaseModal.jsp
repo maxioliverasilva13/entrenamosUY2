@@ -54,6 +54,7 @@
                 closeModalClase();
             }
             const claseInfo = window?.claseInfo;
+            console.log(window?.claseInfo);
             const realizarSorteo = window.isProfesorDeClaseAndYaPaso === true;
             const mostrarResultadoContent = document.getElementById("mostrarResultadosModal");
             if (resultados?.length > 0) {
