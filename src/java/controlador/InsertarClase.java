@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "InsertarClase", urlPatterns = {"/insertarClase"})
 public class InsertarClase extends HttpServlet {
-
+                                            
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

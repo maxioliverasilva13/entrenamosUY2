@@ -83,7 +83,7 @@
 
                     element.innerHTML = `
                     <div class="w-[200px] h-auto flex flex-col px-4 py-4 items-center justify-start shadow-md border border-gray-100 rounded-lg">
-                        <div class="w-[70px] h-[70px] rounded-full bg-red-500 shadow-md mb-1">
+                        <div class="w-[70px] h-[70px] rounded-full shadow-md mb-1">
                             <img src="` + imgsrc + `" class="w-full h-full object-cover rounded-full" />
                         </div>
                         <p class="font-medium text-sm flex-grow text-gray-900 text-left truncate max-w-full">
