@@ -187,7 +187,6 @@
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert("llego");
         const files = $("#inputFile").prop('files');
         const fileToSend = files[0];
         if (fileToSend != null) {

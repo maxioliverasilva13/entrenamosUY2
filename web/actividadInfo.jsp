@@ -257,19 +257,22 @@
                     <% 
                     if (deberiaPoderFavoritaActividad == true) {
                     %> 
-                    <button id="favoriteButton" class="right-6 top-10 cursor-pointer absolute" onclick="handleFavoriteActividad('<%=infoAct.getId()%>')" >
-                        <%
-                            if (isFavoriteOfUser.get() == true) {
-                        %> 
-                        <i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>
-                        <%
-                        } else {
-                        %> 
-                        <i class="fa-regular fa-heart text-[20px]"></i>
-                        <%
-                            }
-                        %>
-                    </button>
+                    <div class="flex right-6 top-10 absolute gap-x-2">
+                        <button id="favoriteButton" class="cursor-pointer" onclick="handleFavoriteActividad('<%=infoAct.getId()%>')" >
+                            <%
+                                if (isFavoriteOfUser.get() == true) {
+                            %> 
+                            <i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>
+                            <%
+                            } else {
+                            %> 
+                            <i class="fa-regular fa-heart text-[20px]"></i>
+                            <%
+                                }
+                            %>
+                        </button>
+                        <p id="favCount" class="text-lg font-medium"><%=infoAct.getCantFavoritos()%></p>
+                    </div>
                     <%
                         }
                     
