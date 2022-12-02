@@ -21,7 +21,33 @@ public class ClaseInsertDTO {
     String fileToSend;
     String nombrePremio;
     String cantidadSorteados;
+    String videoClase = "";
 
+    public String getVideoClase() {
+        return videoClase;
+    }
+
+    public void setVideoClase(String videoClase) {
+        this.videoClase = videoClase;
+    }
+
+    public ClaseInsertDTO(String nombre, String sociosMin, String sociosMax, String urlAcceso, String fechaClase, String idActividad, String idProfesor, String profesorNombre, String fileToSend, String nombrePremio, String cantidadSorteados, String videoClase) {
+        this.nombre = nombre;
+        this.sociosMin = sociosMin;
+        this.sociosMax = sociosMax;
+        this.urlAcceso = urlAcceso;
+        this.fechaClase = fechaClase;
+        this.idActividad = idActividad;
+        this.idProfesor = idProfesor;
+        this.profesorNombre = profesorNombre;
+        this.fileToSend = fileToSend;
+        this.nombrePremio = nombrePremio;
+        this.cantidadSorteados = cantidadSorteados;
+        this.videoClase = videoClase;
+    }
+
+    
+    
     public String getNombrePremio() {
         return nombrePremio;
     }

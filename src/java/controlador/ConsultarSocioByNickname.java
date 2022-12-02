@@ -4,8 +4,6 @@
  */
 package controlador;
 
-import Usuario.Usuario;
-import Usuario.UsuarioDAO;
 import com.google.gson.Gson;
 import customsDtos.ResponseServer;
 import java.io.IOException;
@@ -15,6 +13,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.UsuarioDTO;
 
 /**
  *
@@ -63,8 +64,10 @@ public class ConsultarSocioByNickname extends HttpServlet {
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         String nickname = request.getParameter("nickname");
-        UsuarioDAO userDao = new UsuarioDAO();
-        Usuario userInfoByNickname = userDao.getByNickname(nickname);
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
+        UsuarioDTO userInfoByNickname = publicador.getUserByNickname(nickname);
         Boolean alreadyExists = userInfoByNickname != null;
         if (nickname != null) {
             response.setStatus(200);

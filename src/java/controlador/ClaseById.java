@@ -5,12 +5,6 @@
 package controlador;
 
 import customsDtos.ClaseInfoToReturn;
-import Clase.ClaseBO;
-import Clase.DtClase;
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
-import Profesor.dtos.ProfesorDTO;
-import Socio.dtos.SocioDTO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,7 +17,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import Registro.DtRegistro;
+import ws.DtClase;
+import ws.DtRegistro;
+import ws.ProfesorDTO;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.SocioDTO;
 
 /**
  *
@@ -71,11 +70,13 @@ public class ClaseById extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String claseId = request.getParameter("claseId");
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+        
         
         if (claseId != null) {
-            ClaseBO claseBO = new ClaseBO();
             request.setAttribute("", this);
-            DtClase claseInfo = claseBO.consultarClase(Integer.parseInt(claseId));
+            DtClase claseInfo = publicador.consultarClase(Integer.parseInt(claseId));
             // request.setAttribute("selectedCuponeraInfo", cupinfo);
             PrintWriter out = response.getWriter();
             boolean isProfesorDeClaseAndYaPaso = false;
@@ -85,7 +86,7 @@ public class ClaseById extends HttpServlet {
             String typeofUser = (String) session.getAttribute("typeOfUser");
             if (typeofUser != null && typeofUser.equals("Profesor")) {
                 ProfesorDTO profe = (ProfesorDTO) session.getAttribute("currentSessionUser");
-                if (claseInfo.getProfesorId() == profe.getId()) {
+                if (claseInfo.getProfesorId() == profe.getID()) {
                     if (claseInfo.getPremio() != null) {
                         if (claseInfo.getPremio().getRegistros().size() > 0) {
                             verResultados = true;
@@ -94,7 +95,8 @@ public class ClaseById extends HttpServlet {
                             });
                         } else {
                             Date now = new Date();
-                            if (claseInfo.getFecha().before(now) && claseInfo.getPremio() != null) {
+                            Date currentFecha = claseInfo.getFecha().toGregorianCalendar().getTime();
+                            if (currentFecha.before(now) && claseInfo.getPremio() != null) {
                                 if (claseInfo.getPremio().isFueSorteado() == false) {
                                     isProfesorDeClaseAndYaPaso = true;
                                 }

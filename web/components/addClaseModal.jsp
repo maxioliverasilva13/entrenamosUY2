@@ -7,8 +7,6 @@
 --%>
 
 
-<%@page import="Actividad.dtos.ActividadDTO"%>
-<%@page import="Clase.DtClase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <head>
@@ -114,7 +112,8 @@
         const fechaClase = $("#fechaClase").val();
         const cantidadSorteados = $("#cantidadSorteados").val();
         const nombrePremio = $("#nombrePremio").val();
-
+        const videoClase = $("#videoClaseSrc").val();
+        console.log(videoClase);
         const needsValidation = (nombrePremio != "" && nombrePremio != null) || ((cantidadSorteados != "" && cantidadSorteados != null) || cantidadSorteados > 0)
         if (needsValidation) {
             if (nombrePremio != "" || nombrePremio != null) {
@@ -158,7 +157,8 @@
                 profesorNombre,
                 fileToSend: imgSrc,
                 cantidadSorteados,
-                nombrePremio
+                nombrePremio,
+                videoClase
             })
         })
                 .then((response) => {
@@ -187,7 +187,6 @@
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert("llego");
         const files = $("#inputFile").prop('files');
         const fileToSend = files[0];
         if (fileToSend != null) {
@@ -289,6 +288,11 @@
             <div class="flex-1 w-full ">
                 <label for="urlAccesoClase" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Url Acceso</label>
                 <input required="true" type="text" id="urlAccesoClase" name="urlAccesoClase" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="UrlAcceso" />
+            </div>
+            
+            <div class="flex-1 w-full ">
+                <label for="videoClaseSrc" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Url Acceso</label>
+                <input required="false" type="text" id="videoClaseSrc" name="videoClaseSrc" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Video Clase" />
             </div>
 
             <div class="flex-1 w-full ">

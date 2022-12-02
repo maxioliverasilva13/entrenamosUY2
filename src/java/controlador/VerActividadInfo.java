@@ -4,17 +4,6 @@
  */
 package controlador;
 
-import Actividad.ActividadBO;
-import Actividad.dtos.ActividadDTO;
-import Actividad.dtos.ActividadDetalleDTO;
-import Clase.ClaseBO;
-import Clase.ClaseDao;
-import Clase.DtClase;
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
-import Cuponera.InterfaceCuponeraBo;
-import Profesor.dtos.ProfesorDTO;
-import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -24,6 +13,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import ws.ActividadDTO;
+import ws.DtClase;
+import ws.DtCuponera;
+import ws.ProfesorDTO;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.UsuarioDTO;
 
 /**
  *
@@ -45,6 +41,9 @@ public class VerActividadInfo extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
         String actID = request.getParameter("actId");
         String modalOpen = request.getParameter("modalOpen");
         String claseId = request.getParameter("claseId");
@@ -54,33 +53,30 @@ public class VerActividadInfo extends HttpServlet {
         ProfesorDTO loggUser = null;
         if (session.getAttribute("currentSessionUser") != null && session.getAttribute("typeOfUser") != null) {
             if (session.getAttribute("typeOfUser").equals("Profesor")) {
-                loggUser = (ProfesorDTO)session.getAttribute("currentSessionUser");
+                loggUser = (ProfesorDTO) session.getAttribute("currentSessionUser");
             }
 
         }
 
         try {
             if (claseId != null) {
-                ClaseBO clasebo = new ClaseBO();
-                DtClase claseInfo = clasebo.consultarClase(Integer.parseInt(claseId));
+                DtClase claseInfo = publicador.consultarClase(Integer.parseInt(claseId));
                 request.setAttribute("selectedClaseInfo", claseInfo);
             }
 
             if (cupId != null) {
-                CuponeraBo cupBO = new CuponeraBo();
-                DtCuponera cupinfo = cupBO.consultarCuponera(Integer.parseInt(cupId));
+                DtCuponera cupinfo = publicador.consultarCuponera(Integer.parseInt(cupId));
                 request.setAttribute("selectedCuponeraInfo", cupinfo);
             }
 
             if (actID == null || actID.equals("")) {
                 response.sendRedirect("NotFound.jsp");
             } else {
-                ActividadBO actBO = new ActividadBO();
-                ActividadDTO actInfo = actBO.consultarById(Integer.parseInt(actID));
+                ActividadDTO actInfo = publicador.getActividadById(Integer.parseInt(actID));
                 request.setAttribute("actInfo", actInfo);
                 if (loggUser != null) {
                     ProfesorDTO profe = loggUser;
-                    if (profe.getInstituciones().get(0).getId() ==  actInfo.getInstitucion().getId()) {
+                    if (profe.getInstituciones().get(0).getId() == actInfo.getInstitucion().getId()) {
                         request.setAttribute("showAddClassButton", true);
                     }
                 }
@@ -89,10 +85,13 @@ public class VerActividadInfo extends HttpServlet {
                     request.setAttribute("modalIsOpen", modalOpen.equals("true") ? "true" : "false");
                 }
                 if (verInfoPagoOpen != null) {
-                    UsuarioDTO userLogged = (UsuarioDTO)session.getAttribute("currentSessionUser");
+                    UsuarioDTO userLogged = (UsuarioDTO) session.getAttribute("currentSessionUser");
                     request.setAttribute("infoPagoModal", verInfoPagoOpen.equals("true") ? "true" : "false");
-                                        InterfaceCuponeraBo  cupBO = new CuponeraBo();
-                    HashMap<Integer, DtCuponera> cuponerasDisp = cupBO.listarCuponerasDisponiblesBySocio(userLogged.getId(),Integer.parseInt(actID));
+                    HashMap<Integer, DtCuponera> cuponerasDisp = new HashMap();
+                    publicador.listarCuponerasDisponiblesBySocio(userLogged.getID(), Integer.parseInt(actID)).forEach((DtCuponera cup) -> {
+                        cuponerasDisp.put(cup.getId(), cup);
+                    });
+
                     request.setAttribute("cuponerasDisp", cuponerasDisp);
                 }
                 request.getRequestDispatcher("/actividadInfo.jsp").forward(request, response);

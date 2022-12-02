@@ -4,29 +4,11 @@
  */
 package controlador;
 
-import Actividad.ActividadBO;
-import Actividad.ActividadDao;
-import Actividad.dtos.ActividadDTO;
-import Clase.DtClase;
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
-import Institucion.DtInstitucion;
-import Institucion.InstitucionBO;
-import ParseDate.ParseDate;
-import Premio.PremioBO;
-import Premio.dtos.PremioDTO;
-import Profesor.ProfesorBO;
-import Profesor.dtos.ProfesorDTO;
-import Registro.DtRegistro;
-import Socio.SocioBO;
-import Socio.dtos.SocioDTO;
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
+import controlador.utils.ParseDate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -36,7 +18,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import mygym.logica.usuario.dataTypes.DtActividad;
+import ws.ActividadDTO;
+import ws.DtCuponera;
+import ws.DtInstitucion;
+import ws.DtRegistro;
+import ws.PremioDTO;
+import ws.ProfesorDTO;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.SocioDTO;
+import ws.UsuarioDTO;
 
 /**
  *
@@ -58,6 +49,8 @@ public class ServletVerPerfilUsuario extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
 
         ParseDate parse = new ParseDate();
 
@@ -70,41 +63,34 @@ public class ServletVerPerfilUsuario extends HttpServlet {
         // TO DO: Validar si no está logueado, llevarlo a not found.
         if (request.getParameter("userID") == null) {
             if (loggedUser != null) {
-                userAconsultar = loggedUser.getId();
+                userAconsultar = loggedUser.getID();
             }
         } else {
             userAconsultar = Integer.parseInt(request.getParameter("userID"));  //  A PRUEBA
         }
-
-        InstitucionBO insBO = new InstitucionBO();
-        ActividadBO actBO = new ActividadBO();
-        UsuarioBO userBO = new UsuarioBO();
-        ProfesorBO profBO = new ProfesorBO();
-        SocioBO socBO = new SocioBO();
-        CuponeraBo cupBO = new CuponeraBo();
 
         UsuarioDTO userInfoToShow = null; // Guarda la info del usuario a consultar. (trae el id del url que viene de los parametros del servlet)
         String userType;
 
         // Aqui ya se valida si el user no existe (dependiendo del id)
         try {
-            userType = userBO.getTipoById(userAconsultar);
+            userType = publicador.getTipoById(userAconsultar);
         } catch (Exception e) {
             response.sendRedirect("NotFound.jsp");
             return;
         }
 
         if (userType.equals("Profesor")) {
-            userInfoToShow = profBO.getProfesorById(userAconsultar); // USER_ID 52: Nicolas
+            userInfoToShow = publicador.getProfesorById(userAconsultar); // USER_ID 52: Nicolas
         } else if (userType.equals("Socio")) {
-            userInfoToShow = socBO.consultarSocio(userAconsultar);  // USER_ID 2: Manuel
+            userInfoToShow = publicador.consultarSocio(userAconsultar);  // USER_ID 2: Manuel
         }
 
         request.setAttribute("idConsultado", userAconsultar); // Para usar luego en el POST.
         request.setAttribute("userDT", userInfoToShow);
 
-        int seguidos = (int) userBO.getSeguidos(userAconsultar);
-        int seguidores = (int) userBO.getSeguidores(userAconsultar);
+        int seguidos = (int) publicador.getSeguidosByUser(userAconsultar);
+        int seguidores = (int) publicador.getSeguidoresByUser(userAconsultar);
 
         request.setAttribute("cantSeguidores", seguidores);
         request.setAttribute("cantSeguidos", seguidos);
@@ -120,7 +106,7 @@ public class ServletVerPerfilUsuario extends HttpServlet {
         boolean loggSigueAconsultado = false;
         try {
             if (loggedUser != null) {
-                loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), userAconsultar);
+                loggSigueAconsultado = publicador.consultarSigueUsuario(loggedUser.getID(), userAconsultar);
                 request.setAttribute("sigoAlConsultado", loggSigueAconsultado);
             } else {
                 request.setAttribute("userNotLogged", true);
@@ -141,7 +127,9 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             HashMap<Integer, ActividadDTO> listActAjeno = new HashMap<>(); // Se listan solo en estado aceptada.
 
             try {
-                listActPropio = actBO.listarActividadesByProfesor(userAconsultar);
+                publicador.listarActividadesByProfesor(userAconsultar).forEach((ActividadDTO act) -> {
+                    listActPropio.put(act.getId(), act);
+                });
 
                 List<ActividadDTO> actsProfeAjeno = dtProfesor.getActividades();
                 actsProfeAjeno.forEach((item) -> {
@@ -154,22 +142,22 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             }
 
             request.setAttribute("userType", "Profesor");
-            request.setAttribute("nombre", dtProfesor.getNombre());
-            request.setAttribute("apellido", dtProfesor.getApellido());
-            request.setAttribute("correo", dtProfesor.getEmail());
+            request.setAttribute("nombre", dtProfesor.getNOMBRE());
+            request.setAttribute("apellido", dtProfesor.getAPELLIDO());
+            request.setAttribute("correo", dtProfesor.getEMAIL());
             request.setAttribute("institucion", dtIns.getNombre());
-            if (dtProfesor.getNacimiento() != null) {
+            if (dtProfesor.getNACIMIENTO() != null) {
                 SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-                String date = DATE_FORMAT.format(dtProfesor.getNacimiento());
+                String date = DATE_FORMAT.format(dtProfesor.getNACIMIENTO().toGregorianCalendar().getTime());
                 request.setAttribute("fnacimiento", date);
             }
             request.setAttribute("website", dtProfesor.getLinkSitioWeb());
             request.setAttribute("biografia", dtProfesor.getBiografia());
-            request.setAttribute("descripcion", dtProfesor.getdescripcionGeneral());
+            request.setAttribute("descripcion", dtProfesor.getDescripcionGeneral());
 
             // Validar si el perfil q va a consultar es el suyo o uno ajeno.
             if (loggedUser != null) {
-                if (userAconsultar == loggedUser.getId()) {
+                if (userAconsultar == loggedUser.getID()) {
                     // Es su propio perfil
                     request.setAttribute("actividades", listActPropio);
                     request.getRequestDispatcher("Profesor/perfilProfesorPropio.jsp").forward(request, response);
@@ -186,29 +174,28 @@ public class ServletVerPerfilUsuario extends HttpServlet {
 
         if (userInfoToShow instanceof SocioDTO) {
             SocioDTO dtSocio = (SocioDTO) userInfoToShow;
-            ActividadDao actDao = new ActividadDao();
 
             HashMap<Integer, DtCuponera> listCuponeras = new HashMap<>();
             try {
-                listCuponeras = cupBO.listarCuponerasAdquiridasBySocio(userAconsultar);
+                publicador.listarCuponerasAdquiridasBySocio(userAconsultar).forEach((DtCuponera cup) -> {
+                    listCuponeras.put(cup.getId(), cup);
+                });
             } catch (Exception e) {
                 response.sendRedirect("NotFound.jsp");
                 return;
             }
             List<DtRegistro> listRegistrosOfUser = new ArrayList<>();
             List<ActividadDTO> actividadesOfUser = new ArrayList<>();
-            PremioBO premBO = new PremioBO();
-            List<PremioDTO> premioOfuser = premBO.premiosOfUser(dtSocio.getId());
+            List<PremioDTO> premioOfuser = publicador.premiosOfUser(dtSocio.getID());
 
             dtSocio.getRegistros().forEach((DtRegistro r) -> {
                 listRegistrosOfUser.add(r);
-                int idActividad = r.getClase().getIdActividad();                
+                int idActividad = r.getClase().getIdActividad();
                 if (idActividad != 0) {
-                    Actividad.Actividad act = actDao.getById(idActividad);
-                    if (act != null) {
-                        ActividadDTO actToAdd = act.getDtActividad();
+                    ActividadDTO actToAdd = publicador.getActividadById(idActividad);
+                    if (actToAdd != null) {
                         if (!actividadesOfUser.contains(actToAdd)) {
-                            actividadesOfUser.add(act.getDtActividad());
+                            actividadesOfUser.add(actToAdd);
                         }
                     }
                 }
@@ -221,20 +208,20 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("actividadesOfUser", actividadesOfUser);
 
             request.setAttribute("userType", "Profesor");
-            request.setAttribute("nombre", dtSocio.getNombre());
-            request.setAttribute("apellido", dtSocio.getApellido());
-            request.setAttribute("correo", dtSocio.getEmail());
-            request.setAttribute("nickname", dtSocio.getNickname());
-            if (dtSocio.getNacimiento() != null) {
+            request.setAttribute("nombre", dtSocio.getNOMBRE());
+            request.setAttribute("apellido", dtSocio.getAPELLIDO());
+            request.setAttribute("correo", dtSocio.getEMAIL());
+            request.setAttribute("nickname", dtSocio.getNICKNAME());
+            if (dtSocio.getNACIMIENTO() != null) {
                 SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-                String date = DATE_FORMAT.format(dtSocio.getNacimiento());
+                String date = DATE_FORMAT.format(dtSocio.getNACIMIENTO().toGregorianCalendar().getTime());
                 request.setAttribute("fnacimiento", date);
             }
             request.setAttribute("cuponeras", listCuponeras);
 
             // Validar si el perfil q va a consultar es el suyo o uno ajeno.
             if (loggedUser != null) {
-                if (userAconsultar == loggedUser.getId()) {
+                if (userAconsultar == loggedUser.getID()) {
                     // Es su propio perfil
                     request.getRequestDispatcher("verInfoSocioPerfil.jsp").forward(request, response);
                 } else {

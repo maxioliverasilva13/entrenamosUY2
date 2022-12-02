@@ -4,10 +4,10 @@
     Author     : Maximiliano Olivera
 --%>
 
-<%@page import="Socio.dtos.SocioDTO"%>
+<%@page import="ws.SocioDTO"%>
+<%@page import="ws.ActividadDTO"%>
 <%@page import="javafx.beans.property.SimpleBooleanProperty"%>
 <%@page import="util.BlobToImage"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
 <%@page import="java.util.HashMap"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page='imports.jsp'>
@@ -58,7 +58,7 @@
                     val.getFavoritos().forEach((
                               
                         favorito) -> {
-                    if (favorito.getActid() == key && favorito.getUserId() == socio.getId()) {
+                    if (favorito.getActid() == key && favorito.getUserId() == socio.getID()) {
                             isFavoriteOfUser.set(true);
                         }
                     });

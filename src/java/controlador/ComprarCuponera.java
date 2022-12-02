@@ -4,11 +4,7 @@
  */
 package controlador;
 
-import Cuponera.CuponeraBo;
-import Exceptions.CuponeraAlreadyPurchaseBySocio;
-import Socio.dtos.SocioDTO;
 import com.google.gson.Gson;
-import controlador.utils.ClaseInsertDTO;
 import controlador.utils.ResponseUtil;
 import customsDtos.ComprarCuponeraInput;
 import java.io.IOException;
@@ -21,6 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.SocioDTO;
 
 /**
  *
@@ -82,18 +81,19 @@ public class ComprarCuponera extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
 
         try {
             SocioDTO socio = (SocioDTO) session.getAttribute("currentSessionUser");
-            CuponeraBo cupBo = new CuponeraBo();
             PrintWriter out = response.getWriter();
 
             ComprarCuponeraInput cuponerasProps = new Gson().fromJson(request.getReader(), ComprarCuponeraInput.class);
 
             cuponerasProps.getActividadesIds().forEach(((Integer actId) -> {
                 try {
-                    cupBo.comprarCuponera(socio.getId(), cuponerasProps.getCuponeraId(), actId.intValue());
-                } catch (CuponeraAlreadyPurchaseBySocio ex) {
+                    publicador.comprarCuponera(socio.getID(), cuponerasProps.getCuponeraId(), actId.intValue());
+                } catch (Exception ex) {
                     System.out.println(ex);
                     ResponseUtil respUtil = new ResponseUtil(false, ex.getMessage(), this);
                     String claseJSON = new Gson().toJson(respUtil);
@@ -114,7 +114,7 @@ public class ComprarCuponera extends HttpServlet {
 
         } catch (Exception e) {
             System.out.println("Error");
-            System.out.println("error2 "+e);
+            System.out.println("error2 " + e);
             ResponseUtil respUtil = new ResponseUtil(false, e.getMessage(), this);
             PrintWriter out = response.getWriter();
             String claseJSON = new Gson().toJson(respUtil);

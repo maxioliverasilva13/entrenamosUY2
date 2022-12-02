@@ -4,9 +4,6 @@
  */
 package controlador;
 
-import Registro.DtRegistro;
-import Registro.InterfaceRegistroBO;
-import Registro.RegistroBO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.DtRegistro;
+import ws.Publicador;
+import ws.Publicador_Service;
 
 /**
  *
@@ -65,10 +65,10 @@ public class RegistroById extends HttpServlet {
         String registroId = request.getParameter("registroId");
         int registroIdInt = Integer.parseInt(registroId);
         if (registroId != null) {
-            InterfaceRegistroBO registroBo  = new RegistroBO();
-            request.setAttribute("", this);
-            DtRegistro registroInfo = registroBo.getById(registroIdInt);
-            // request.setAttribute("selectedCuponeraInfo", cupinfo);
+            Publicador_Service pucService = new Publicador_Service();
+            Publicador publicador = pucService.getPublicadorPort();
+
+            DtRegistro registroInfo = publicador.getRegistroById(registroIdInt);
             PrintWriter out = response.getWriter();
             String registroJSON = new Gson().toJson(registroInfo);
             response.setContentType("application/json");

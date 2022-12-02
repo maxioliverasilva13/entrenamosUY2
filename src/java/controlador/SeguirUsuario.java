@@ -4,8 +4,6 @@
  */
 package controlador;
 
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import util.FollowData;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.UsuarioDTO;
 
 /**
  *
@@ -64,19 +65,17 @@ public class SeguirUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession(true);
-        UsuarioBO userBO = new UsuarioBO();
-        
+
         int usrIDConsultado = Integer.parseInt(request.getParameter("idConsultado"));
-        UsuarioDTO loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
-        
-        boolean loggSigueAconsultado = false;
-        
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
         try {
             PrintWriter out = response.getWriter();
-            int seguidores = userBO.getSeguidores(usrIDConsultado);
-            int seguidos = userBO.getSeguidos(usrIDConsultado);
+            int seguidores = publicador.getSeguidoresByUser(usrIDConsultado);
+            int seguidos = publicador.getSeguidosByUser(usrIDConsultado);
             FollowData fd = new FollowData(seguidores, seguidos);
             String JSONdata = new Gson().toJson(fd);
             response.setContentType("application/json");
@@ -100,26 +99,28 @@ public class SeguirUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //doGet(request, response);
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
         try {
-            UsuarioBO userBO = new UsuarioBO();
             HttpSession session = request.getSession(true);
             UsuarioDTO loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
 
             int idConsultado = Integer.parseInt(request.getParameter("idConsultado"));
 
-            boolean loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), idConsultado);
+            boolean loggSigueAconsultado = publicador.consultarSigueUsuario(loggedUser.getID(), idConsultado);
 
             if (!loggSigueAconsultado) {
-                userBO.seguirAUsuario(loggedUser.getId(), idConsultado);
+                publicador.seguirUsuario(loggedUser.getID(), idConsultado);
                 System.out.println("LLEGO 1");
             } else {
                 try {
-                    userBO.dejarSeguirUsuario(loggedUser.getId(), idConsultado);
+                    publicador.dejarSeguirUsuario(loggedUser.getID(), idConsultado);
                     System.out.println("LLEGO 2");
                 } catch (Exception e) {
                 }
             }
-        response.sendRedirect("verPerfil?&userID="+idConsultado);
+            response.sendRedirect("verPerfil?&userID=" + idConsultado);
 
         } catch (Exception e) {
             response.sendRedirect("NotFound.jsp");

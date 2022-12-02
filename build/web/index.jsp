@@ -4,12 +4,12 @@
     Author     : Maximiliano Olivera
 --%>
 
-<%@page import="Socio.dtos.SocioDTO"%>
+<%@page import="ws.ActividadDTO"%>
+<%@page import="ws.DtInstitucion"%>
+<%@page import="ws.SocioDTO"%>
+<%@page import="ws.UsuarioDTO"%>
 <%@page import="javafx.beans.property.SimpleBooleanProperty"%>
-<%@page import="Usuario.dtos.UsuarioDTO"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="Institucion.DtInstitucion"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -43,7 +43,7 @@
     String nameOfUser = "Usuario";
     UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
     if (userInfo != null) {
-        nameOfUser = userInfo.getNombre() + " " + userInfo.getApellido();
+        nameOfUser = userInfo.getNOMBRE() + " " + userInfo.getAPELLIDO();
     }
 %>
 <!DOCTYPE html>
@@ -249,7 +249,7 @@
                                     val.getFavoritos().forEach((
                                               
                                         favorito) -> {
-                                        if (favorito.getActid() == key && favorito.getUserId() == socio.getId()) {
+                                        if (favorito.getActid() == key && favorito.getUserId() == socio.getID()) {
                                             isFavoriteOfUser.set(true);
                                         }
                                     });

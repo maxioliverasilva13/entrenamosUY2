@@ -4,10 +4,10 @@
     Author     : Maximiliano Olivera
     Esta pagina es solo para socios logueados
 --%>
-<%@page import="Cuponera.DtCuponera"%>
+<%@page import="ws.DtCuponera"%>
+<%@page import="ws.ActividadDTO"%>
+<%@page import="ws.DtClase"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
-<%@page import="Clase.DtClase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     DtClase selectedClaseInfo = (DtClase) request.getAttribute("selectedClaseInfo");

@@ -4,20 +4,19 @@
     Author     : angel
 --%>
 
+<%@page import="ws.UsuarioDTO"%>
+<%@page import="ws.DtCuponera"%>
+<%@page import="ws.DtInstitucion"%>
+<%@page import="ws.DtCuponeraXActividad"%>
+<%@page import="ws.DtClase"%>
+<%@page import="ws.DtCategoria"%>
+<%@page import="ws.ActividadDTO"%>
 <%@page import="javafx.beans.property.SimpleBooleanProperty"%>
-<%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="Cuponera.DtCuponera"%>
 <%@page import="java.util.Random"%>
 <%@page import="util.BlobToImage"%>
-<%@page import="Institucion.DtInstitucion"%>
-<%@page import="CuponeraXActividad.DtCuponeraXActividad"%>
-<%@page import="Clase.DtClase"%>
 <%@page import="java.util.List"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
-<%@page import="Actividad.dtos.ActividadDetalleDTO"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="Categoria.DtCategoria"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page='imports.jsp'>
     <jsp:param name="" value=""/>
@@ -44,12 +43,14 @@
     SimpleBooleanProperty isFavoriteOfUser = new SimpleBooleanProperty(false);
     boolean deberiaPoderFavoritaActividad = false;
     if (session.getAttribute("typeOfUser") != null) {
-     deberiaPoderFavoritaActividad = session.getAttribute("typeOfUser").equals("Socio") || false;
+        deberiaPoderFavoritaActividad = session.getAttribute("typeOfUser").equals("Socio") || false;
     }
+    UsuarioDTO userInfo = null;
     if (session.getAttribute("currentSessionUser") != null && deberiaPoderFavoritaActividad) {
-        UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
+        userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
         //isFavoriteOfUser = infoAct.getFavoritos().indexOf(userInfo.getId()) == 0;
         infoAct.getFavoritos().forEach((
+                  
             favorito) -> {
         if (favorito.getActid() == infoAct.getId()) {
                 isFavoriteOfUser.set(true);
@@ -75,6 +76,7 @@
     }
 
     public String formatDate(Object x) {
+        System.out.println("Object is" + x);
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
         String date;
         try {
@@ -126,7 +128,6 @@
                 if (isOpen) {
                     claseModal.style.cssText = "display: flex";
                 }
-                console.log(data?.claseInfo)
                 window.claseInfo = data.claseInfo;
                 window.isProfesorDeClaseAndYaPaso = data.isProfesorDeClaseAndYaPaso;
                 claseModal.onload(isOpen, data?.resultados || []);
@@ -148,7 +149,6 @@
         } else {
             addClaseModal.style.cssText = "display: none";
         }
-
     }
 
     const finalizarActividad = (idAct) => {
@@ -194,6 +194,10 @@
 
     console.log("<%=infoAct.getFavoritos()%>");
 </script>
+
+<jsp:include page='/components/selectedCuponeraInfo.jsp' />
+<jsp:include page='/components/infoClaseModal.jsp' />
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -213,10 +217,6 @@
         <%
             }
         %>
-
-        <jsp:include page='/components/selectedCuponeraInfo.jsp' />
-        <jsp:include page='/components/infoClaseModal.jsp' />
-
         <%
             if (showAddClassButton == true) {
         %>
@@ -254,8 +254,8 @@
                 </div>
 
                 <div class='w-full flex-grow h-auto border border-gray-300 rounded-md shadow-md flex flex-col items-start justify-start p-6 relative'>
-                    <% 
-                    if (deberiaPoderFavoritaActividad == true) {
+                    <%
+                        if (deberiaPoderFavoritaActividad == true) {
                     %> 
                     <button id="favoriteButton" class="right-6 top-10 cursor-pointer absolute" onclick="handleFavoriteActividad('<%=infoAct.getId()%>')" >
                         <%
@@ -272,10 +272,10 @@
                     </button>
                     <%
                         }
-                    
+
                     %>
-                    
-                  
+
+
                     <div class="w-full py-5 border-b border-gray-300 w-full flex flex-row items-center jusitfy-between"><p>Nombre Actividad: <%=infoAct.getNombre()%></p></div>
                     <div class="flex w-full flex-row items-center justify-start py-5 border-b border-gray-300">
                         <p class="w-1/3 text-gray-500 text-sm font-medium">Institución</p>
@@ -301,7 +301,7 @@
             %>
             <div id="buttons" class="w-full h-auto flex flex-col-reverse sm:flex-row items-center justify-between sm:px-0 h-auto gap-y-2">
                 <button onclick="finalizarActividad('<%=infoAct.getId()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-red-500">Finalizar Actividad Deportiva</button>
-                <button onclick="toggleOpenAddClaseModal('<%=infoAct.getId()%>', '<%=infoAct.getProfesor().getId()%>', '<%=infoAct.getProfesor().getNombre()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-[#294557]">Agregar Clase</button>
+                <button onclick="toggleOpenAddClaseModal('<%=infoAct.getId()%>', '<%=infoAct.getProfesor().getID()%>', '<%=infoAct.getProfesor().getNOMBRE()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-[#294557]">Agregar Clase</button>
             </div>
             <%
                 }

@@ -4,9 +4,8 @@
  */
 package customsDtos;
 
-import Categoria.DtCategoria;
-import Institucion.DtInstitucion;
 import java.util.HashMap;
+import ws.DtCategoria;
 
 /**
  *

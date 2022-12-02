@@ -4,10 +4,6 @@
  */
 package controlador;
 
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
-import Socio.dtos.SocioDTO;
-import Usuario.dtos.UsuarioDTO;
 import com.google.gson.Gson;
 import controlador.utils.ResponseUtil;
 import java.io.IOException;
@@ -19,6 +15,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import ws.DtCuponera;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.SocioDTO;
 
 /**
  *
@@ -40,14 +40,17 @@ public class ListarCuponeras extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         String typeOfUser = (String) session.getAttribute("typeOfUser");
-        System.out.println("llego");
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
 
         if (typeOfUser != null && typeOfUser.equals("Socio")) {
-            SocioDTO userinfo = (SocioDTO)session.getAttribute("currentSessionUser");
+            SocioDTO userinfo = (SocioDTO) session.getAttribute("currentSessionUser");
 
-            CuponeraBo cup = new CuponeraBo();
             HashMap<Integer, DtCuponera> res = new HashMap<Integer, DtCuponera>();
-            res = cup.listarCuponerasBySocio(userinfo.getId());
+            publicador.listarCuponerasBySocio(userinfo.getID()).forEach((DtCuponera cup) -> {
+                res.put(cup.getId(), cup);
+            });
+            
             ResponseUtil respUtil = new ResponseUtil(false, "Datos obtenidos correctamente", res);
 
             PrintWriter out = response.getWriter();

@@ -4,9 +4,6 @@
  */
 package controlador;
 
-import Premio.PremioDao;
-import com.google.gson.Gson;
-import customsDtos.ResponseServer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.Publicador;
+import ws.Publicador_Service;
 
 /**
  *
@@ -65,9 +64,13 @@ public class ImprimirComprobantePremio extends HttpServlet {
             throws ServletException, IOException {
         String premioId = request.getParameter("premioId");
         String userId = request.getParameter("userID");
-        PremioDao premDao = new PremioDao();
+
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
         if (userId != null && premioId != null) {
-            File pdfComprobante = premDao.imprimirPremio(Integer.parseInt(premioId), Integer.parseInt(userId));
+            // File pdfComprobante = publicador.imprimirPremio(Integer.parseInt(premioId), Integer.parseInt(userId));
+            File pdfComprobante = new File("");
             // Get PrintWriter object
             PrintWriter out = response.getWriter();
 

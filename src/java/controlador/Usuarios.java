@@ -4,9 +4,6 @@
  */
 package controlador;
 
-import Usuario.IUsuarioBO;
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -14,6 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.UsuarioDTO;
 
 /**
  *
@@ -38,7 +38,7 @@ public class Usuarios extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Usuarios</title>");            
+            out.println("<title>Servlet Usuarios</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Usuarios at " + request.getContextPath() + "</h1>");
@@ -59,15 +59,22 @@ public class Usuarios extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        IUsuarioBO usuarioBo = new UsuarioBO();
-        try{
-            HashMap<Integer,UsuarioDTO> res = usuarioBo.listarUsuarios();
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
+        try {
+            HashMap<Integer, UsuarioDTO> res = new HashMap();
+            publicador.listarUsuarios().forEach((UsuarioDTO user) -> {
+                res.put(user.getID(), user);
+            });
+            System.out.println("usuarios is" + res);
             request.setAttribute("usuarios", res);
             request.getRequestDispatcher("/usuarios.jsp").forward(request, response);
-        }catch(Exception e){
-            response.sendError(500,"Ha ocurrido un error insesperado");
+        } catch (Exception e) {
+            System.out.println(e);
+            response.sendError(500, "Ha ocurrido un error insesperado");
         }
-        
+
     }
 
     /**

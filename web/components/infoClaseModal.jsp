@@ -4,11 +4,9 @@
     Author     : Maximiliano Olivera
 --%>
 
-<%@page import="Cuponera.DtCuponera"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
-<%@page import="Clase.DtClase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
@@ -37,7 +35,7 @@
     }
     $(document).ready(function () {
         var cantPuntuaciones = 0;
-        var puntuacionGeneral = 0 ;
+        var puntuacionGeneral = 0;
         document.getElementById("infoClaseModal").onload = (isOpen, resultados) => {
             const shouldOpenModal = isOpen === true;
             const openModalCrearSorteo = (data) => {
@@ -56,7 +54,6 @@
                 closeModalClase();
             }
             const claseInfo = window?.claseInfo;
-            console.log(window?.claseInfo);
             const realizarSorteo = window.isProfesorDeClaseAndYaPaso === true;
             const mostrarResultadoContent = document.getElementById("mostrarResultadosModal");
             if (resultados?.length > 0) {
@@ -78,23 +75,31 @@
                 mostrarResultadoContent.style.cssText = "display: none";
             }
 
-            if(window?.registroInfo)
+            if (window?.registroInfo)
             {
+                console.log("si")
                 var registroInfo = window?.registroInfo;
-                if(registroInfo.clase){
-                   loadPuntuacionProfesor(registroInfo.clase.id);
+                if (registroInfo.clase) {
+                    loadPuntuacionProfesor(registroInfo.clase.id);
                 }
-                
-                $("#modalValorarProfesor").attr("registroId",registroInfo.id);
+
+                $("#modalValorarProfesor").attr("registroId", registroInfo.id);
                 let parentNode = document.getElementById("tablaContent");
 
-            if (claseInfo === "Loading") {
-                $("#contentInfo").css("display", "none");
-                // document.getElementById("imageCup").setAttribute("src", "")
-            } else {
-                    
+                if (claseInfo === "Loading") {
+                    $("#contentInfo").css("display", "none");
+                    // document.getElementById("imageCup").setAttribute("src", "")
+                } else {
+
                     $("#contentInfo").css("display", "flex");
                     $("#claseNombre").text(registroInfo?.clase.nombre);
+                    console.log(registroInfo?.linkClase);
+                    if (registroInfo?.linkClase) {
+                        $("#videoClase").attr("src", registroInfo?.linkClase);
+                        document.getElementById("videoClase").style.cssText = "display: block";
+                    } else {
+                        document.getElementById("videoClase").style.cssText = "display: none";
+                    }
                     $("#fechaInicioClase").text(registroInfo?.clase.fecha);
                     $("#profesorClase").text(registroInfo?.clase.profesor);
                     $("#sociosMinimosClase").text(registroInfo?.clase.capMinima);
@@ -103,52 +108,59 @@
                     $("#inscriptosClase").text(registroInfo?.registros?.length || 0);
                     var imgsrc = registroInfo.clase.imageBlob ? "data:image/jpg;base64," + btoa(new Uint8Array(registroInfo.clase.imageBlob).reduce(function (data, byte) {
                         return data + String.fromCharCode(byte);
-                    }, '')) : "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png" 
+                    }, '')) : "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png"
                     $("#imageClase").attr("src", imgsrc);
                     var actividadId = registroInfo?.clase.idActividad;
                     var claseId = registroInfo.clase?.id;
-                    $("#seleccionarMedioPagoModal").attr("href", "verActividadInfo?actId="+ actividadId+ "&verInfoPago=true&claseId=" + claseId + "");
-                    if(!registroInfo.puntuacionProfesor){
+                    $("#seleccionarMedioPagoModal").attr("href", "verActividadInfo?actId=" + actividadId + "&verInfoPago=true&claseId=" + claseId + "");
+                    console.log(registroInfo)
+                    if (!registroInfo.puntuacionProfesor) {
                         $("#btnValorarProf").removeClass("hidden");
-                    }else{
+                    } else {
                         $("#tuPuntuacion").removeClass("hidden");
                         $("#tuPuntuacionNro").text(registroInfo.puntuacionProfesor.puntuacion);
-                        $("#btnValorarProf").addClass("hidden"); 
+                        $("#btnValorarProf").addClass("hidden");
                     }
                     window.registroInfo = null;
                     this.onload = null;
                 }
-           }else{
-                    const claseInfo = window?.claseInfo;
-                    if(claseInfo){
-                          loadPuntuacionProfesor(claseInfo.id);
-                    }
-                    idClass = claseInfo.id;
-                    let parentNode = document.getElementById("tablaContent");
-                    if (claseInfo === "Loading") {
-                        $("#contentInfo").css("display", "none");
-                        // document.getElementById("imageCup").setAttribute("src", "")
-                    } else {
-                        $("#contentInfo").css("display", "flex");
-                        $("#claseNombre").text(claseInfo?.nombre);
-                        $("#fechaInicioClase").text(claseInfo?.fecha);
-                        $("#profesorClase").text(claseInfo?.profesor);
-                        $("#sociosMinimosClase").text(claseInfo?.capMinima);
-                        $("#sociosMaximosClase").text(claseInfo?.capMaxima);
-                        $("#urlClase").text(claseInfo?.urlAcceso);
-                        $("#inscriptosClase").text(claseInfo?.registros?.length || 0);
-                        var imgsrc = claseInfo.imageBlob ? "data:image/jpg;base64," + btoa(new Uint8Array(claseInfo.imageBlob).reduce(function (data, byte) {
-                            return data + String.fromCharCode(byte);
-                        }, '')) : "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png"
-                        $("#imageClase").attr("src", imgsrc);
-                        var actividadId = claseInfo?.idActividad;
-                        var claseId = claseInfo?.id;
-                        $("#seleccionarMedioPagoModal").attr("href", "verActividadInfo?actId="+ actividadId+ "&verInfoPago=true&claseId=" + claseId + "");
-                        window.claseInfo = null;
-                        this.onload = null;
-                    }
+            } else {
+                const claseInfo = window?.claseInfo;
+                if (claseInfo) {
+                    loadPuntuacionProfesor(claseInfo.id);
                 }
-             }
+                idClass = claseInfo.id;
+                let parentNode = document.getElementById("tablaContent");
+                if (claseInfo === "Loading") {
+                    $("#contentInfo").css("display", "none");
+                    // document.getElementById("imageCup").setAttribute("src", "")
+                } else {
+                    $("#contentInfo").css("display", "flex");
+                    $("#claseNombre").text(claseInfo?.nombre);
+                    $("#fechaInicioClase").text(claseInfo?.fecha);
+                    if (claseInfo?.linkClase) {
+                        $("#videoClase").attr("src", claseInfo?.linkClase);
+                        document.getElementById("videoClase").style.cssText = "display: block";
+                    } else {
+                        document.getElementById("videoClase").style.cssText = "display: none";
+                    }
+                    $("#profesorClase").text(claseInfo?.profesor);
+                    $("#sociosMinimosClase").text(claseInfo?.capMinima);
+                    $("#sociosMaximosClase").text(claseInfo?.capMaxima);
+                    $("#urlClase").text(claseInfo?.urlAcceso);
+                    $("#inscriptosClase").text(claseInfo?.registros?.length || 0);
+                    var imgsrc = claseInfo.imageBlob ? "data:image/jpg;base64," + btoa(new Uint8Array(claseInfo.imageBlob).reduce(function (data, byte) {
+                        return data + String.fromCharCode(byte);
+                    }, '')) : "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png"
+                    $("#imageClase").attr("src", imgsrc);
+                    var actividadId = claseInfo?.idActividad;
+                    var claseId = claseInfo?.id;
+                    $("#seleccionarMedioPagoModal").attr("href", "verActividadInfo?actId=" + actividadId + "&verInfoPago=true&claseId=" + claseId + "");
+                    window.claseInfo = null;
+                    this.onload = null;
+                }
+            }
+        }
     });
 
 
@@ -257,6 +269,13 @@
                     <div class="flex-grow h-12 p-4 border-gray-300 border rounded-md flex items-center gap-x-2 justify-start">
                         <i class="fa-solid fa-link"></i>
                         <span id="urlClase"></span>
+                    </div>
+                </div>
+                <div class="w-full p-6 gap-y-1 border-b border-gray-300 flex flex-col items-start justify-start">
+                    <p class="text-sm font-medium text-gray-900 w-1/3">Video Clae</p>
+                    <div class="flex-grow p-4  w-full border-gray-300 border rounded-md flex items-center gap-x-2 justify-start">
+                        <iframe id="videoClase" width="100%" height="250">
+                        </iframe>
                     </div>
                 </div>
             </div>

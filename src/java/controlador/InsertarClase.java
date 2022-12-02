@@ -4,10 +4,6 @@
  */
 package controlador;
 
-import Clase.ClaseBO;
-import Clase.DtClase;
-import Premio.PremioBO;
-import Registro.DtRegistro;
 import com.google.gson.Gson;
 import controlador.utils.ClaseInsertDTO;
 import controlador.utils.ResponseUtil;
@@ -20,6 +16,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +25,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import ws.DtClase;
+import ws.DtRegistro;
+import ws.Publicador;
+import ws.Publicador_Service;
 
 /**
  *
@@ -35,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "InsertarClase", urlPatterns = {"/insertarClase"})
 public class InsertarClase extends HttpServlet {
-                                            
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -91,6 +94,9 @@ public class InsertarClase extends HttpServlet {
 
         File outputFile = null;
         byte[] data = null;
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
         try {
             ClaseInsertDTO claseToInsert = new Gson().fromJson(request.getReader(), ClaseInsertDTO.class);
             String crntImage = claseToInsert.getFileToSend();
@@ -117,27 +123,49 @@ public class InsertarClase extends HttpServlet {
             Integer profesorId = Integer.parseInt(claseToInsert.getIdProfesor());
             Integer capMinima = Integer.parseInt(claseToInsert.getSociosMin());
             Integer capMaxima = Integer.parseInt(claseToInsert.getSociosMax());
+            String linkVideo = claseToInsert.getVideoClase();
             String urlAcceso = claseToInsert.getUrlAcceso();
             Date fechaRegistro = new Date();
             List<DtRegistro> registros = null;
             Integer idActividad = Integer.parseInt(claseToInsert.getIdActividad());
-            Integer idInstitucion = null;
             Integer cantidadSorteados = 0;
             if (claseToInsert.getCantidadSorteados() != null && !claseToInsert.getCantidadSorteados().equals("")) {
                 cantidadSorteados = Integer.parseInt(claseToInsert.getCantidadSorteados());
             }
-                                        System.out.println("si3");
 
             String nombrePremio = claseToInsert.getNombrePremio();
 
-            ClaseBO claseBo = new ClaseBO();
-            DtClase claseToInsertDt = new DtClase(0, claseNombre, fechaClase, profesorNombre, profesorId, capMinima, capMaxima, urlAcceso, fechaRegistro, registros, idActividad, null, idInstitucion, outputFile, data);
-            if (nombrePremio == null || nombrePremio.equals("")) {
-               claseBo.insertarClase(claseToInsertDt.getIdActividad(), claseToInsertDt);
-            } else {
-                claseBo.insertarClaseAndPremio(claseToInsertDt.getIdActividad(), claseToInsertDt, nombrePremio, cantidadSorteados);
-            }
+            GregorianCalendar fechaClaseData = new GregorianCalendar();
+            fechaClaseData.setTime(fechaClase);
+            XMLGregorianCalendar fechaParssed;
+            fechaParssed = DatatypeFactory.newInstance().newXMLGregorianCalendar(fechaClaseData);
 
+            GregorianCalendar fechaHoy = new GregorianCalendar();
+            fechaHoy.setTime(fechaRegistro);
+            XMLGregorianCalendar fechaParssedRegistro;
+            fechaParssedRegistro = DatatypeFactory.newInstance().newXMLGregorianCalendar(fechaHoy);
+
+            DtClase claseToInsertDt = new DtClase();
+            claseToInsertDt.setId(0);
+            claseToInsertDt.setNombre(claseNombre);
+            claseToInsertDt.setProfesor(profesorNombre);
+            claseToInsertDt.setProfesorId(profesorId);
+            claseToInsertDt.setCapMaxima(capMaxima);
+            claseToInsertDt.setCapMinima(capMinima);
+            claseToInsertDt.setUrlAcceso(urlAcceso);
+            claseToInsertDt.setFecha(fechaParssed);
+            claseToInsertDt.setFechaRegistro(fechaParssedRegistro);
+            claseToInsertDt.setIdActividad(idActividad);
+            if (outputFile != null) {
+                claseToInsertDt.setImage(outputFile.toString());
+            }
+            claseToInsertDt.setLinkClase(linkVideo);
+            claseToInsertDt.setImageBlob(data);
+            if (nombrePremio == null || nombrePremio.equals("")) {
+                publicador.insertarClase(claseToInsertDt.getIdActividad(), claseToInsertDt);
+            } else {
+                publicador.insertarClaseAndPremio(claseToInsertDt.getIdActividad(), claseToInsertDt, nombrePremio, cantidadSorteados);
+            }
             ResponseUtil respUtil = new ResponseUtil(true, "Clase insertada correctamente", claseToInsertDt);
 
             PrintWriter out = response.getWriter();

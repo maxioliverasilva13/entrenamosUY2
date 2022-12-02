@@ -4,9 +4,7 @@
  */
 package controlador;
 
-import Premio.PremioDao;
 import com.google.gson.Gson;
-import customsDtos.ClaseInfoToReturn;
 import customsDtos.ResponseServer;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +13,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.PremioDTO;
+import ws.Publicador;
+import ws.Publicador_Service;
 
 /**
  *
@@ -62,12 +63,14 @@ public class PremioById extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            Publicador_Service pucService = new Publicador_Service();
+            Publicador publicador = pucService.getPublicadorPort();
+
             String premioId = request.getParameter("premioId");
-            PremioDao premDao = new PremioDao();
-            Premio.Premio prem = premDao.existe(Integer.parseInt(premioId));
+            PremioDTO prem = publicador.premioById(Integer.parseInt(premioId));
 
             PrintWriter out = response.getWriter();
-            ResponseServer claseToReturn = new ResponseServer(200, "success", prem.getDtPremio());
+            ResponseServer claseToReturn = new ResponseServer(200, "success", prem);
             String claseJSON = new Gson().toJson(claseToReturn);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

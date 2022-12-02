@@ -4,7 +4,6 @@
  */
 package controlador;
 
-import Actividad.ActividadBO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.Publicador;
+import ws.Publicador_Service;
 
 /**
  *
@@ -38,7 +39,7 @@ public class FinalizarActividad extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FinalizarActividad</title>");            
+            out.println("<title>Servlet FinalizarActividad</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet FinalizarActividad at " + request.getContextPath() + "</h1>");
@@ -60,19 +61,20 @@ public class FinalizarActividad extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String actId = request.getParameter("actId");
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
 
         if (actId != null) {
-            ActividadBO actBO = new ActividadBO();
             try {
                 System.out.println("Intentando finalizar...");
-                actBO.cambiarEstado(Integer.parseInt(actId), "Finalizada");
-                System.out.println("Actividad "+ actId + " finalizada con exito!");
+                publicador.cambiarEstadoActividad(Integer.parseInt(actId), "Finalizada");
+                System.out.println("Actividad " + actId + " finalizada con exito!");
                 request.setAttribute("exito", "true");
-                response.setStatus(HttpServletResponse.SC_OK, "Actividad finalizada con exito!"); 
+                response.setStatus(HttpServletResponse.SC_OK, "Actividad finalizada con exito!");
             } catch (Exception e) {
                 System.out.println("Error al finalizar!");
                 System.out.println(e.getMessage());
-                response.sendError(400,"La actividad ya fue finalizada");
+                response.sendError(400, "La actividad ya fue finalizada");
             }
 //            DtClase claseInfo = claseBO.consultarClase(Integer.parseInt(claseId));
 //            // request.setAttribute("selectedCuponeraInfo", cupinfo);

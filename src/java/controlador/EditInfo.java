@@ -4,19 +4,13 @@
  */
 package controlador;
 
-import Profesor.Profesor;
-import Profesor.ProfesorBO;
-import Profesor.dtos.ProfesorDTO;
-import Profesor.dtos.ProfesorEditDTO;
-import Socio.SocioBO;
-import Socio.dtos.SocioDTO;
-import Socio.dtos.SocioEditDTO;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -25,8 +19,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import spals.shaded.com.google.common.io.ByteStreams;
 import util.BlobToImage;
+import ws.ProfesorDTO;
+import ws.ProfesorEditDTO;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.SocioDTO;
+import ws.SocioEditDTO;
 
 /**
  *
@@ -89,6 +91,8 @@ public class EditInfo extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html");
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
 
         // Asignación de variables en común para ambos tipos d usuario
         String userType = request.getParameter("userType");
@@ -104,82 +108,124 @@ public class EditInfo extends HttpServlet {
         } catch (Exception e) {
             System.err.println("fechaNacimiento parse error catched, file: EditInfo.java");
         }
-        
 
         String pass = request.getParameter("password");
         int userId = Integer.parseInt(request.getParameter("userId"));
 
         if (userType.equals("Profesor")) {
             try {
-                ProfesorEditDTO data;
-                ProfesorBO profBO = new ProfesorBO();
+                ProfesorEditDTO data = new ProfesorEditDTO();
 
                 String description = request.getParameter("description");
                 String biography = request.getParameter("biography");
                 String website = request.getParameter("website");
-                
-                Part filePart = request.getPart("selected_file");
-                InputStream fileContent = null;
-                File avatar = null;
-                if(filePart.getSize() > 0){
-                    BlobToImage blobToImg = new BlobToImage();
-                    fileContent = filePart.getInputStream();
-                    byte[] targetArray = fileContent.readAllBytes();
-                    avatar = blobToImg.writeBytesToFile(nickname, targetArray);
-                }
-                
-                if (pass == null || request.getParameter("confirmPassword").equals("")) {
-                    // NO modifico password
-                    data = new ProfesorEditDTO(name, lastname, nickname, null, description, biography, website, mail, fechaNacimientoDate, avatar != null ? avatar : null);
-                    profBO.editProfesorById(userId, data);
-                    //System.out.println("profesor editado correctamente! (no editaste password)");
-                    response.sendRedirect("verPerfil");
-                } else {
-                    // SI modifico password
-                    char[] charPass = request.getParameter("confirmPassword").toCharArray();
-                    data = new ProfesorEditDTO(name, lastname, nickname, charPass, description, biography, website, mail, fechaNacimientoDate, avatar != null ? avatar : null);
-                    profBO.editProfesorById(userId, data);
-                    //System.out.println("profesor editado correctamente! (SI editaste password)");
-                    response.sendRedirect("verPerfil");
-                }
-                ProfesorBO profeBO = new ProfesorBO();
-                ProfesorDTO profe = profeBO.getProfesorById(userId);
-                session.setAttribute("currentSessionUser", profe);
-            } catch (Exception e) {
-            }
-        }
-        
-        if (userType.equals("Socio")) {
-            try {
-                SocioEditDTO dataSocio;
-                SocioBO socioBO = new SocioBO();
 
                 Part filePart = request.getPart("selected_file");
                 InputStream fileContent = null;
                 File avatar = null;
-                if(filePart.getSize() > 0){
+                if (filePart.getSize() > 0) {
                     BlobToImage blobToImg = new BlobToImage();
                     fileContent = filePart.getInputStream();
-                    byte[] targetArray = fileContent.readAllBytes();
+                    byte[] targetArray = ByteStreams.toByteArray(fileContent);
                     avatar = blobToImg.writeBytesToFile(nickname, targetArray);
                 }
-                
+                GregorianCalendar fecha = new GregorianCalendar();
+                fecha.setTime(fechaNacimientoDate);
+                XMLGregorianCalendar fechaParssed;
+                fechaParssed = DatatypeFactory.newInstance().newXMLGregorianCalendar(fecha);
+
                 if (pass == null || request.getParameter("confirmPassword").equals("")) {
-                    // NO modifico password
-                    dataSocio = new SocioEditDTO(name, lastname, nickname, null, mail, fechaNacimientoDate, avatar != null ? avatar : null);
-                    socioBO.editar(userId, dataSocio);
+                    data.setNombre(name);
+                    data.setApellido(lastname);
+                    data.setNickname(nickname);
+                    data.setDescripcionGeneral(description);
+                    data.setBiografia(biography);
+                    data.setLinkSitioWeb(website);
+                    data.setEmail(mail);
+                    data.setFechaNacimiento(fechaParssed);
+                    if (avatar != null) {
+                        data.setImage(avatar.toString());
+                    }
+                    publicador.editProfeInfo(userId, data, "");
+                    //System.out.println("profesor editado correctamente! (no editaste password)");
                     response.sendRedirect("verPerfil");
                 } else {
                     // SI modifico password
-                    char[] charPass = request.getParameter("confirmPassword").toCharArray();
-                    dataSocio = new SocioEditDTO(name, lastname, nickname, charPass, mail, fechaNacimientoDate, avatar != null ? avatar : null);
-                    socioBO.editar(userId, dataSocio);
+                    String newPass = request.getParameter("confirmPassword");
+                    data.setNombre(name);
+                    data.setApellido(lastname);
+                    data.setNickname(nickname);
+                    data.setDescripcionGeneral(description);
+                    data.setBiografia(biography);
+                    data.setLinkSitioWeb(website);
+                    data.setEmail(mail);
+                    // data.setPassword
+                    data.setFechaNacimiento(fechaParssed);
+                    data.setImage(avatar != null ? avatar.toString() : null);
+                    publicador.editProfeInfo(userId, data, newPass);
                     response.sendRedirect("verPerfil");
                 }
-                SocioBO socBO = new SocioBO();
-                SocioDTO socio = socBO.consultarSocio(userId);
+                ProfesorDTO profe = publicador.getProfesorById(userId);
+                session.setAttribute("currentSessionUser", profe);
+            } catch (Exception e) {
+                System.out.println("Aca1");
+
+                System.out.println(e);
+            }
+        }
+
+        if (userType.equals("Socio")) {
+            try {
+                SocioEditDTO dataSocio = new SocioEditDTO();
+                Part filePart = request.getPart("selected_file");
+                InputStream fileContent = null;
+                File avatar = null;
+                if (filePart.getSize() > 0) {
+                    BlobToImage blobToImg = new BlobToImage();
+                    fileContent = filePart.getInputStream();
+                    byte[] targetArray = ByteStreams.toByteArray(fileContent);
+                    avatar = blobToImg.writeBytesToFile(nickname, targetArray);
+                }
+
+                GregorianCalendar fecha = new GregorianCalendar();
+                fecha.setTime(fechaNacimientoDate);
+                XMLGregorianCalendar fechaParssed;
+                fechaParssed = DatatypeFactory.newInstance().newXMLGregorianCalendar(fecha);
+                if (pass == null || request.getParameter("confirmPassword").equals("")) {
+                    dataSocio.setNombre(name);
+                    dataSocio.setApellido(lastname);
+                    dataSocio.setNickname(nickname);
+                    dataSocio.setEmail(mail);
+                    dataSocio.setNacimiento(fechaParssed);
+                    if (avatar != null) {
+                        dataSocio.setImage(avatar.toString());
+                    }
+                    publicador.editSocioInfo(userId, dataSocio, "");
+                    System.out.println("llego 6");
+
+                    response.sendRedirect("verPerfil");
+                } else {
+                    // SI modifico password
+                    String newPass = request.getParameter("confirmPassword");
+                    dataSocio.setNombre(name);
+                    dataSocio.setApellido(lastname);
+                    dataSocio.setNickname(nickname);
+                    dataSocio.setEmail(mail);
+                    dataSocio.setNacimiento(fechaParssed);
+                    if (avatar != null) {
+                        dataSocio.setImage(avatar.toString());
+                    }
+                    //dataSocio.setPassport
+                    publicador.editSocioInfo(userId, dataSocio, newPass);
+                    
+
+                    response.sendRedirect("verPerfil");
+                }
+                SocioDTO socio = publicador.consultarSocio(userId);
                 session.setAttribute("currentSessionUser", socio);
             } catch (Exception e) {
+                System.out.println("Aca12");
+                System.out.println(e);
             }
         }
     }

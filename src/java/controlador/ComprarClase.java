@@ -4,20 +4,13 @@
  */
 package controlador;
 
-import Exceptions.ClassHasMaxOfReg;
-import Exceptions.CompraCuponeraNotFoundException;
-import Exceptions.MaxClasesForCuponera;
-import Exceptions.SocioAlreadyAreInClass;
-import Registro.DtRegistro;
-import Registro.InterfaceRegistroBO;
-import Registro.RegistroBO;
-import Usuario.dtos.UsuarioDTO;
 import com.google.gson.Gson;
 import customsDtos.ResponseServer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +19,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import ws.DtRegistro;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.UsuarioDTO;
 
 /**
  *
@@ -50,7 +50,7 @@ public class ComprarClase extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ComprarClase</title>");            
+            out.println("<title>Servlet ComprarClase</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ComprarClase at " + request.getContextPath() + "</h1>");
@@ -85,18 +85,20 @@ public class ComprarClase extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
         String claseIdStr = request.getParameter("claseId");
         String precioFinalStr = request.getParameter("precioFinal");
         String cuponeraIdStr = request.getParameter("choosedCupID");
-        HttpSession session = request.getSession(true);	    
+        HttpSession session = request.getSession(true);
         UsuarioDTO user = (UsuarioDTO) session.getAttribute("currentSessionUser");
 
-        if(claseIdStr == null || precioFinalStr == null){
-           response.sendError(400,"Datos invalidos");
-           return;
+        if (claseIdStr == null || precioFinalStr == null) {
+            response.sendError(400, "Datos invalidos");
+            return;
         }
-        int socioID = user.getId();
-
+        int socioID = user.getID();
 
         float precioFinalFlt = Float.parseFloat(precioFinalStr);
         int claseId = Integer.parseInt(claseIdStr);
@@ -104,36 +106,49 @@ public class ComprarClase extends HttpServlet {
         List<Integer> clases = new ArrayList<Integer>();
         clases.add(claseId);
 
-        DtRegistro registro = new DtRegistro(0,precioFinalFlt,new Date(),user.getNickname(),null);
-        InterfaceRegistroBO regBo = new RegistroBO();
-
-
-        Integer cuponeraID = null;
-        if(!cuponeraIdStr.equals("") && !(cuponeraIdStr == null)){
-            cuponeraID = Integer.parseInt(cuponeraIdStr);
-        }
-
-        Gson gson = new Gson();
-        ResponseServer res;
-        PrintWriter pw = response.getWriter();
-        response.setContentType("application/json");
-        String responseStr;
+        DtRegistro registro = new DtRegistro();
+        registro.setCosto(precioFinalFlt);
+        GregorianCalendar fecha = new GregorianCalendar();
+        fecha.setTime(new Date());
+        XMLGregorianCalendar fechaParssed;
+        System.out.println("llego 12");
         try {
-            regBo.agregarRegistro(socioID, claseId,  registro,cuponeraID);
-            res = new ResponseServer(200,"Has comprado la clase correctamente!");
-            responseStr = gson.toJson(res);
-            pw.print(responseStr);
-        } catch (ClassHasMaxOfReg ex) { 
-            response.sendError(400,ex.getMessage());
-        } catch (SocioAlreadyAreInClass ex) {
-            res = new ResponseServer(400,"Ya estas registrado en esta clase");  
-            responseStr = gson.toJson(res);
-            pw.print(responseStr);
-        }catch(Exception e){
-            res = new ResponseServer(500,e.getMessage());  
-            responseStr = gson.toJson(res);
-            pw.print(responseStr);
+            fechaParssed = DatatypeFactory.newInstance().newXMLGregorianCalendar(fecha);
+
+            registro.setFecha(fechaParssed);
+            registro.setSocioName(user.getNICKNAME());
+
+            Integer cuponeraID = null;
+            if (!cuponeraIdStr.equals("") && !(cuponeraIdStr == null)) {
+                cuponeraID = Integer.parseInt(cuponeraIdStr);
+            }
+
+            Gson gson = new Gson();
+            ResponseServer res;
+            PrintWriter pw = response.getWriter();
+            response.setContentType("application/json");
+            String responseStr;
+            try {
+                if (cuponeraID != null) {
+                    publicador.agregarRegistro(socioID, claseId, registro, cuponeraID);
+                } else {
+                    publicador.agregarRegistroSinCuponera(socioID, claseId, registro);
+                }
+                res = new ResponseServer(200, "Has comprado la clase correctamente!");
+                responseStr = gson.toJson(res);
+                pw.print(responseStr);
+            } catch (Exception e) {
+                System.out.println(e);
+                res = new ResponseServer(500, e.getMessage());
+                responseStr = gson.toJson(res);
+                pw.print(responseStr);
+            }
+
+        } catch (DatatypeConfigurationException ex) {
+            System.out.println("error aca");
+            System.out.println(ex);
         }
+
     }
 
     /**

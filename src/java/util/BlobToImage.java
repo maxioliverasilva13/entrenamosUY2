@@ -47,6 +47,22 @@ public class BlobToImage {
         }
         return "data:image/jpg;base64," + base64DataString;
     }
+    
+    public String getBase64StringImageFromString(String strBlob) {
+        byte[] imageBlob = strBlob.getBytes();
+        if (imageBlob == null) {
+            return "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png";
+        }
+        byte[] encoded = Base64.getEncoder().encode(imageBlob);
+        String base64DataString = "";
+        try {
+            base64DataString = new String(encoded , "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(BlobToImage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "data:image/jpg;base64," + base64DataString;
+    }
+
     public String encodeFileToBase64(File file) {
     try {
          if (file == null) {
@@ -60,6 +76,17 @@ public class BlobToImage {
     }
     
     public byte[] getFileToByteArray(File file) throws FileNotFoundException, IOException {
+        if(file == null){
+            return null;
+        }
+        byte[] picInBytes = new byte[(int) file.length()];
+        FileInputStream fileInputStream = new FileInputStream(file);
+        fileInputStream.read(picInBytes);
+        fileInputStream.close();
+        return picInBytes;
+    }
+    
+    public byte[] getFileStringToFile(File file) throws FileNotFoundException, IOException {
         if(file == null){
             return null;
         }

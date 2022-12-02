@@ -4,10 +4,10 @@ package customsDtos;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-import Clase.DtClase;
-import Socio.dtos.SocioDTO;
 import java.util.ArrayList;
 import java.util.List;
+import ws.DtClase;
+import ws.SocioDTO;
 
 /**
  *

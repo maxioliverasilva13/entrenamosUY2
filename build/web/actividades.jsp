@@ -4,10 +4,9 @@
     Author     : Maximiliano Olivera
 --%>
 
-<%@page import="Actividad.dtos.ActividadDTO"%>
-<%@page import="Categoria.DtCategoria"%>
+<%@page import="ws.DtCategoria"%>
+<%@page import="ws.DtInstitucion"%>
 <%@page import="util.BlobToImage"%>
-<%@page import="Institucion.DtInstitucion"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
