@@ -236,12 +236,28 @@
                     </div>
                     <%
                         if (userInfo == null) {
+                            if (actividades.size() > 0){
+                            %>
+                                <p class="text-[#3A5A6E my-2 font-medium text-2xl">Aquí tienes algunas actividades, para acceder a ellas debes iniciar sesión!</p>
+                            <%
+                            }else{ // No hay acts
+                            %>
+                                <p class="text-[#3A5A6E my-2 font-medium text-2xl">Lo sentimos, pero actualmente no contamos con Actividades disponibles para listarte!</p>
+                            <%
+                            }
                     %>
-                            <p class="text-[#3A5A6E my-2 font-medium text-2xl">Aquí tienes algunas actividades, para acceder a ellas debes iniciar sesión!</p>
                     <%
                         }else{
-                    %>
-                            <p class="text-[#3A5A6E my-2 font-medium text-2xl">Listado de actividades</p>
+                            if (actividades.size() > 0){
+                        %>
+                                <p class="text-[#3A5A6E my-2 font-medium text-2xl">Listado de actividades</p>
+                        <%
+                            }else{
+                        %>
+                                <p class="text-[#3A5A6E my-2 font-medium text-2xl">Lo sentimos, pero actualmente no contamos con Actividades disponibles para listarte!</p>
+                        <%
+                            }
+                        %>
                     <%
                         }
                     %>
