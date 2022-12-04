@@ -1226,5 +1226,53 @@
         <delete dir="${build.generated.sources.dir}/jax-ws/ws"/>
         <delete dir="${build.generated.dir}/jax-wsCache/publicador_74"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-publicador, wsimport-client-publicador_1, wsimport-client-publicador_2, wsimport-client-publicador_3, wsimport-client-publicador_4, wsimport-client-publicador_5, wsimport-client-publicador_6, wsimport-client-publicador_7, wsimport-client-publicador_8, wsimport-client-publicador_9, wsimport-client-publicador_10, wsimport-client-publicador_11, wsimport-client-publicador_12, wsimport-client-publicador_13, wsimport-client-publicador_14, wsimport-client-publicador_15, wsimport-client-publicador_16, wsimport-client-publicador_17, wsimport-client-publicador_18, wsimport-client-publicador_19, wsimport-client-publicador_20, wsimport-client-publicador_21, wsimport-client-publicador_22, wsimport-client-publicador_23, wsimport-client-publicador_24, wsimport-client-publicador_25, wsimport-client-publicador_26, wsimport-client-publicador_27, wsimport-client-publicador_28, wsimport-client-publicador_29, wsimport-client-publicador_30, wsimport-client-publicador_31, wsimport-client-publicador_32, wsimport-client-publicador_33, wsimport-client-publicador_34, wsimport-client-publicador_35, wsimport-client-publicador_36, wsimport-client-publicador_37, wsimport-client-publicador_38, wsimport-client-publicador_39, wsimport-client-publicador_40, wsimport-client-publicador_41, wsimport-client-publicador_42, wsimport-client-publicador_43, wsimport-client-publicador_44, wsimport-client-publicador_45, wsimport-client-publicador_46, wsimport-client-publicador_47, wsimport-client-publicador_48, wsimport-client-publicador_49, wsimport-client-publicador_50, wsimport-client-publicador_51, wsimport-client-publicador_52, wsimport-client-publicador_53, wsimport-client-publicador_54, wsimport-client-publicador_55, wsimport-client-publicador_56, wsimport-client-publicador_57, wsimport-client-publicador_58, wsimport-client-publicador_59, wsimport-client-publicador_60, wsimport-client-publicador_61, wsimport-client-publicador_62, wsimport-client-publicador_63, wsimport-client-publicador_64, wsimport-client-publicador_65, wsimport-client-publicador_66, wsimport-client-publicador_67, wsimport-client-publicador_68, wsimport-client-publicador_69, wsimport-client-publicador_70, wsimport-client-publicador_71, wsimport-client-publicador_72, wsimport-client-publicador_73, wsimport-client-publicador_74"/>
+    <target name="wsimport-client-publicador_75" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/publicador_75"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/publicador_75" destdir="${build.generated.dir}/jax-wsCache/publicador_75" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/publicador_75/wsdl/localhost_2222/ws/publicador.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:2222/ws/publicador?wsdl" xnocompile="true" xendorsed="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/publicador_75/wsdl/localhost_2222/ws/publicador.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/publicador_75"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/publicador_75">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-publicador_75" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/publicador_75"/>
+    </target>
+    <target name="wsimport-client-publicador_76" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/publicador_76"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/publicador_76" destdir="${build.generated.dir}/jax-wsCache/publicador_76" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/publicador_76/wsdl/localhost_2222/ws/publicador.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:2222/ws/publicador?wsdl" xnocompile="true" xendorsed="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/publicador_76/wsdl/localhost_2222/ws/publicador.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/publicador_76"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/publicador_76">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-publicador_76" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/publicador_76"/>
+    </target>
+    <target name="wsimport-client-publicador_77" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/publicador_77"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/publicador_77" destdir="${build.generated.dir}/jax-wsCache/publicador_77" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/publicador_77/wsdl/localhost_2222/ws/publicador.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:2222/ws/publicador?wsdl" xnocompile="true" xendorsed="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/publicador_77/wsdl/localhost_2222/ws/publicador.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/publicador_77"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/publicador_77">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-publicador_77" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/publicador_77"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-publicador, wsimport-client-publicador_1, wsimport-client-publicador_2, wsimport-client-publicador_3, wsimport-client-publicador_4, wsimport-client-publicador_5, wsimport-client-publicador_6, wsimport-client-publicador_7, wsimport-client-publicador_8, wsimport-client-publicador_9, wsimport-client-publicador_10, wsimport-client-publicador_11, wsimport-client-publicador_12, wsimport-client-publicador_13, wsimport-client-publicador_14, wsimport-client-publicador_15, wsimport-client-publicador_16, wsimport-client-publicador_17, wsimport-client-publicador_18, wsimport-client-publicador_19, wsimport-client-publicador_20, wsimport-client-publicador_21, wsimport-client-publicador_22, wsimport-client-publicador_23, wsimport-client-publicador_24, wsimport-client-publicador_25, wsimport-client-publicador_26, wsimport-client-publicador_27, wsimport-client-publicador_28, wsimport-client-publicador_29, wsimport-client-publicador_30, wsimport-client-publicador_31, wsimport-client-publicador_32, wsimport-client-publicador_33, wsimport-client-publicador_34, wsimport-client-publicador_35, wsimport-client-publicador_36, wsimport-client-publicador_37, wsimport-client-publicador_38, wsimport-client-publicador_39, wsimport-client-publicador_40, wsimport-client-publicador_41, wsimport-client-publicador_42, wsimport-client-publicador_43, wsimport-client-publicador_44, wsimport-client-publicador_45, wsimport-client-publicador_46, wsimport-client-publicador_47, wsimport-client-publicador_48, wsimport-client-publicador_49, wsimport-client-publicador_50, wsimport-client-publicador_51, wsimport-client-publicador_52, wsimport-client-publicador_53, wsimport-client-publicador_54, wsimport-client-publicador_55, wsimport-client-publicador_56, wsimport-client-publicador_57, wsimport-client-publicador_58, wsimport-client-publicador_59, wsimport-client-publicador_60, wsimport-client-publicador_61, wsimport-client-publicador_62, wsimport-client-publicador_63, wsimport-client-publicador_64, wsimport-client-publicador_65, wsimport-client-publicador_66, wsimport-client-publicador_67, wsimport-client-publicador_68, wsimport-client-publicador_69, wsimport-client-publicador_70, wsimport-client-publicador_71, wsimport-client-publicador_72, wsimport-client-publicador_73, wsimport-client-publicador_74, wsimport-client-publicador_75, wsimport-client-publicador_76, wsimport-client-publicador_77"/>
 </project>

@@ -15,17 +15,17 @@
         document.getElementById("infoSorteoModal").onload = (data) => {
             const premioInfo = data?.data || {};
             const ganadores = premioInfo?.registros?.map((reg) => {
-                return reg?.socio?.NOMBRE;
+                return reg?.socio?.nombre;
             })
             const participantes = premioInfo?.clase?.registros?.map((reg) => {
-                return reg?.socio?.NOMBRE;
+                return reg?.socio?.nombre;
             })
             $("#descripcionPremio").text(premioInfo?.descripcion)
             $("#cantParticipantes").text(participantes.toString()?.replaceAll(",", ", "))
             $("#cantGanadores").text(ganadores?.toString()?.replaceAll(",", ", "))
             $("#cantGan").text(premioInfo?.cantidadSorteados)
 
-            const fechaValidez = new Date(premioInfo?.fechaCreacion);
+            const fechaValidez = new Date(premioInfo?.fechaCreacion?.month + "/" + premioInfo?.fechaCreacion?.day + "/" + premioInfo?.fechaCreacion?.year);
             fechaValidez.setDate(fechaValidez.getDate() + 30);
             $("#validezPremio").text(fechaValidez?.toLocaleDateString());
             const imprimirComprobanteButton = document.getElementById("imprimirComprobante");

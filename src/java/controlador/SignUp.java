@@ -82,6 +82,7 @@ public class SignUp extends HttpServlet {
             ins.put(inst.getId(), inst);
         });
 
+        System.out.println("llego 1");
         request.setAttribute("instituciones", ins);
         request.getRequestDispatcher("/signup.jsp").forward(request, response);
 
@@ -109,6 +110,7 @@ public class SignUp extends HttpServlet {
         String Contraseña = request.getParameter("confirmPassword");
         String fechaNacimiento = request.getParameter("fechaNacimiento");
         Date fechaNacimientoDate = null;
+        System.out.println("llego 1");
 
         Part filePart = request.getPart("file_upload");
         InputStream fileContent = null;
@@ -135,10 +137,12 @@ public class SignUp extends HttpServlet {
                 socioData.setNombre(Nombre);
                 socioData.setApellido(Apellido);
                 socioData.setEmail(Email);
-                socioData.setImage(avatar.toString());
+                if (avatar != null) {
+                    socioData.setImage(avatar.toString());
+                }
                 socioData.setNacimiento(fechaParssed);
                 // socioData.setContrase{a
-                
+
                 publicador.crearSocio(socioData, Contraseña);
                 System.out.println("Socio Creado");
                 request.setAttribute("signUpSucces", true);
@@ -147,13 +151,18 @@ public class SignUp extends HttpServlet {
                 String descripcion = request.getParameter("description");
                 String biografia = request.getParameter("about");
                 String website = request.getParameter("website");
+                System.out.println("ax1");
                 int idInstitucion = Integer.parseInt(request.getParameter("institucion"));
+                System.out.println("ax12");
+
                 ProfesorCreateDTO socioData = new ProfesorCreateDTO();
                 socioData.setIdInstitucion(idInstitucion);
                 socioData.setNombre(Nombre);
                 socioData.setApellido(Apellido);
                 socioData.setEmail(Email);
-                socioData.setImage(avatar.toString());
+                if (avatar != null) {
+                    socioData.setImage(avatar.toString());
+                }
                 socioData.setNacimiento(fechaParssed);
                 socioData.setBiografia(biografia);
                 socioData.setLinkSitioWeb(website);
@@ -164,6 +173,7 @@ public class SignUp extends HttpServlet {
                 request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
         } catch (Exception e) {
+            System.out.println(e);
             request.setAttribute("invalid-signup", e.getMessage());
             request.getRequestDispatcher("/signup.jsp").forward(request, response);
         }

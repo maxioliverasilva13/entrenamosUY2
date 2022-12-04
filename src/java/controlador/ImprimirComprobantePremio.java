@@ -69,8 +69,7 @@ public class ImprimirComprobantePremio extends HttpServlet {
         Publicador publicador = pucService.getPublicadorPort();
 
         if (userId != null && premioId != null) {
-            // File pdfComprobante = publicador.imprimirPremio(Integer.parseInt(premioId), Integer.parseInt(userId));
-            File pdfComprobante = new File("");
+            File pdfComprobante = new File(publicador.imprimirPremio(Integer.parseInt(premioId), Integer.parseInt(userId)));
             // Get PrintWriter object
             PrintWriter out = response.getWriter();
 

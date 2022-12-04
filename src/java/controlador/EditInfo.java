@@ -119,6 +119,7 @@ public class EditInfo extends HttpServlet {
                 String description = request.getParameter("description");
                 String biography = request.getParameter("biography");
                 String website = request.getParameter("website");
+                String newPass = request.getParameter("confirmPassword");
 
                 Part filePart = request.getPart("selected_file");
                 InputStream fileContent = null;
@@ -146,12 +147,11 @@ public class EditInfo extends HttpServlet {
                     if (avatar != null) {
                         data.setImage(avatar.toString());
                     }
-                    publicador.editProfeInfo(userId, data, "");
+                    publicador.editProfeInfo(userId, data, newPass);
                     //System.out.println("profesor editado correctamente! (no editaste password)");
                     response.sendRedirect("verPerfil");
                 } else {
                     // SI modifico password
-                    String newPass = request.getParameter("confirmPassword");
                     data.setNombre(name);
                     data.setApellido(lastname);
                     data.setNickname(nickname);
@@ -192,6 +192,7 @@ public class EditInfo extends HttpServlet {
                 XMLGregorianCalendar fechaParssed;
                 fechaParssed = DatatypeFactory.newInstance().newXMLGregorianCalendar(fecha);
                 if (pass == null || request.getParameter("confirmPassword").equals("")) {
+                    System.out.println("no Cambio password");
                     dataSocio.setNombre(name);
                     dataSocio.setApellido(lastname);
                     dataSocio.setNickname(nickname);
@@ -205,8 +206,11 @@ public class EditInfo extends HttpServlet {
 
                     response.sendRedirect("verPerfil");
                 } else {
+                    System.out.println("Cambio password");
                     // SI modifico password
                     String newPass = request.getParameter("confirmPassword");
+                    System.out.println(newPass);
+
                     dataSocio.setNombre(name);
                     dataSocio.setApellido(lastname);
                     dataSocio.setNickname(nickname);
@@ -217,7 +221,6 @@ public class EditInfo extends HttpServlet {
                     }
                     //dataSocio.setPassport
                     publicador.editSocioInfo(userId, dataSocio, newPass);
-                    
 
                     response.sendRedirect("verPerfil");
                 }

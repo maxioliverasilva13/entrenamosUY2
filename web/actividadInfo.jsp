@@ -287,7 +287,7 @@
                     </div>
                     <div class="flex w-full flex-row items-center justify-start py-5 border-b border-gray-300">
                         <p class="w-1/3 text-gray-500 text-sm font-medium">Fecha Alta</p>
-                        <p class="w-2/3 text-sm font-normal text-gray-900"><%=formatDate(infoAct.getFechaRegistro())%></p>
+                        <p class="w-2/3 text-sm font-normal text-gray-900"><%=infoAct.getFechaRegistro()%></p>
                     </div>
                     <div class="flex w-full flex-row items-start justify-start py-5 h-auto">
                         <p class="w-1/3 text-gray-500 text-sm font-medium">Descripcion</p>
@@ -380,7 +380,7 @@
                         </div>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getRegistros().size()%></p>
-                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=formatDate(clase.getFecha())%></p>
+                        <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getFecha()%></p>
                     </a>
                     <%
                             }

@@ -74,8 +74,8 @@
                 registros.forEach((registro) => {
                     const socioInfo = registro?.socio;
                     var element = document.createElement("template");
-                    const socioNombre = socioInfo.NOMBRE + " " + socioInfo.APELLIDO;
-                    const userId = socioInfo.ID;
+                    const socioNombre = socioInfo.nombre + " " + socioInfo.apellido;
+                    const userId = socioInfo.id;
 
                     var imgsrc = socioInfo.blobImage ? "data:image/jpg;base64," + btoa(new Uint8Array(socioInfo.blobImage).reduce(function (data, byte) {
                         return data + String.fromCharCode(byte);
@@ -91,7 +91,7 @@
                         </p>
                         <p class="font-medium text-sm flex-grow text-gray-900 text-left truncate max-w-full">
                             <i class="fa-solid fa-envelope mr-1"></i>
-                            <span>` + socioInfo.EMAIL + `</span>
+                            <span>` + socioInfo.email + `</span>
                         </p>
                         <a href="verPerfil?&userID=` + userId + `" class="font-medium transition-all cursor-pointer hover:underline text-sm mt-4 flex-grow text-indigo-800 text-center truncate max-w-full">Perfil ></a>
                     </div>`
