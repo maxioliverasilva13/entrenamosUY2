@@ -97,7 +97,7 @@ public class VerActividadInfo extends HttpServlet {
                 request.getRequestDispatcher("/actividadInfo.jsp").forward(request, response);
             }
         } catch (Exception e) {
-            response.sendRedirect("NotFound.jsp");
+            response.sendRedirect("NotFound.jsp");  
         }
     }
 
