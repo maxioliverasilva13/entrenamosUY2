@@ -187,8 +187,8 @@
 
                 <main class="flex-grow w-full h-full flex flex-col items-start justify-start gap-y-1">
                     <div class="w-full h-auto p-2 bg-blue-50 flex flex-col items-start justify-start gap-y-1.5 rounded-md ">
-                        <p class="text-[#0F225E] text-xl font-semibold">Buenas tardes <%=nameOfUser%>, esperamos que estes teniendo un buen dia! </p>
-                        <p class="text-[#1E40AF] text-xl font-medium">Tenemos un monton de actividades y clases para ti !</p>
+                        <p class="text-[#0F225E] text-xl font-semibold">Buenas tardes <%=nameOfUser%>, ¡esperamos que estes teniendo un buen día! </p>
+                        <p class="text-[#1E40AF] text-xl font-medium">Tenemos un montón de actividades y clases para ti!</p>
                     </div>
 
                     <%
@@ -203,7 +203,7 @@
                     <%
                         }
                     %>
-                    <p class="text-[#3A5A6E] font-medium lg:my-0 my-3 text-xl">Algunas Estadisticas Que Podrian Interesarte</p>
+                    <p class="text-[#3A5A6E] font-medium lg:my-0 my-3 text-xl">Algunas estadísticas que podrían Interesarte:</p>
                     <%-- Estadisticas Div Principal --%>
                     <div class="w-full lg:h-28 h-auto flex lg:flex-row flex-col items-center justify-between gap-x-6 mt-1">
                         <div class="h-full p-6 flex flex-row items-center justify-start flex-grow w-full rounded-xl shadow-md border border-gray-100">
@@ -234,7 +234,33 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-[#3A5A6E my-2 font-medium text-2xl">Aqui tienes algunas actividades, para acceder a ellas debes iniciar seison</p>
+                    <%
+                        if (userInfo == null) {
+                            if (actividades.size() > 0){
+                            %>
+                                <p class="text-[#3A5A6E my-2 font-medium text-2xl">Aquí tienes algunas actividades, para acceder a ellas debes iniciar sesión!</p>
+                            <%
+                            }else{ // No hay acts
+                            %>
+                                <p class="text-[#3A5A6E my-2 font-medium text-2xl">Lo sentimos, pero actualmente no contamos con Actividades disponibles para listarte!</p>
+                            <%
+                            }
+                    %>
+                    <%
+                        }else{
+                            if (actividades.size() > 0){
+                        %>
+                                <p class="text-[#3A5A6E my-2 font-medium text-2xl">Listado de actividades</p>
+                        <%
+                            }else{
+                        %>
+                                <p class="text-[#3A5A6E my-2 font-medium text-2xl">Lo sentimos, pero actualmente no contamos con Actividades disponibles para listarte!</p>
+                        <%
+                            }
+                        %>
+                    <%
+                        }
+                    %>
 
                     <%-- Recorrer actividades --%>
 
@@ -261,6 +287,7 @@
                             <jsp:param name="descripcion" value="<%=val.getDescripcion()%>" />
                             <jsp:param name="actID" value="<%=val.getId()%>" />
                             <jsp:param name="isFavorita" value="<%=isFavoriteOfUser.get()%>" />
+                            <jsp:param name="cantFavs" value="<%=val.getCantFavoritos()%>" />
                         </jsp:include>
                         <%
                             }

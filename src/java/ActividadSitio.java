@@ -18,7 +18,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import ws.Publicador;
 import ws.Publicador_Service;
-import ws.RegistroSitioDTO;
 
 /**
  *
@@ -71,11 +70,6 @@ public class ActividadSitio implements Filter {
         String browser = userAgent.getBrowser().toString();
         String Os = userAgent.getOperatingSystem().toString();
 
-        RegistroSitioDTO regSitio = new RegistroSitioDTO();
-        regSitio.setIp(ipAddress);
-        regSitio.setUrl(requestUrl);
-        regSitio.setBrowser(browser);
-        regSitio.setSo(Os);
         try {
             publicador.crearRegistroSitio(ipAddress, requestUrl, browser, Os);
         } catch (Exception e) {

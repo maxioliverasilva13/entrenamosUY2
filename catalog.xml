@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <system systemId="http://localhost:2222/ws/publicador?xsd=2" uri="src/conf/xml-resources/web-service-references/publicador_61/wsdl/localhost_2222/ws/publicador.xsd_2.xsd"/>
-    <system systemId="http://localhost:2222/ws/publicador?wsdl" uri="src/conf/xml-resources/web-service-references/publicador_77/wsdl/localhost_2222/ws/publicador.wsdl"/>
-    <system systemId="http://localhost:2222/ws/publicador?xsd=1" uri="src/conf/xml-resources/web-service-references/publicador_77/wsdl/localhost_2222/ws/publicador.xsd_1.xsd"/>
+    <system systemId="http://localhost:2222/ws/publicador?wsdl" uri="src/conf/xml-resources/web-service-references/publicador/wsdl/localhost_2222/ws/publicador.wsdl"/>
+    <system systemId="http://localhost:2222/ws/publicador?xsd=1" uri="src/conf/xml-resources/web-service-references/publicador/wsdl/localhost_2222/ws/publicador.xsd_1.xsd"/>
 </catalog>

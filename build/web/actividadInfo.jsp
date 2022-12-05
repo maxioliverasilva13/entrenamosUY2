@@ -28,6 +28,8 @@
     boolean openClaseModalInfo = modalIsOpen != null ? modalIsOpen.equals("true") : false;
     boolean openPagoModal = modalPagoOpen != null ? modalPagoOpen.equals("true") : false;
     boolean showAddClassButton = false;
+    
+    
 
     if (request.getAttribute("showAddClassButton") != null) {
         showAddClassButton = (boolean) request.getAttribute("showAddClassButton");
@@ -257,19 +259,22 @@
                     <%
                         if (deberiaPoderFavoritaActividad == true) {
                     %> 
-                    <button id="favoriteButton" class="right-6 top-10 cursor-pointer absolute" onclick="handleFavoriteActividad('<%=infoAct.getId()%>')" >
-                        <%
-                            if (isFavoriteOfUser.get() == true) {
-                        %> 
-                        <i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>
-                        <%
-                        } else {
-                        %> 
-                        <i class="fa-regular fa-heart text-[20px]"></i>
-                        <%
-                            }
-                        %>
-                    </button>
+                    <div class="flex right-6 top-10 absolute gap-x-2">
+                        <button id="favoriteButton" class="cursor-pointer" onclick="handleFavoriteActividad('<%=infoAct.getId()%>')" >
+                            <%
+                                if (isFavoriteOfUser.get() == true) {
+                            %> 
+                            <i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>
+                            <%
+                            } else {
+                            %> 
+                            <i class="fa-regular fa-heart text-[20px]"></i>
+                            <%
+                                }
+                            %>
+                        </button>
+                        <p id="favCount" class="text-lg font-medium"><%=infoAct.getCantFavoritos()%></p>
+                    </div>
                     <%
                         }
 
@@ -362,6 +367,9 @@
                     <%
                         if (clasesAct.size() == 0) {
                     %>
+<<<<<<< HEAD
+                    <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full <%  !%>flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
+=======
                     <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
                         <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
                         <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
@@ -371,6 +379,7 @@
                         for (DtClase clase : clasesAct) {
                     %>
                     <a onclick="handleGetClase('<%=clase.getId()%>', true)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
+>>>>>>> 29a04c9000b0047f5228390f345fa5da142c2181
                         <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
                             <img
                                 src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"

@@ -32,7 +32,6 @@ import util.BlobToImage;
 import util.JSONConverter;
 import ws.ActividadCreateDTO;
 import ws.DtCategoria;
-import ws.DtCategoriaArray;
 import ws.ProfesorDTO;
 import ws.Publicador;
 import ws.Publicador_Service;

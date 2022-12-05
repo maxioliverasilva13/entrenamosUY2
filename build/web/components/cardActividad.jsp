@@ -17,14 +17,21 @@
     <a href="verActividadInfo?actId=${param.actID}" class="w-full h-auto py-4 flex items-center justify-center border-t border-gray-300">
         <p class="text-sm decoration-none font-medium text-gray-700">Ver Mas</p>
     </a>
-    <button id="favoriteButton" class="right-6 top-10 cursor-pointer absolute"" >
-        <%
-            if (request.getParameter("isFavorita").equals("true")) {
-        %> 
-        <i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>
-        <%
-            }
-        %>
-    </button>
+    <div class="flex right-6 top-4 absolute gap-x-2 cursor-default">
+        <button id="favoriteButton">
+            <%
+                if (request.getParameter("isFavorita").equals("true")) {
+            %> 
+            <i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>
+            <%
+                }else{
+            %>
+            <i class="fa-sharp text-gray-500 fa-solid text-[20px] fa-heart"></i>
+            <%    
+                }
+            %>
+        </button>
+        <p id="favCount" class="text-lg font-medium">${param.cantFavs}</p>
+    </div>
 </div>
 
