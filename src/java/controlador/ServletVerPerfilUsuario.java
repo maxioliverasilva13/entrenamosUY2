@@ -187,21 +187,21 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             List<DtRegistro> listRegistrosOfUserPropio = new ArrayList<>(); // Debe contener solo los registros cuya actividad fue FINALIZADA. (nuevo requerimiento)
             List<DtRegistro> listRegistrosOfUserAjeno = new ArrayList<>();// Debe contener todos los registros, sin importar el estado. (como estaba antes)
             HashMap<Integer, ActividadDTO> actividadesOfUserHash = new HashMap<>();
-            PremioBO premBO = new PremioBO();
-            List<PremioDTO> premioOfuser = premBO.premiosOfUser(dtSocio.getId());
+            
+            List<PremioDTO> premioOfuser = publicador.premiosOfUser(dtSocio.getID());
 
             dtSocio.getRegistros().forEach((DtRegistro r) -> {
                 listRegistrosOfUserAjeno.add(r); // Agregar registro solo despues de verificar que el estado de su Actividad, sea "Finalizada"
                 int idActividad = r.getClase().getIdActividad();                
                 if (idActividad != 0) {
-                    Actividad.Actividad act = actDao.getById(idActividad);
+                    ActividadDTO act = publicador.getActividadById(idActividad);
                     if (act != null) {
-                        ActividadDTO actToAdd = act.getDtActividad();
+                        ActividadDTO actToAdd = act;
                         if(actToAdd.getEstado().equals("Finalizada")){
                             listRegistrosOfUserPropio.add(r); // Agregar registro solo despues de verificar que el estado de su Actividad, sea "Finalizada"
                         }
                         if (!actividadesOfUserHash.containsKey(actToAdd.getId())) {
-                            actividadesOfUserHash.put(act.getId(), act.getDtActividad());
+                            actividadesOfUserHash.put(act.getId(), act);
                         }
                     }
                 }
