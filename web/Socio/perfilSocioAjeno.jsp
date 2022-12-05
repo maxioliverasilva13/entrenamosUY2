@@ -5,6 +5,7 @@
 --%>
 <%@page import="ws.ActividadDTO"%>
 <%@page import="ws.DtClase"%>
+<%@page import="ws.DtRegistro"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="java.util.HashMap"%>
@@ -22,7 +23,7 @@
     //int cantSeguidores = (int) request.getAttribute("cantSeguidores");
     //int cantSeguidos = (int) request.getAttribute("cantSeguidos");
 
-    List<DtClase> listClasesOfUser = new ArrayList<>();
+    List<DtRegistro> listClasesOfUser = new ArrayList<>();
     List<ActividadDTO> actividadesOfUser = new ArrayList<>();
     String userType = (String) request.getAttribute("userType");
     String nombre = (String) request.getAttribute("nombre");
@@ -51,8 +52,8 @@
         userNotLogged = (boolean) request.getAttribute("userNotLogged");
     }
 
-    if (request.getAttribute("listClasesOfUser") != null) {
-        listClasesOfUser = (List<DtClase>) request.getAttribute("listClasesOfUser");
+    if (request.getAttribute("listRegistrosOfUserAjeno") != null) {
+        listClasesOfUser = (List<DtRegistro>) request.getAttribute("listRegistrosOfUserAjeno");
     }
 
     if (request.getAttribute("actividadesOfUser") != null) {
@@ -295,14 +296,13 @@
                     %>
                     <%-- ForEach Clases --%>
                     <%
-                        for (DtClase en : listClasesOfUser) {
-                            DtClase val = en;
-                            
+                        for (DtRegistro en : listClasesOfUser) {
+                            DtClase val = en.getClase();
 
                             SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
                             String dateRegistro = DATE_FORMAT.format(val.getFecha().toGregorianCalendar().getTime());
                     %>
-                    <a onclick="handleGetClase('<%=val.getId()%>')" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
+                    <a onclick="handleGetClase('<%= en.getId()%>', true)" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
                         <img src="<%=btimg.getBase64StringImage(val.getImageBlob())%>" alt="Girl in a jacket" class="rounded-full w-[40px] h-[40px] object-cover"/>
                         <div class="text-gray-500 text-[12px] font-medium flex-grow h-full flex flex-col item-start justify-start flex-col">
                             <p><%=val.getNombre()%> (<%=val.getRegistros().size()%> Inscripto/s)</p>
@@ -311,8 +311,8 @@
                         <button class="border border-gray-300 py-[1px] px-[10px] rounded-[14px] font-medium text-[14px] text-gray-700 shadow-sm">View</button>
                     </a> 
                     <%
+                            }
                         }
-                    }
                     %>
                 </div>
             </div>        

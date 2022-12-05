@@ -123,8 +123,6 @@
 
         $("#containerScores").removeClass("hidden");
         $("#loadingScores").addClass("hidden");
-        //alert("hola");
-
     })
 
     const followUser = (idUser) => {
