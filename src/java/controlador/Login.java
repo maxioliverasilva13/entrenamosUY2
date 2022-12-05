@@ -95,6 +95,12 @@ public class Login extends HttpServlet {
             HttpSession session = request.getSession(true);
             session.setAttribute("typeOfUser", typeofUser);
             if (typeofUser.equals("Profesor")) {
+                System.out.println(request.getHeader("User-Agent"));
+                if(request.getHeader("User-Agent").indexOf("Mobile") != -1){   
+                    request.setAttribute("status", "Correo o Contraseña incorrectos");
+                    request.getRequestDispatcher("/login.jsp").forward(request, response);
+                    return;  
+                }
                 ProfesorBO profeBO = new ProfesorBO();
                 ProfesorDTO profe = profeBO.getProfesorById(user.getId());
                 session.setAttribute("currentSessionUser", profe);

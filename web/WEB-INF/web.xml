@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <filter>
+        <filter-name>filterInfoActividad</filter-name>
+        <filter-class>filterInfoActividad</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>filterInfoActividad</filter-name>
+        <servlet-name>VerActividadInfo</servlet-name>
+    </filter-mapping>
     <servlet>
         <servlet-name>Inicio</servlet-name>
         <servlet-class>controlador.Inicio</servlet-class>
@@ -47,6 +55,14 @@
     <servlet>
         <servlet-name>getPuntuacionGeneralByClass</servlet-name>
         <servlet-class>controlador.getPuntuacionGeneralByClass</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VerActividadInfo</servlet-name>
+        <servlet-class>controlador.VerActividadInfo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClaseById</servlet-name>
+        <servlet-class>controlador.ClaseById</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Inicio</servlet-name>
@@ -124,6 +140,14 @@
         <servlet-name>getPuntuacionGeneralByClass</servlet-name>
         <url-pattern>/getPuntuacionGeneralByClass</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VerActividadInfo</servlet-name>
+        <url-pattern>/verActividadInfo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClaseById</servlet-name>
+        <url-pattern>/claseById</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30 
@@ -132,4 +156,8 @@
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
+    <filter-mappping>
+        <filter-name>filterSocioInActividad</filter-name>
+        <filter-class>filterSocioInActividad</filter-class>
+    </filter-mappping>
 </web-app>

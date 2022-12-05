@@ -45,6 +45,7 @@ public class VerActividadInfo extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("siiis");
         String actID = request.getParameter("actId");
         String modalOpen = request.getParameter("modalOpen");
         String claseId = request.getParameter("claseId");
@@ -98,7 +99,7 @@ public class VerActividadInfo extends HttpServlet {
                 request.getRequestDispatcher("/actividadInfo.jsp").forward(request, response);
             }
         } catch (Exception e) {
-            response.sendRedirect("NotFound.jsp");
+            response.sendRedirect("NotFound.jsp");  
         }
     }
 

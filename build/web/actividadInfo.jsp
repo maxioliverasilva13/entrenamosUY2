@@ -27,6 +27,8 @@
     boolean openClaseModalInfo = modalIsOpen != null ? modalIsOpen.equals("true") : false;
     boolean openPagoModal = modalPagoOpen != null ? modalPagoOpen.equals("true") : false;
     boolean showAddClassButton = false;
+    
+    
 
     if (request.getAttribute("showAddClassButton") != null) {
         showAddClassButton = (boolean) request.getAttribute("showAddClassButton");
@@ -268,7 +270,7 @@
 
                     <% for (DtClase clase : clasesAct) {
                     %>
-                    <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
+                    <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full <%  !%>flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
                         <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
                             <img
                             src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
