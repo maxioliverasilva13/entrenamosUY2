@@ -3,15 +3,14 @@
     Created on : 19 oct. 2022, 12:17:06
     Author     : mandi
 --%>
+<%@page import="ws.ActividadDTO"%>
+<%@page import="ws.DtClase"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="Clase.DtClase"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.List"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
 <jsp:include page='../imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
@@ -301,7 +300,7 @@
                             
 
                             SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-                            String dateRegistro = DATE_FORMAT.format(val.getFecha());
+                            String dateRegistro = DATE_FORMAT.format(val.getFecha().toGregorianCalendar().getTime());
                     %>
                     <a onclick="handleGetClase('<%=val.getId()%>')" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
                         <img src="<%=btimg.getBase64StringImage(val.getImageBlob())%>" alt="Girl in a jacket" class="rounded-full w-[40px] h-[40px] object-cover"/>

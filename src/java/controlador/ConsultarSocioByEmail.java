@@ -4,27 +4,18 @@
  */
 package controlador;
 
-import Clase.ClaseBO;
-import Clase.DtClase;
-import Profesor.dtos.ProfesorDTO;
-import Registro.DtRegistro;
-import Socio.dtos.SocioDTO;
-import Usuario.Usuario;
-import Usuario.UsuarioDAO;
 import com.google.gson.Gson;
-import customsDtos.ClaseInfoToReturn;
 import customsDtos.ResponseServer;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.UsuarioDTO;
 
 /**
  *
@@ -72,9 +63,11 @@ public class ConsultarSocioByEmail extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
+         Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+        
         String emailUser = request.getParameter("email");
-        UsuarioDAO userDao = new UsuarioDAO();
-        Usuario userInfoByEmail = userDao.getByEmail(emailUser);
+        UsuarioDTO userInfoByEmail = publicador.getUserByEmail(emailUser);
         Boolean alreadyExists = userInfoByEmail != null;
         if (emailUser != null) {
             response.setStatus(200);

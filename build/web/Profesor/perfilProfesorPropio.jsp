@@ -4,13 +4,13 @@
     Author     : mandi
 --%>
 
+<%@page import="ws.ActividadDTO"%>
+<%@page import="ws.UsuarioDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="util.BlobToImage"%>
-<%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
 <jsp:include page='../imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
@@ -31,6 +31,7 @@
     String website = (String) request.getAttribute("website");
     String biografia = (String) request.getAttribute("biografia");
     String descripcion = (String) request.getAttribute("descripcion");
+    String typeofUser = (String) session.getAttribute("typeOfUser");
 
     int idConsultado = (int) request.getAttribute("idConsultado");
 
@@ -81,6 +82,7 @@
     $(window).on("load", () => {
         const urlPuntuacion = '/entrenamosUY3//getPuntuacionesByProfesor?profId=' + userId;
         fetch(urlPuntuacion).then(response => response.json()).then(data => {
+            console.log("data is", data);
             $("#meanPuntuacion").text(data.meanPuntuacion);
             printMeanStarsPropio(data.meanPuntuacion);
 
@@ -242,7 +244,7 @@
                                     ActividadDTO val = en.getValue();
 
                                     SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-                                    String dateRegistro = DATE_FORMAT.format(val.getFechaRegistro());
+                                    String dateRegistro = DATE_FORMAT.format(val.getFechaRegistro().toGregorianCalendar().getTime());
                             %>
                             <tr class="bg-white border-b ">
                                 <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
@@ -380,8 +382,8 @@
         <jsp:include page='editarInfoProfesorModal.jsp' >
             <jsp:param name="path" value="index" />
             <jsp:param name="usrIdConsultado" value="<%= idConsultado%>" />
-            <jsp:param name="nickname" value="<%= userDT.getNickname()%>" />
-            <jsp:param name="email" value="<%= userDT.getEmail()%>" />
+            <jsp:param name="nickname" value="<%= userDT.getNICKNAME()%>" />
+            <jsp:param name="email" value="<%= userDT.getEMAIL()%>" />
             <jsp:param name="institucion" value="<%= institucion%>" />
             <jsp:param name="name" value="<%= nombre%>" />
             <jsp:param name="lastname" value="<%= apellido%>" />
@@ -389,7 +391,7 @@
             <jsp:param name="website" value="<%= website%>" />
             <jsp:param name="biografia" value="<%= biografia%>" />
             <jsp:param name="description" value="<%= descripcion%>" />
-            <jsp:param name="utype" value="<%= userDT.getType()%>" />
+            <jsp:param name="utype" value="<%=typeofUser %>" />
         </jsp:include>
     </body>
 </html>

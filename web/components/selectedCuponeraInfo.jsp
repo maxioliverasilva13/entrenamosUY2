@@ -4,15 +4,13 @@
     Author     : Maximiliano Olivera
 --%>
 
-<%@page import="CuponeraXActividad.DtCuponeraXActividad"%>
-<%@page import="Cuponera.DtCuponera"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
-<%@page import="Clase.DtClase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <script>
+    console.log("hola xd")
     const removeChilds = (parent) => {
         while (parent.lastChild) {
             parent.removeChild(parent.lastChild);
@@ -24,6 +22,8 @@
     const getColor = (index) => {
         return listOfColors[index % 4];
     }
+
+    console.log("asd")
 
     $(document).ready(function () {
         document.getElementById("cuponeraInfoModal").onload = () => {
@@ -92,17 +92,18 @@
         }
     });
 
-    const closeModal = () => {
+    const closeModalCupInfo = () => {
+        console.log("xd")
         document.getElementById("cuponeraInfoModal").style.cssText = "display: none";
     }
 
 </script>
 
 <!DOCTYPE html>
-<div id="cuponeraInfoModal" style="display: none;" class="w-screen transition-all h-screen min-h-screen md:p-0 p-4  fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 items-center justify-center transition-all">
+<div id="cuponeraInfoModal" style="display: none;" class="w-screen z-[99999] transition-all h-screen min-h-screen md:p-0 p-4  fixed top-0 left-0 right-0 bottom-0 bg-[#6B7280] bg-opacity-60 items-center justify-center transition-all">
     <div class="bg-white transition-all transition-opacity transition-all rounded-2xl md:p-12 p-4 border-gray-300 border md:w-3/5 w-full h-auto flex flex-col items-start justify-start gap-x-12 gap-y-6 relative">
         <%-- Close Button --%>
-        <button id="closeButton" onclick="closeModal()" class="w-10 transition-all h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
+        <button id="closeButton" onclick="closeModalCupInfo()" class="w-10 transition-all h-10 text-2xl bg-pink-100 text-red-700 flex items-center justify-center rounded-full absolute -top-3 -right-3">
             <i class="fa-solid fa-xmark"></i>
         </button>
 
@@ -134,3 +135,6 @@
     </div>
 
 </div>
+
+
+

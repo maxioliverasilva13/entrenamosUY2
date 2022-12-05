@@ -4,12 +4,7 @@
  */
 package controlador;
 
-import Actividad.ActividadBO;
-import Actividad.dtos.ActividadDTO;
-import Categoria.CategoriaBO;
-import Categoria.DtCategoria;
-import Institucion.DtInstitucion;
-import Institucion.InstitucionBO;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -21,6 +16,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.ActividadDTO;
+import ws.DtCategoria;
+import ws.DtInstitucion;
+import ws.Publicador;
+import ws.Publicador_Service;
 
 /**
  *
@@ -31,30 +31,38 @@ public class actividadesInfo extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        InstitucionBO insBO = new InstitucionBO();
-        CategoriaBO catBO = new CategoriaBO();
-        ActividadBO actBO = new ActividadBO();
-
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+        
         String institucionID = (String) request.getParameter("instId");
         boolean hasFilteredCategories = request.getAttribute("filteredActividades") != null;
         
         try {
-            HashMap<Integer, DtCategoria> categorias = catBO.listarCategorias();
+            HashMap<Integer, DtCategoria> categorias = new HashMap();
+            publicador.listarCategorias().forEach((DtCategoria cat) -> {
+                categorias.put(cat.getId(), cat);
+            });
             request.setAttribute("categorias", categorias);
 
             if (!hasFilteredCategories) {
                 if (institucionID != null && institucionID != "") {
-                    DtInstitucion ins = insBO.existeInstitucion(Integer.parseInt(institucionID));
+                    DtInstitucion ins = publicador.existeInstitucion(Integer.parseInt(institucionID));
                     if (ins == null) {
                         response.sendRedirect("NotFound.jsp");
                     } else {
                         request.setAttribute("institucionInfo", ins);
-                        HashMap<Integer, ActividadDTO> actividades = actBO.listarActividades(ins.getId(), "Aceptada");
+                        HashMap<Integer, ActividadDTO> actividades = new HashMap();
+                        publicador.listarActividadesByInstitucionAndEstado(ins.getId(), "Aceptada").forEach((ActividadDTO act) -> {
+                            actividades.put(act.getId(), act);
+                        });
+                        
                         request.setAttribute("actividadesInstitucion", actividades);
                     }
                 } else {
                     HashMap<Integer, DtInstitucion> instituciones = new HashMap<>();
-                    instituciones = insBO.listarInstituciones();
+                    publicador.listarInstituciones().forEach((DtInstitucion inst) -> {
+                        instituciones.put(inst.getId(), inst);
+                    });
                     request.setAttribute("instituciones", instituciones);
                 }
             }
@@ -66,8 +74,9 @@ public class actividadesInfo extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ActividadBO actBO = new ActividadBO();
-
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+        
         try {
             String body = request.getReader().lines().collect(Collectors.joining());
             List<String> categoriasToFilter = new ArrayList<>();
@@ -81,7 +90,11 @@ public class actividadesInfo extends HttpServlet {
                 }
             }
 
-            HashMap<Integer, ActividadDTO> filteredActividades = actBO.listarActividadesByCategoria(categoriasToFilter, "Aceptada");
+            HashMap<Integer, ActividadDTO> filteredActividades = new HashMap();
+            publicador.listarActividadesByCategorias(new Gson().toJson(categoriasToFilter), "Aceptada").forEach((ActividadDTO act) -> {
+                filteredActividades.put(act.getId(), act);
+            });
+            
             request.setAttribute("filteredActividades", filteredActividades);
             if (categoriasToFilter.size() > 0) {
                 request.setAttribute("listOfAppliedFilters", categoriasToFilter);

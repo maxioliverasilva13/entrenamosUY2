@@ -4,9 +4,9 @@
     Author     : rodrigo
 --%>
 
+<%@page import="ws.UsuarioDTO"%>
 <%@page import="java.nio.file.Files"%>
 <%@page import="util.BlobToImage"%>
-<%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="java.util.HashMap"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -42,12 +42,11 @@
                         UsuarioDTO val = in.getValue();
                 %>
                 <jsp:include page='/components/userCard.jsp' >
-                    <jsp:param name="uid" value="<%= val.getId() %>" />
-                    <jsp:param name="nombre" value="<%= val.getNombre()%>" />
-                    <jsp:param name="apellido" value="<%= val.getApellido()%>" />
-                    <jsp:param name="image" value="<%= blobToImage.getBase64StringImage(blobToImage.getFileToByteArray(val.getImage()))%>" />
-                    <jsp:param name="email" value="<%= val.getEmail()%>" />
-                    <jsp:param name="email" value="<%= val.getEmail()%>" />
+                    <jsp:param name="uid" value="<%= val.getID() %>" />
+                    <jsp:param name="nombre" value="<%= val.getNOMBRE()%>" />
+                    <jsp:param name="apellido" value="<%= val.getAPELLIDO()%>" />
+                    <jsp:param name="image" value="<%=blobToImage.getBase64StringImage(val.getBlobImage())%>" />
+                    <jsp:param name="email" value="<%= val.getEMAIL()%>" />
                 </jsp:include>
 
                 <%

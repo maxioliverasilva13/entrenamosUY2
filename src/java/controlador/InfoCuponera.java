@@ -4,20 +4,17 @@
  */
 package controlador;
 
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
-import CuponeraXActividad.DtCuponeraXActividad;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Integer.parseInt;
-import java.util.Date;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.DtCuponera;
+import ws.Publicador;
+import ws.Publicador_Service;
 
 /**
  *
@@ -37,10 +34,10 @@ public class InfoCuponera extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CuponeraBo cupo = new CuponeraBo();
         int id =parseInt(request.getParameter("id"));
-        
-        DtCuponera res = cupo.consultarCuponera(id);
+          Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+        DtCuponera res = publicador.consultarCuponera(id);
         
         String openModal=request.getParameter("openModal");
         request.setAttribute("open", openModal);

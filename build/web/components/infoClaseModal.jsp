@@ -4,11 +4,9 @@
     Author     : Maximiliano Olivera
 --%>
 
-<%@page import="Cuponera.DtCuponera"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Date"%>
-<%@page import="Clase.DtClase"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
@@ -36,6 +34,8 @@
         document.getElementById("infoClaseModal").style.cssText = "display: none";
     }
     $(document).ready(function () {
+        var cantPuntuaciones = 0;
+        var puntuacionGeneral = 0;
         document.getElementById("infoClaseModal").onload = (isOpen, resultados) => {
             const shouldOpenModal = isOpen === true;
             const openModalCrearSorteo = (data) => {
@@ -75,39 +75,90 @@
                 mostrarResultadoContent.style.cssText = "display: none";
             }
 
-            if (registroInfo.clase) {
-                loadPuntuacionProfesor(registroInfo.clase.id);
-            }
-            let parentNode = document.getElementById("tablaContent");
-            $("#modalValorarProfesor").attr("registroId", registroInfo.id);
-            if (claseInfo === "Loading") {
-                $("#contentInfo").css("display", "none");
-                // document.getElementById("imageCup").setAttribute("src", "")
-            } else {
-                $("#contentInfo").css("display", "flex");
-                $("#claseNombre").text(claseInfo?.nombre);
-                $("#fechaInicioClase").text(claseInfo?.fecha);
-                $("#profesorClase").text(claseInfo?.profesor);
-                $("#sociosMinimosClase").text(claseInfo?.capMinima);
-                $("#sociosMaximosClase").text(claseInfo?.capMaxima);
-                $("#urlClase").text(claseInfo?.urlAcceso);
-                $("#inscriptosClase").text(claseInfo?.registros?.length || 0);
-                var imgsrc = claseInfo.imageBlob ? "data:image/jpg;base64," + btoa(new Uint8Array(claseInfo.imageBlob).reduce(function (data, byte) {
-                    return data + String.fromCharCode(byte);
-                }, '')) : "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png"
-                $("#imageClase").attr("src", imgsrc);
-                var actividadId = claseInfo?.idActividad;
-                var claseId = claseInfo?.id;
-                $("#seleccionarMedioPagoModal").attr("href", "verActividadInfo?actId=" + actividadId + "&verInfoPago=true&claseId=" + claseId + "");
-                if (!registroInfo.puntuacionProfesor) {
-                    $("#btnValorarProf").removeClass("hidden");
-                } else {
-                    $("#tuPuntuacion").removeClass("hidden");
-                    $("#tuPuntuacionNro").text(registroInfo.puntuacionProfesor.puntuacion);
-                    $("#btnValorarProf").addClass("hidden");
+            if (window?.registroInfo)
+            {
+                console.log("si")
+                var registroInfo = window?.registroInfo;
+                if (registroInfo.clase) {
+                    loadPuntuacionProfesor(registroInfo.clase.id);
                 }
-                window.claseInfo = null;
-                this.onload = null;
+
+                $("#modalValorarProfesor").attr("registroId", registroInfo.id);
+                let parentNode = document.getElementById("tablaContent");
+
+                if (claseInfo === "Loading") {
+                    $("#contentInfo").css("display", "none");
+                    // document.getElementById("imageCup").setAttribute("src", "")
+                } else {
+
+                    $("#contentInfo").css("display", "flex");
+                    $("#claseNombre").text(registroInfo?.clase.nombre);
+                    console.log(registroInfo?.linkClase);
+                    if (registroInfo?.linkClase) {
+                        $("#videoClase").attr("src", registroInfo?.linkClase);
+                        document.getElementById("videoClase").style.cssText = "display: block";
+                    } else {
+                        document.getElementById("videoClase").style.cssText = "display: none";
+                    }
+                    $("#fechaInicioClase").text(registroInfo?.clase.fecha);
+                    $("#profesorClase").text(registroInfo?.clase.profesor);
+                    $("#sociosMinimosClase").text(registroInfo?.clase.capMinima);
+                    $("#sociosMaximosClase").text(registroInfo?.clase.capMaxima);
+                    $("#urlClase").text(registroInfo?.urlAcceso);
+                    $("#inscriptosClase").text(registroInfo?.registros?.length || 0);
+                    var imgsrc = registroInfo.clase.imageBlob ? "data:image/jpg;base64," + btoa(new Uint8Array(registroInfo.clase.imageBlob).reduce(function (data, byte) {
+                        return data + String.fromCharCode(byte);
+                    }, '')) : "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png"
+                    $("#imageClase").attr("src", imgsrc);
+                    var actividadId = registroInfo?.clase.idActividad;
+                    var claseId = registroInfo.clase?.id;
+                    $("#seleccionarMedioPagoModal").attr("href", "verActividadInfo?actId=" + actividadId + "&verInfoPago=true&claseId=" + claseId + "");
+                    console.log(registroInfo)
+                    if (!registroInfo.puntuacionProfesor) {
+                        $("#btnValorarProf").removeClass("hidden");
+                    } else {
+                        $("#tuPuntuacion").removeClass("hidden");
+                        $("#tuPuntuacionNro").text(registroInfo.puntuacionProfesor.puntuacion);
+                        $("#btnValorarProf").addClass("hidden");
+                    }
+                    window.registroInfo = null;
+                    this.onload = null;
+                }
+            } else {
+                const claseInfo = window?.claseInfo;
+                if (claseInfo) {
+                    loadPuntuacionProfesor(claseInfo.id);
+                }
+                idClass = claseInfo.id;
+                let parentNode = document.getElementById("tablaContent");
+                if (claseInfo === "Loading") {
+                    $("#contentInfo").css("display", "none");
+                    // document.getElementById("imageCup").setAttribute("src", "")
+                } else {
+                    $("#contentInfo").css("display", "flex");
+                    $("#claseNombre").text(claseInfo?.nombre);
+                    $("#fechaInicioClase").text(claseInfo?.fecha);
+                    if (claseInfo?.linkClase) {
+                        $("#videoClase").attr("src", claseInfo?.linkClase);
+                        document.getElementById("videoClase").style.cssText = "display: block";
+                    } else {
+                        document.getElementById("videoClase").style.cssText = "display: none";
+                    }
+                    $("#profesorClase").text(claseInfo?.profesor);
+                    $("#sociosMinimosClase").text(claseInfo?.capMinima);
+                    $("#sociosMaximosClase").text(claseInfo?.capMaxima);
+                    $("#urlClase").text(claseInfo?.urlAcceso);
+                    $("#inscriptosClase").text(claseInfo?.registros?.length || 0);
+                    var imgsrc = claseInfo.imageBlob ? "data:image/jpg;base64," + btoa(new Uint8Array(claseInfo.imageBlob).reduce(function (data, byte) {
+                        return data + String.fromCharCode(byte);
+                    }, '')) : "https://www.bcm-institute.org/wp-content/uploads/2020/11/No-Image-Icon.png"
+                    $("#imageClase").attr("src", imgsrc);
+                    var actividadId = claseInfo?.idActividad;
+                    var claseId = claseInfo?.id;
+                    $("#seleccionarMedioPagoModal").attr("href", "verActividadInfo?actId=" + actividadId + "&verInfoPago=true&claseId=" + claseId + "");
+                    window.claseInfo = null;
+                    this.onload = null;
+                }
             }
         }
     });
@@ -193,7 +244,7 @@
                             Promedio puntuacion:
                             <div class="flex flex-row">
                                 <svg aria-hidden="true" class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Rating star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                                <p class="ml-2 text-sm font-bold text-gray-900 dark:text-white" id="promedioPuntuacion">0</p>
+                                <p class="ml-2 text-sm font-bold text-gray-900" id="promedioPuntuacion">0</p>
 
                             </div>
                         </div>
@@ -202,7 +253,7 @@
                         <div id="tuPuntuacion"  class="hidden">
                             <span > Tu puntuacion: <strong id="tuPuntuacionNro"></strong> </span>
                         </div>
-                        <a href="#" id="btnValorarProf" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white hidden ml-2" onclick="openModalValorarProfesor()">Valorar</a>
+                        <a href="#" id="btnValorarProf" class="text-sm font-medium text-gray-900 underline hover:no-underline hidden ml-2" onclick="openModalValorarProfesor()">Valorar</a>
                     </div>
                 </div>
                 <div class="w-full h-auto p-6 gap-y-1 border-b border-gray-300 flex flex-row items-center justify-start">
@@ -218,6 +269,13 @@
                     <div class="flex-grow h-12 p-4 border-gray-300 border rounded-md flex items-center gap-x-2 justify-start">
                         <i class="fa-solid fa-link"></i>
                         <span id="urlClase"></span>
+                    </div>
+                </div>
+                <div class="w-full p-6 gap-y-1 border-b border-gray-300 flex flex-col items-start justify-start">
+                    <p class="text-sm font-medium text-gray-900 w-1/3">Video Clae</p>
+                    <div class="flex-grow p-4  w-full border-gray-300 border rounded-md flex items-center gap-x-2 justify-start">
+                        <iframe id="videoClase" width="100%" height="250">
+                        </iframe>
                     </div>
                 </div>
             </div>

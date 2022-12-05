@@ -3,7 +3,7 @@
     Created on : 01/10/2022, 07:58:03 AM
     Author     : Maximiliano Olivera
 --%>
-<%@page import="Cuponera.DtCuponera"%>
+<%@page import="ws.DtCuponera"%>
 <%@page import="java.util.HashMap"%>
 <%
     int id;

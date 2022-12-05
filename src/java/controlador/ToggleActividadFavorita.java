@@ -4,10 +4,6 @@
  */
 package controlador;
 
-import Favoritos.FavoritoDAO;
-import Socio.dtos.SocioDTO;
-import Usuario.Usuario;
-import Usuario.UsuarioDAO;
 import com.google.gson.Gson;
 import customsDtos.ResponseServer;
 import java.io.IOException;
@@ -18,6 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.SocioDTO;
 
 /**
  *
@@ -67,13 +66,14 @@ public class ToggleActividadFavorita extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             HttpSession session = request.getSession(true);
-
+            Publicador_Service pucService = new Publicador_Service();
+            Publicador publicador = pucService.getPublicadorPort();
+        
             SocioDTO socioInfo = (SocioDTO) session.getAttribute("currentSessionUser");
 
             String actId = request.getParameter("actId");
-            FavoritoDAO favDao = new FavoritoDAO();
 
-            boolean isFavorito = favDao.toggleFavoritoActividad(Integer.parseInt(actId), socioInfo.getId());
+            boolean isFavorito = publicador.toggleFavoritoActividad(Integer.parseInt(actId), socioInfo.getID());
 
             response.setStatus(200);
             ResponseServer resp = new ResponseServer(200, "todo ok", isFavorito);

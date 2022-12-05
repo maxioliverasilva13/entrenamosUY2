@@ -1,7 +1,7 @@
 
+<%@page import="ws.DtCuponera"%>
+<%@page import="ws.UsuarioDTO"%>
 <%@page import="util.BlobToImage"%>
-<%@page import="Usuario.dtos.UsuarioDTO"%>
-<%@page import="Cuponera.DtCuponera"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page='../imports.jsp' />
 <script>
@@ -170,7 +170,7 @@
                         <div  id="claseModal" style="display: none" class="w-64 h-auto gap-y-2 px-4 py-4 shadow-lg bg-gray-50 absolute top-12 right-12 border rounded-2xl border-gray-300 flex-col items-center justify-cecnter">
                             <% if (userInfo != null) {
                             %>
-                            <a href="verPerfil?&userID=<%=userInfo.getId()%>" class="w-full h-auto bg-gray-700 text-white px-4 py-2 font-medium cursor-pointer rounded-xl text-center">Mi Perfil</a>
+                            <a href="verPerfil?&userID=<%=userInfo.getID()%>" class="w-full h-auto bg-gray-700 text-white px-4 py-2 font-medium cursor-pointer rounded-xl text-center">Mi Perfil</a>
                             <%
                                 }
                             %>

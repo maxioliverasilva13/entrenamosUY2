@@ -3,8 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Filter.java to edit this template
  */
 
-import RegistroSitio.InterfaceRegistroSitioBO;
-import RegistroSitio.RegistroSitioDTO;
 import eu.bitwalker.useragentutils.UserAgent;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -18,7 +16,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import RegistroSitio.RegistroSitioBO;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.RegistroSitioDTO;
 
 /**
  *
@@ -56,6 +56,9 @@ public class ActividadSitio implements Filter {
         if (debug) {
             log("ActividadSitio:DoBeforeProcessing");
         }
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
         HttpServletRequest req = (HttpServletRequest) request;
         UserAgent userAgent = UserAgent.parseUserAgentString(req.getHeader("User-Agent"));
         String requestUrl = req.getRequestURI();
@@ -68,9 +71,16 @@ public class ActividadSitio implements Filter {
         String browser = userAgent.getBrowser().toString();
         String Os = userAgent.getOperatingSystem().toString();
 
-        RegistroSitioDTO regSitio = new RegistroSitioDTO(ipAddress, requestUrl, browser, Os);
-        InterfaceRegistroSitioBO regSitioBO = new RegistroSitio.RegistroSitioBO();
-        regSitioBO.insertar(regSitio);
+        RegistroSitioDTO regSitio = new RegistroSitioDTO();
+        regSitio.setIp(ipAddress);
+        regSitio.setUrl(requestUrl);
+        regSitio.setBrowser(browser);
+        regSitio.setSo(Os);
+        try {
+            publicador.crearRegistroSitio(ipAddress, requestUrl, browser, Os);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void doAfterProcessing(ServletRequest request, ServletResponse response)

@@ -3,24 +3,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-import Clase.ClaseBO;
-import Clase.DtClase;
-import Premio.PremioBO;
-import Profesor.dtos.ProfesorDTO;
-import Socio.dtos.SocioDTO;
 import com.google.gson.Gson;
-import customsDtos.ClaseInfoToReturn;
 import customsDtos.ResponseServer;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.SocioDTO;
 
 /**
  *
@@ -41,12 +37,16 @@ public class SortearPremio extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
 
         try {
             String idPremio = request.getParameter("premioId");
             if (idPremio != null) {
-                PremioBO premioBO = new PremioBO();
-                List<SocioDTO> ganadores = premioBO.realizarSorteo(Integer.valueOf(idPremio));
+                List<SocioDTO> ganadores = new ArrayList<>();
+                publicador.realizarSorteo(Integer.valueOf(idPremio)).forEach((SocioDTO socio) -> {
+                    ganadores.add(socio);
+                });
                 ResponseServer reponseServer = new ResponseServer(200, "La clase se sorteo correctamente", ganadores);
                 String claseJSON = new Gson().toJson(reponseServer);
                 response.setContentType("application/json");

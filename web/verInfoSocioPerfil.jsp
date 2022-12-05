@@ -3,14 +3,14 @@
     Created on : 2 oct. 2022, 14:50:35
     Author     : pedri
 --%>
-<%@page import="Premio.dtos.PremioDTO"%>
-<%@page import="Registro.DtRegistro"%>
+<%@page import="ws.DtClase"%>
+<%@page import="ws.DtCuponera"%>
+<%@page import="ws.UsuarioDTO"%>
+<%@page import="ws.ActividadDTO"%>
+<%@page import="ws.DtRegistro"%>
+<%@page import="ws.PremioDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="Clase.DtClase"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
-<%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="Cuponera.DtCuponera"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <jsp:include page='imports.jsp'>
@@ -36,7 +36,8 @@
     String fnacimiento = (String) request.getAttribute("fnacimiento");
     String biografia = (String) request.getAttribute("biografia");
     String descripcion = (String) request.getAttribute("descripcion");
-
+    String typeofUser = (String) session.getAttribute("typeOfUser");
+    
     if (request.getAttribute("listRegistrosOfUser") != null) {
         listRegistrosOfUser = (List<DtRegistro>) request.getAttribute("listRegistrosOfUser");
     }
@@ -123,6 +124,7 @@
         const cuponeraModal = document.getElementById("cuponeraInfoModal");
         window.cuponeraInfo = "Loading";
         cuponeraModal.style.cssText = "display: flex";
+        console.log("event is ", cuponeraModal.onload)
         cuponeraModal.onload();
         window.fetch(url).then((response) => {
             return response.json();
@@ -281,7 +283,7 @@
                                             DtClase val = en.getClase();
                                             
                                             SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-                                            String dateRegistro = DATE_FORMAT.format(val.getFecha());
+                                            String dateRegistro = DATE_FORMAT.format(val.getFecha().toGregorianCalendar().getTime());
                                     %>
                                     <a onclick="handleGetClase('<%= en.getId()%>', true)" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
                                         <img src="<%=btimg.getBase64StringImage(val.getImageBlob())%>" alt="Girl in a jacket" class="rounded-full w-[40px] h-[40px] object-cover"/>
@@ -375,14 +377,14 @@
                                 <jsp:param name="path" value="index" />
                                 <jsp:param name="usrIdConsultado" value="<%= idConsultado%>" />
                                 <jsp:param name="nickname" value="<%= nickname%>" />
-                                <jsp:param name="email" value="<%= userDT.getEmail()%>" />
+                                <jsp:param name="email" value="<%= userDT.getEMAIL()%>" />
                                 <jsp:param name="institucion" value="<%= institucion%>" />
                                 <jsp:param name="name" value="<%= nombre%>" />
                                 <jsp:param name="lastname" value="<%= apellido%>" />
                                 <jsp:param name="fnacimiento" value="<%= fnacimiento%>" />
                                 <jsp:param name="biografia" value="<%= biografia%>" />
                                 <jsp:param name="description" value="<%= descripcion%>" />
-                                <jsp:param name="utype" value="<%= userDT.getType()%>" />
+                                <jsp:param name="utype" value="<%=typeofUser %>" />
                             </jsp:include>
                         </body>
                         </html>

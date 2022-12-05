@@ -4,43 +4,37 @@
  */
 package controlador;
 
-import Institucion.DtInstitucion;
-import Institucion.InstitucionBO;
-import Institucion.InterfaceInstitucionBO;
-import Profesor.dtos.ProfesorCreateDTO;
-import Socio.dtos.SocioCreateDTO;
-import Usuario.IUsuarioBO;
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioCreateDTO;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import static java.lang.System.in;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.Part;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import spals.shaded.com.google.common.io.ByteStreams;
 import util.BlobToImage;
+import ws.ActividadCreateDTO;
+import ws.DtInstitucion;
+import ws.ProfesorCreateDTO;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.SocioCreateDTO;
+import ws.UsuarioCreateDTO;
 
 /**
  *
  * @author rodrigo
  */
-
-@MultipartConfig(maxFileSize = 160177215) 
+@MultipartConfig(maxFileSize = 160177215)
 public class SignUp extends HttpServlet {
 
     /**
@@ -60,7 +54,7 @@ public class SignUp extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SignUp</title>");            
+            out.println("<title>Servlet SignUp</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet SignUp at " + request.getContextPath() + "</h1>");
@@ -81,13 +75,17 @@ public class SignUp extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        InterfaceInstitucionBO insBo = new InstitucionBO();
-        HashMap<Integer,DtInstitucion> ins = insBo.listarInstituciones();
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+        HashMap<Integer, DtInstitucion> ins = new HashMap();
+        publicador.listarInstituciones().forEach((DtInstitucion inst) -> {
+            ins.put(inst.getId(), inst);
+        });
+
+        System.out.println("llego 1");
         request.setAttribute("instituciones", ins);
         request.getRequestDispatcher("/signup.jsp").forward(request, response);
 
-       
     }
 
     /**
@@ -101,62 +99,84 @@ public class SignUp extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      response.setContentType("text/html");
-                
-      
-        
-      
+        response.setContentType("text/html");
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
         String tipoUsuario = request.getParameter("tipoUsuario");
-        String  nickname = request.getParameter("nickname");
+        String nickname = request.getParameter("nickname");
         String Nombre = request.getParameter("Nombre");
         String Apellido = request.getParameter("Apellido");
         String Email = request.getParameter("Email");
-        char[] Contraseña = request.getParameter("Contraseña").toCharArray();
+        String Contraseña = request.getParameter("confirmPassword");
         String fechaNacimiento = request.getParameter("fechaNacimiento");
         Date fechaNacimientoDate = null;
-        
-       
+        System.out.println("llego 1");
+
         Part filePart = request.getPart("file_upload");
         InputStream fileContent = null;
         File avatar = null;
-        if(filePart.getSize() > 0){
+        if (filePart.getSize() > 0) {
             BlobToImage blobToImg = new BlobToImage();
             fileContent = filePart.getInputStream();
-            byte[] bytes = fileContent.readAllBytes();
+            byte[] bytes = ByteStreams.toByteArray(fileContent);
             avatar = blobToImg.writeBytesToFile(nickname, bytes);
         }
-        IUsuarioBO usuarioBo = new UsuarioBO();
-        try{
-            fechaNacimientoDate =new SimpleDateFormat("dd/MM/yyyy").parse(fechaNacimiento); 
-        }catch(Exception e){
-            response.sendError(500,"Ha ocurrido un error inesperado");
+        try {
+            fechaNacimientoDate = new SimpleDateFormat("dd/MM/yyyy").parse(fechaNacimiento);
+        } catch (Exception e) {
+            response.sendError(500, "Ha ocurrido un error inesperado");
         }
-        UsuarioCreateDTO userData;
-        if(tipoUsuario.equals("Socio")){
-            userData = new SocioCreateDTO(
-             Nombre,
-             Apellido,
-             nickname,
-             Contraseña,
-             Email,
-             fechaNacimientoDate,
-              avatar
-          );
-        }else{ //es un profesor
-            String descripcion = request.getParameter("description");
-            String biografia = request.getParameter("about");
-            String website = request.getParameter("website");
-            int idInstitucion = Integer.parseInt(request.getParameter("institucion"));
-            userData = new ProfesorCreateDTO(Nombre,Apellido,nickname,Contraseña,descripcion,biografia,Email,website,fechaNacimientoDate,idInstitucion,avatar);         
-        }
-        try{
-            usuarioBo.create(userData);
-            request.setAttribute("signUpSucces", true);
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
-        }catch(Exception e){
-            request.setAttribute("invalid-signup",e.getMessage());
+        try {
+            GregorianCalendar fechaNacimientoParssed = new GregorianCalendar();
+            fechaNacimientoParssed.setTime(fechaNacimientoDate);
+            XMLGregorianCalendar fechaParssed;
+            fechaParssed = DatatypeFactory.newInstance().newXMLGregorianCalendar(fechaNacimientoParssed);
+
+            if (tipoUsuario.equals("Socio")) {
+                SocioCreateDTO socioData = new SocioCreateDTO();
+                socioData.setNombre(Nombre);
+                socioData.setApellido(Apellido);
+                socioData.setEmail(Email);
+                if (avatar != null) {
+                    socioData.setImage(avatar.toString());
+                }
+                socioData.setNacimiento(fechaParssed);
+                // socioData.setContrase{a
+
+                publicador.crearSocio(socioData, Contraseña);
+                System.out.println("Socio Creado");
+                request.setAttribute("signUpSucces", true);
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            } else { //es un profesor
+                String descripcion = request.getParameter("description");
+                String biografia = request.getParameter("about");
+                String website = request.getParameter("website");
+                System.out.println("ax1");
+                int idInstitucion = Integer.parseInt(request.getParameter("institucion"));
+                System.out.println("ax12");
+
+                ProfesorCreateDTO socioData = new ProfesorCreateDTO();
+                socioData.setIdInstitucion(idInstitucion);
+                socioData.setNombre(Nombre);
+                socioData.setApellido(Apellido);
+                socioData.setEmail(Email);
+                if (avatar != null) {
+                    socioData.setImage(avatar.toString());
+                }
+                socioData.setNacimiento(fechaParssed);
+                socioData.setBiografia(biografia);
+                socioData.setLinkSitioWeb(website);
+                socioData.setDescripcionGeneral(descripcion);
+                publicador.crearProfe(socioData, Contraseña);
+                request.setAttribute("signUpSucces", true);
+                System.out.println("Profe Creado");
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            request.setAttribute("invalid-signup", e.getMessage());
             request.getRequestDispatcher("/signup.jsp").forward(request, response);
-        }  
+        }
     }
 
     /**

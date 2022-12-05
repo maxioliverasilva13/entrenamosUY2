@@ -4,16 +4,19 @@
  */
 package controlador;
 
-import Profesor.IProfesorBO;
-import Profesor.ProfesorBO;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import mygym.logica.usuario.dataTypes.ProfesorPuntuacionesDTO;
+import javax.servlet.http.HttpSession;
+import ws.ProfesorPuntuacionesDTO;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.UsuarioDTO;
 
 /**
  *
@@ -38,7 +41,7 @@ public class getPuntuacionesByProfesor extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet getPuntuacionesByProfesor</title>");            
+            out.println("<title>Servlet getPuntuacionesByProfesor</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet getPuntuacionesByProfesor at " + request.getContextPath() + "</h1>");
@@ -59,16 +62,24 @@ public class getPuntuacionesByProfesor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
+
         String idProf = request.getParameter("profId");
-        int id = Integer.parseInt(idProf);
-        
-        IProfesorBO profBo = new ProfesorBO();
-        
-        
-        Gson gson = new Gson();
-        ProfesorPuntuacionesDTO puntuaciones = profBo.getValoracionesGenerales(id);
-        String res  = gson.toJson(puntuaciones);
+        HttpSession session = request.getSession(true);
+        int id = 0;
+        if (idProf != null || idProf != "") {
+            id = Integer.parseInt(idProf);
+        } else {
+            if (session.getAttribute("currentSessionUser")  != null) {
+                UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
+                id = userInfo.getID();
+            }
+        }
+
+        Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
+        ProfesorPuntuacionesDTO puntuaciones = publicador.getValoracionesGeneralesByProfe(id);
+        String res = gson.toJson(puntuaciones);
         PrintWriter pw = response.getWriter();
         response.setContentType("application/json");
         System.out.println(res);

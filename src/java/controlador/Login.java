@@ -4,10 +4,6 @@
  */
 package controlador;
 
-import Profesor.ProfesorBO;
-import Profesor.dtos.ProfesorDTO;
-import Socio.SocioBO;
-import Socio.dtos.SocioDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -16,12 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Usuario.IUsuarioBO;
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
-import Usuario.exceptions.UnauthorizedException;
-
 import javax.servlet.http.HttpSession;
+import ws.Publicador;
+import ws.Publicador_Service;
+import ws.UsuarioDTO;
+import ws.ProfesorDTO;
+import ws.SocioDTO;
+import ws.UnauthorizedException_Exception;
 
 /**
  *
@@ -89,28 +86,30 @@ public class Login extends HttpServlet {
         if (email == null || password == null) {
             response.sendError(400, "Email o password invalida");
         }
-        IUsuarioBO usuarioBo = new UsuarioBO();
         try {
-            UsuarioDTO user = usuarioBo.authenticarse(email, password);
-            String typeofUser = usuarioBo.getTipoById(user.getId());
+            Publicador_Service pucService = new Publicador_Service();
+            Publicador publicador = pucService.getPublicadorPort();
+
+            UsuarioDTO user = publicador.login(email, password);
+            String typeofUser = publicador.getTipoById(user.getID());
+            System.out.println("Type of user is: ");
+            System.out.println(typeofUser);
             HttpSession session = request.getSession(true);
             session.setAttribute("typeOfUser", typeofUser);
             if (typeofUser.equals("Profesor")) {
-                ProfesorBO profeBO = new ProfesorBO();
-                ProfesorDTO profe = profeBO.getProfesorById(user.getId());
+                ProfesorDTO profe = publicador.getProfesorById(user.getID());
                 session.setAttribute("currentSessionUser", profe);
             } else if (typeofUser.equals("Socio")) {
-                SocioBO socBO = new SocioBO();
-                SocioDTO socio = socBO.consultarSocio(user.getId());
+                SocioDTO socio = publicador.consultarSocio(user.getID());
                 session.setAttribute("currentSessionUser", socio);
             }
-            
-            if (remember != null){
-            session.setMaxInactiveInterval(999999999*600); // sesion "infinita" si el checkbox esta ON
+
+            if (remember != null) {
+                session.setMaxInactiveInterval(999999999 * 600); // sesion "infinita" si el checkbox esta ON
             }
-            session.setMaxInactiveInterval(120*60); // sesion de 2 horas si el checkbox esta OFF
+            session.setMaxInactiveInterval(120 * 60); // sesion de 2 horas si el checkbox esta OFF
             response.sendRedirect("Inicio");
-        } catch (UnauthorizedException e) {
+        } catch (UnauthorizedException_Exception e) {
             request.setAttribute("status", "Correo o Contraseña incorrectos");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         } catch (Exception e) {

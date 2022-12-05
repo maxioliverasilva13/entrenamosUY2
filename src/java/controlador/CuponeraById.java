@@ -4,8 +4,6 @@
  */
 package controlador;
 
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.DtCuponera;
+import ws.Publicador;
+import ws.Publicador_Service;
 
 /**
  *
@@ -61,13 +62,14 @@ public class CuponeraById extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String cupId = request.getParameter("cupId");
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
 
         if (cupId != null) {
-            CuponeraBo cupBO = new CuponeraBo();
-            DtCuponera cupinfo = cupBO.consultarCuponera(Integer.parseInt(cupId));
+            DtCuponera cupinfo = publicador.consultarCuponera(Integer.parseInt(cupId));
             request.setAttribute("selectedCuponeraInfo", cupinfo);
             PrintWriter out = response.getWriter();
-            
+
             String cuponeraJSON = new Gson().toJson(cupinfo);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

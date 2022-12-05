@@ -3,14 +3,13 @@
     Created on : 30 set. 2022, 12:14:44
     Author     : mandi
 --%>
+<%@page import="ws.ActividadDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="util.BlobToImage"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.List"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
-<%@page import="Actividad.dtos.ActividadDTO"%>
 <jsp:include page='../imports.jsp'>
     <jsp:param name="" value=""/>
 </jsp:include>
@@ -306,7 +305,7 @@
                                 ActividadDTO val = en.getValue();
 
                                 SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-                                String dateRegistro = DATE_FORMAT.format(val.getFechaRegistro());
+                                String dateRegistro = DATE_FORMAT.format(val.getFechaRegistro().toGregorianCalendar().getTime());
                         %>
                         <tr class="bg-white border-b ">
                             <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">

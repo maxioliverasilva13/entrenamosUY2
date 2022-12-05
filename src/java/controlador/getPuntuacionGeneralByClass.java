@@ -4,8 +4,6 @@
  */
 package controlador;
 
-import Profesor.IProfesorBO;
-import Profesor.ProfesorBO;
 import com.google.gson.Gson;
 import customsDtos.PuntuacionGeneralProfesor;
 import java.io.IOException;
@@ -14,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ws.Publicador;
+import ws.Publicador_Service;
 
 /**
  *
@@ -59,16 +59,15 @@ public class getPuntuacionGeneralByClass extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Publicador_Service pucService = new Publicador_Service();
+        Publicador publicador = pucService.getPublicadorPort();
         
         String claseId = request.getParameter("claseId");
         int id = Integer.parseInt(claseId);
         
-        IProfesorBO profBo = new ProfesorBO();
-        
-        
         Gson gson = new Gson();
-        double puntuacionGeneral = profBo.getValoracionByClass(id);
-        int cantPuntuaciones = profBo.getCantValoracionByClass(id);
+        double puntuacionGeneral = publicador.getValoracionByClass(id);
+        int cantPuntuaciones = publicador.getCantValoracionByClass(id);
         PuntuacionGeneralProfesor puntuacionGeneralObj = new PuntuacionGeneralProfesor(puntuacionGeneral,cantPuntuaciones);
         String res  = gson.toJson(puntuacionGeneralObj);
         PrintWriter pw = response.getWriter();
