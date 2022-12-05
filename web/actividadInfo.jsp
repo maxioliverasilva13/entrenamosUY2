@@ -4,6 +4,8 @@
     Author     : angel
 --%>
 
+<%@page import="javafx.beans.property.SimpleBooleanProperty"%>
+<%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Cuponera.DtCuponera"%>
 <%@page import="java.util.Random"%>
@@ -40,8 +42,23 @@
     List<DtClase> clasesAct = infoAct.getClases();
     List<DtCuponeraXActividad> cuponerasXAct = infoAct.getCuponerasXActivdad();
     DtInstitucion instAct = infoAct.getInstitucion();
-    DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");  
-    
+    DtCuponera cupInfo = (DtCuponera) request.getAttribute("selectedCuponeraInfo");
+    SimpleBooleanProperty isFavoriteOfUser = new SimpleBooleanProperty(false);
+    boolean deberiaPoderFavoritaActividad = false;
+    if (session.getAttribute("typeOfUser") != null) {
+     deberiaPoderFavoritaActividad = session.getAttribute("typeOfUser").equals("Socio") || false;
+    }
+    if (session.getAttribute("currentSessionUser") != null && deberiaPoderFavoritaActividad) {
+        UsuarioDTO userInfo = (UsuarioDTO) session.getAttribute("currentSessionUser");
+        //isFavoriteOfUser = infoAct.getFavoritos().indexOf(userInfo.getId()) == 0;
+        infoAct.getFavoritos().forEach((
+            favorito) -> {
+        if (favorito.getActid() == infoAct.getId()) {
+                isFavoriteOfUser.set(true);
+            }
+        });
+    }
+
 
 %>
 
@@ -61,7 +78,7 @@
 
     public String formatDate(Object x) {
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-            String date;
+        String date;
         try {
             date = DATE_FORMAT.format(x);
         } catch (Exception e) {
@@ -80,7 +97,7 @@
     var idActividad;
     var idProfesor;
     var profesorNombre;
-    
+
     const handleGetItem = (itemId) => {
         const url = '/entrenamosUY3/cuponeraById?cupId=' + itemId;
         const cuponeraModal = document.getElementById("cuponeraInfoModal");
@@ -99,19 +116,22 @@
         });
     }
 
-    const handleGetClase = (itemId) => {
+    const handleGetClase = (itemId, isOpen) => {
         const url = '/entrenamosUY3/claseById?claseId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
         if (window.claseInfo !== "Loading") {
             window.claseInfo = "Loading";
-            
+
             window.fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
-                console.log(data);
-                claseModal.style.cssText = "display: flex";
-                window.claseInfo = data;
-                claseModal.onload();
+                if (isOpen) {
+                    claseModal.style.cssText = "display: flex";
+                }
+                console.log(data?.claseInfo)
+                window.claseInfo = data.claseInfo;
+                window.isProfesorDeClaseAndYaPaso = data.isProfesorDeClaseAndYaPaso;
+                claseModal.onload(isOpen, data?.resultados || []);
             }).catch((err) => {
                 console.log(err);
                 window.claseInfo = "Error";
@@ -132,6 +152,49 @@
         }
 
     }
+
+    const finalizarActividad = (idAct) => {
+        const url = '/entrenamosUY3/finalizarActividad?actId=' + idAct;
+        const botones = document.getElementById("buttons");
+
+        window.fetch(url).then((response) => {
+            if (response.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Exito',
+                    text: 'Actividad finalizada correctamente.'
+                })
+                botones.style.cssText = 'display: none';
+            } else {
+                console.log("error al finalizar " + response.statusText)
+            }
+        });
+    };
+
+    const handleFavoriteActividad = (actId) => {
+        const url = "/entrenamosUY3/toggleActividadFavorita?actId=" + actId;
+        window.fetch(url).then((response) => response.json()).then((data) => {
+            const isFavorito = data?.data;
+            if (isFavorito) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actividad agregada a favoritos',
+                    text: "Tu actividad se agrego a favoritos correctamente"
+                });
+                $("#favoriteButton").html(`<i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>`)
+            } else {
+                $("#favoriteButton").html(`<i class="fa-regular fa-heart text-[20px]"></i>`)
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Esta actividad ya no es favorita',
+                    text: "Esta actividad ya no esta en las actividades favoritas"
+                });
+            }
+
+        });
+    }
+
+    console.log("<%=infoAct.getFavoritos()%>");
 </script>
 <!DOCTYPE html>
 <html>
@@ -165,12 +228,12 @@
         %>
 
 
-        <div class="w-full h-full flex-grow flex flex-col items-start justify-start md:px-20 px-4 gap-y-4 my-6">
+        <div class="w-full h-full flex-grow flex flex-col items-start justify-start md:px-20 p-4 gap-y-4">
             <div class="w-full flex flex-col items-center md:flex-row md:items-start md:justify-between gap-x-20 gap-y-4">
-                <div class='w-[420px] h-full flex flex-col items-center justify-start gap-y-6'>
+                <div class='w-max h-full flex flex-col items-center justify-start gap-y-6'>
                     <img
                         src="<%=btimg.getBase64StringImage(infoAct.getImageBlob())%>"
-                        class="w-full h-[300px] object-cover rounded-md overflow-hidden"
+                        class="w-[300px] full h-[300px] min-h-[300px] min-w-[300px] object-cover rounded-md overflow-hidden"
                         />
 
                     <p class="text-gray-900 text-lg font-medium pb-5 border-b w-full border-gray-300">Categorias</p>
@@ -192,9 +255,30 @@
                     </div>
                 </div>
 
-                <div class='w-full flex-grow h-auto border border-gray-300 rounded-md shadow-md flex flex-col items-start justify-start p-6'>
-
-                    <p class="py-5 border-b border-gray-300 w-full text-left">Nombre Actividad: <%=infoAct.getNombre()%></p>
+                <div class='w-full flex-grow h-auto border border-gray-300 rounded-md shadow-md flex flex-col items-start justify-start p-6 relative'>
+                    <% 
+                    if (deberiaPoderFavoritaActividad == true) {
+                    %> 
+                    <button id="favoriteButton" class="right-6 top-10 cursor-pointer absolute" onclick="handleFavoriteActividad('<%=infoAct.getId()%>')" >
+                        <%
+                            if (isFavoriteOfUser.get() == true) {
+                        %> 
+                        <i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>
+                        <%
+                        } else {
+                        %> 
+                        <i class="fa-regular fa-heart text-[20px]"></i>
+                        <%
+                            }
+                        %>
+                    </button>
+                    <%
+                        }
+                    
+                    %>
+                    
+                  
+                    <div class="w-full py-5 border-b border-gray-300 w-full flex flex-row items-center jusitfy-between"><p>Nombre Actividad: <%=infoAct.getNombre()%></p></div>
                     <div class="flex w-full flex-row items-center justify-start py-5 border-b border-gray-300">
                         <p class="w-1/3 text-gray-500 text-sm font-medium">Institución</p>
                         <p class="w-2/3 text-sm font-normal text-gray-900"><%=instAct.getNombre()%></p>
@@ -215,10 +299,11 @@
             </div>
             <%-- Solo si es Profesor --%>
             <%
-                if (showAddClassButton == true) {
+                if (showAddClassButton == true && (!infoAct.getEstado().equals("Finalizada"))) {
             %>
-            <div class="w-full h-auto flex flex-row items-center justify-end h-auto my-0">
-                <button onclick="toggleOpenAddClaseModal('<%=infoAct.getId()%>', '<%=infoAct.getProfesor().getId()%>', '<%=infoAct.getProfesor().getNombre()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-[#294557]">Agregar</button>
+            <div id="buttons" class="w-full h-auto flex flex-col-reverse sm:flex-row items-center justify-between sm:px-0 h-auto gap-y-2">
+                <button onclick="finalizarActividad('<%=infoAct.getId()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-red-500">Finalizar Actividad Deportiva</button>
+                <button onclick="toggleOpenAddClaseModal('<%=infoAct.getId()%>', '<%=infoAct.getProfesor().getId()%>', '<%=infoAct.getProfesor().getNombre()%>')" class="w-auto h-auto px-2 py-1 rounded-md text-white shadow border border-gray-300 bg-[#294557]">Agregar Clase</button>
             </div>
             <%
                 }
@@ -237,8 +322,16 @@
                         <p class="w-max h-auto text-sm text-gray-500 font-medium">Status</p>
                     </div>
 
-
-                    <% for (DtCuponeraXActividad cat : cuponerasXAct) {
+                    <%
+                        if (cuponerasXAct.size() == 0) {
+                    %>
+                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
+                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
+                    </div>
+                    <%
+                    } else {
+                        for (DtCuponeraXActividad cat : cuponerasXAct) {
                             DtCuponeraXActividad val = cat;
                     %>
                     <a onclick="handleGetItem('<%=cat.getCuponera().getId()%>')" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 gap-x-2 px-4">
@@ -251,6 +344,7 @@
                         </div>
                     </a>
                     <%
+                            }
                         }
                     %>
 
@@ -267,22 +361,35 @@
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium">Fecha</p>
                     </div>
 
-
-                    <% for (DtClase clase : clasesAct) {
+                    <%
+                        if (clasesAct.size() == 0) {
                     %>
+<<<<<<< HEAD
                     <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full <%  !%>flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
+=======
+                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
+                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
+                    </div>
+                    <%
+                    } else {
+                        for (DtClase clase : clasesAct) {
+                    %>
+                    <a onclick="handleGetClase('<%=clase.getId()%>', true)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
+>>>>>>> 29a04c9000b0047f5228390f345fa5da142c2181
                         <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
                             <img
-                            src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
-                            class="w-8 h-8 object-cover rounded-full overflow-hidden"
-                            />
-                        <p class="w-[10%]4 h-auto "t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
+                                src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
+                                class="w-8 h-8 object-cover rounded-full overflow-hidden"
+                                />
+                            <p class="w-[10%]4 h-auto "t-sm text-gray-500 font-medium"><%=clase.getNombre()%></p>
                         </div>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getProfesor()%></p>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=clase.getRegistros().size()%></p>
                         <p class="w-[25%] h-auto text-sm text-gray-500 font-medium"><%=formatDate(clase.getFecha())%></p>
                     </a>
                     <%
+                            }
                         }
                     %>
                 </div>

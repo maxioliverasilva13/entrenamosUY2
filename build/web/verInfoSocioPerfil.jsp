@@ -3,6 +3,7 @@
     Created on : 2 oct. 2022, 14:50:35
     Author     : pedri
 --%>
+<%@page import="Premio.dtos.PremioDTO"%>
 <%@page import="Registro.DtRegistro"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Clase.DtClase"%>
@@ -23,6 +24,7 @@
     int cantSeguidores = (int) request.getAttribute("cantSeguidores");
     int cantSeguidos = (int) request.getAttribute("cantSeguidos");
 
+    List<PremioDTO> listadoPremiosUsuario = new ArrayList<>();
     List<DtRegistro> listRegistrosOfUser = new ArrayList<>();
     List<ActividadDTO> actividadesOfUser = new ArrayList<>();
     UsuarioDTO userDT = (UsuarioDTO) request.getAttribute("userDT");
@@ -38,6 +40,12 @@
     if (request.getAttribute("listRegistrosOfUser") != null) {
         listRegistrosOfUser = (List<DtRegistro>) request.getAttribute("listRegistrosOfUser");
     }
+
+    if (request.getAttribute("premioOfuser") != null) {
+        listadoPremiosUsuario = (List<PremioDTO>) request.getAttribute("premioOfuser");
+    }
+
+    System.out.println(listadoPremiosUsuario);
 
     if (request.getAttribute("actividadesOfUser") != null) {
         actividadesOfUser = (List<ActividadDTO>) request.getAttribute("actividadesOfUser");
@@ -57,15 +65,36 @@
 %>
 
 <script>
-    const handleGetClase = (itemId) => {
-     
-     
+    const handleOpenPremioInfo = (premioId) => {
+       const modalElement = document.getElementById("infoSorteoModal");
+        if (modalElement != null) {
+            const url = '/entrenamosUY3/premioById?premioId=' + premioId;
+            window.fetch(url).then((response) => {
+                return response.json();
+            }).then((data) => {
+                modalElement.style.cssText = "display: flex";
+                modalElement.onload(data);
+            }).catch((err) => {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error al cargar el premio',
+                    textContent: err?.message,
+                    showConfirmButton: false,
+                });
+                window.cuponeraInfo = "Error";
+            });
+        }
+
+    }
+    const handleGetClase = (itemId, isOpen) => {
         const url = '/entrenamosUY3//RegistroById?registroId=' + itemId;
         const claseModal = document.getElementById("infoClaseModal");
+        console.log("xd")
         if (window.registroInfo !== "Loading") {
             window.registroInfo = "Loading";
+            window.claseInfo = "Loading";
             claseModal.onload();
-            
             if (document.getElementById("seleccionarMedioPagoModal")) {
                 document.getElementById("seleccionarMedioPagoModal").style.cssText = "display: none!important;"
             }
@@ -73,17 +102,22 @@
             window.fetch(url).then((response) => {
                 return response.json();
             }).then((data) => {
+                console.log(data);
                 claseModal.style.cssText = "display: flex";
+                
+                window.claseInfo = data.clase;
                 window.registroInfo = data;
-                claseModal.onload();
-            }).catch((err) => { 
+                window.isProfesorDeClaseAndYaPaso = data.isProfesorDeClaseAndYaPaso;
+                window.registroInfo = data;
+                claseModal.onload(isOpen, data?.resultados || []);
+            }).catch((err) => {
                 console.log(err);
                 window.registroInfo = "Error";
             });
         }
 
     }
-    
+
     const handleGetCuponera = (itemId) => {
         const url = '/entrenamosUY3//cuponeraById?cupId=' + itemId;
         const cuponeraModal = document.getElementById("cuponeraInfoModal");
@@ -107,19 +141,20 @@
 <html>
     <jsp:include page='/components/infoClaseModal.jsp' />
     <jsp:include page='/components/selectedCuponeraInfo.jsp' />
+    <jsp:include page='/components/premioInfo.jsp' />
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Perfil Propio Socio</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
-        <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
-    </head>
+            <title>Perfil Propio Socio</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&display=swap" rel="stylesheet">
+                        <script src="https://unpkg.com/flowbite@1.5.3/dist/datepicker.js"></script>
+                        </head>
                         <script>
-                            const handleEditInfo = () => {
-                                const editarInfoModal = document.getElementById("editarInfoSocioModal");
-                                editarInfoModal.style.cssText = "display: flex";
-                            };
+    const handleEditInfo = () => {
+        const editarInfoModal = document.getElementById("editarInfoSocioModal");
+        editarInfoModal.style.cssText = "display: flex";
+    };
                         </script>
                         <jsp:include page='/components/header.jsp' >
                             <jsp:param name="path" value="index" />
@@ -188,24 +223,24 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="flex flex-col items-center lg:items-start justify-center p-6 md:p-8 gap-y-4 lg:flex-row w-screen h-max lg:gap-x-12">
-                                <div class="h-max w-5/6 lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
+                            <div class="gap-6 grid md:grid-cols-2 grid-cols-1 items-start lg:items-start justify-center p-6 md:p-8 gap-y-4 lg:flex-row w-screen h-max lg:gap-x-12">
+                                <div class="h-max m-auto flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
                                     <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium">ACTIVIDADES</p>
                                     </div>
 
                                     <%
-                                    if (actividadesOfUser.size() == 0){
+                                        if (actividadesOfUser.size() == 0) {
                                     %>
-                                        <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
-                                            <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
-                                            <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Actividad!</p>
-                                        </div>
+                                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
+                                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Actividad!</p>
+                                    </div>
                                     <%
-                                    }else{
+                                    } else {
                                     %>
-                                    
-                                    
+
+
                                     <%-- ForEach Actividades --%>
                                     <%
                                         for (ActividadDTO en : actividadesOfUser) {
@@ -220,25 +255,25 @@
                                         <button class="border border-gray-300 py-[1px] px-[10px] rounded-[14px] font-medium text-[14px] text-gray-700 shadow-sm">View</button>
                                     </a>
                                     <%
+                                            }
                                         }
-                                    }
                                     %>
 
 
                                 </div>
-                                <div class="h-max w-5/6 lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
+                                <div class="h-max m-auto flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
                                     <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium ">CLASES</p>
                                     </div>
                                     <%
-                                    if (listRegistrosOfUser.size() == 0){
+                                        if (listRegistrosOfUser.size() == 0) {
                                     %>
-                                        <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
-                                            <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
-                                            <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
-                                        </div>
+                                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
+                                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
+                                    </div>
                                     <%
-                                    }else{
+                                    } else {
                                     %>
                                     <%-- ForEach Clases --%>
                                     <%
@@ -248,7 +283,7 @@
                                             SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
                                             String dateRegistro = DATE_FORMAT.format(val.getFecha());
                                     %>
-                                    <a onclick="handleGetClase('<%= en.getId()%>')" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
+                                    <a onclick="handleGetClase('<%= en.getId()%>', true)" class="h-[72px] cursor-pointer border-b-[1px] flex flex-row items-center justify-start py-[16px] px-[24px] gap-x-[16px]">
                                         <img src="<%=btimg.getBase64StringImage(val.getImageBlob())%>" alt="Girl in a jacket" class="rounded-full w-[40px] h-[40px] object-cover"/>
                                         <div class="text-gray-500 text-[12px] font-medium flex-grow h-full flex flex-col item-start justify-start flex-col">
                                             <p><%=val.getNombre()%> (<%=val.getRegistros().size()%> Inscripto/s)</p>
@@ -257,27 +292,27 @@
                                         <button class="border border-gray-300 py-[1px] px-[10px] rounded-[14px] font-medium text-[14px] text-gray-700 shadow-sm">View</button>
                                     </a> 
                                     <%
+                                            }
                                         }
-                                    }
                                     %>
 
 
                                 </div>
 
-                                <div class="h-max w-5/6 lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
+                                <div class="h-max m-auto flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
                                     <div class="bg-gray-200 px-[24px] py-[12px]">
                                         <p class="text-gray-500 text-[12px] font-medium">CUPONERAS ADQUIRIDAS</p>
                                     </div>
 
-<%
-                                    if (listCups.size() == 0){
-                                    %>
-                                        <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
-                                            <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
-                                            <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Cuponera!</p>
-                                        </div>
                                     <%
-                                    }else{
+                                        if (listCups.size() == 0) {
+                                    %>
+                                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
+                                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                                        <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Cuponera!</p>
+                                    </div>
+                                    <%
+                                    } else {
                                     %>
                                     <%-- ForEach Cuponeras --%>
                                     <%
@@ -295,8 +330,44 @@
                                         <button class="border border-gray-300 py-[1px] px-[10px] rounded-[14px] font-medium text-[14px] text-gray-700 shadow-sm">View</button>
                                     </a>    
                                     <%
+                                            }
                                         }
-                                    }
+                                    %>
+                                </div>
+
+
+                                <div class="h-max m-auto flex-grow lg:w-[500px] rounded-[28px] shadow-md flex flex-col items-stretch justify-start overflow-hidden">
+                                    <div class="bg-gray-200 px-[24px] py-[12px]">
+                                        <p class="text-gray-500 text-[12px] font-medium">Premios Ganados</p>
+                                    </div>
+
+                                    <%
+                                        if (listadoPremiosUsuario.size() == 0) {
+                                    %>
+                                    <div class="w-full h-full flex-grow flex items-center flex-col justify-center py-4">
+                                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
+                                        <p class="text-gray-800 font-medium text-base">¡No encontramos ningun premio!</p>
+                                    </div>
+                                    <%
+                                    } else {
+                                    %>
+                                    <%-- ForEach Premios --%>
+                                    <%
+                                        for (PremioDTO en : listadoPremiosUsuario) {
+                                    %>
+                                    <div class="w-full px-4 py-4 gap-y-2 border-b pb-2 shadow h-auto flex flex-row items-center justify-start">
+                                        <img src="https://st2.depositphotos.com/4320929/12352/v/600/depositphotos_123521904-stock-illustration-man-holding-trophy-cup.jpg" class="w-16 h-16 min-w-[64px] min-h-[64px] rounded-full overflow-hidden" />
+                                        <div class="flex flex-grow flex-col gap-y-1 w-full h-auto items-start justify-center pl-6">
+                                            <p class="text-black font-medium text-sm">Premio: <%=en.getDescripcion()%></p>
+                                            <p class="text-black font-medium text-sm">Sorteado: <%=en.getFechaCreacion()%></p>
+                                            <p class="text-black font-medium text-sm">Clase: <%=en.getClase().getNombre()%></p>
+
+                                            <p onclick="handleOpenPremioInfo('<%=en.getId()%>')" id="verMasAboutPremio" class="text-indigo-900 cursor-pointer mt-2 underline text-sm font-medium">Ver mas</p>
+                                        </div>
+                                    </div>
+                                    <%
+                                            }
+                                        }
                                     %>
                                 </div>
                             </div>
@@ -308,7 +379,7 @@
                                 <jsp:param name="institucion" value="<%= institucion%>" />
                                 <jsp:param name="name" value="<%= nombre%>" />
                                 <jsp:param name="lastname" value="<%= apellido%>" />
-                                <jsp:param name="fnacimiento" value="<%= fnacimiento %>" />
+                                <jsp:param name="fnacimiento" value="<%= fnacimiento%>" />
                                 <jsp:param name="biografia" value="<%= biografia%>" />
                                 <jsp:param name="description" value="<%= descripcion%>" />
                                 <jsp:param name="utype" value="<%= userDT.getType()%>" />

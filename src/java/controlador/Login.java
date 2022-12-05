@@ -84,6 +84,7 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         String email = (String) request.getParameter("email");
         String password = request.getParameter("password");
+        String remember = request.getParameter("remember");
 
         if (email == null || password == null) {
             response.sendError(400, "Email o password invalida");
@@ -109,9 +110,12 @@ public class Login extends HttpServlet {
                 SocioDTO socio = socBO.consultarSocio(user.getId());
                 session.setAttribute("currentSessionUser", socio);
             }
-
-            response.sendRedirect("TestServelet");
-
+            
+            if (remember != null){
+            session.setMaxInactiveInterval(999999999*600); // sesion "infinita" si el checkbox esta ON
+            }
+            session.setMaxInactiveInterval(120*60); // sesion de 2 horas si el checkbox esta OFF
+            response.sendRedirect("Inicio");
         } catch (UnauthorizedException e) {
             request.setAttribute("status", "Correo o Contraseña incorrectos");
             request.getRequestDispatcher("/login.jsp").forward(request, response);

@@ -4,6 +4,8 @@
     Author     : Maximiliano Olivera
 --%>
 
+<%@page import="Socio.dtos.SocioDTO"%>
+<%@page import="javafx.beans.property.SimpleBooleanProperty"%>
 <%@page import="Usuario.dtos.UsuarioDTO"%>
 <%@page import="Actividad.dtos.ActividadDTO"%>
 <%@page import="java.util.HashMap"%>
@@ -241,12 +243,24 @@
                                 Integer key = en.getKey();
                                 ActividadDTO val = en.getValue();
 
+                                SimpleBooleanProperty isFavoriteOfUser = new SimpleBooleanProperty(false);
+                                if (session.getAttribute("currentSessionUser") != null && session.getAttribute("typeOfUser").equals("Socio")) {
+                                    SocioDTO socio = (SocioDTO) session.getAttribute("currentSessionUser");
+                                    val.getFavoritos().forEach((
+                                              
+                                        favorito) -> {
+                                        if (favorito.getActid() == key && favorito.getUserId() == socio.getId()) {
+                                            isFavoriteOfUser.set(true);
+                                        }
+                                    });
+                                }
                         %>
                         <jsp:include page='/components/cardActividad.jsp' >
                             <jsp:param name="nombre" value="<%=val.getNombre()%>" />
                             <jsp:param name="image" value="<%=btimg.getBase64StringImage(val.getImageBlob())%>" />
                             <jsp:param name="descripcion" value="<%=val.getDescripcion()%>" />
                             <jsp:param name="actID" value="<%=val.getId()%>" />
+                            <jsp:param name="isFavorita" value="<%=isFavoriteOfUser.get()%>" />
                         </jsp:include>
                         <%
                             }
@@ -365,6 +379,7 @@
                             data.append("costo", costo);
                             data.append("duracion", duracion);
                             data.append("categoriasId", categoriasId.toString());
+                            console.log(categoriasId.toString());
                             if (image) {
                                 data.append("image", image);
                             }
@@ -381,7 +396,7 @@
                                     $("#costo").val("");
                                     $("#descripcion").val("");
                                     Swal.fire({
-                                        icon: 'info',
+                                        icon: 'success',
                                         title: 'Nueva actividad',
                                         text: "Actividad creada con exito.Debes esperar a que un administrador la de de alta"
                                     });
@@ -393,11 +408,19 @@
                                     })
                                 },
                                 error: function (error) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Error',
-                                        text: "Ha ocurrido un error inesperado"
-                                    });
+                                    if (error.status === 400) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: "Ya existe una actividad con ese nombre."
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: "Ha ocurrido un error."
+                                        });
+                                    }
                                 }
                             });
                             return;
@@ -406,7 +429,6 @@
                     const loadingCategoriesElem = $("#loadingCategories");
                     const containerCategorias = $("#categoriasContainer");
                     $.get('/entrenamosUY3/crearActividad', function (data, status) {
-                        console.log(status);
                         if (status !== "success") {
                             return;
                         }

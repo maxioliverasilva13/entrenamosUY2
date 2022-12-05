@@ -4,27 +4,25 @@
  */
 package controlador;
 
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
+import Premio.PremioDao;
 import com.google.gson.Gson;
+import customsDtos.ResponseServer;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import util.FollowData;
 
 /**
  *
- * @author mandi
+ * @author maximilianoolivera
  */
-@WebServlet(name = "SeguirUsuario", urlPatterns = {"/SeguirUsuario"})
-public class SeguirUsuario extends HttpServlet {
+@WebServlet(name = "ImprimirComprobantePremio", urlPatterns = {"/imprimirComprobantePremio"})
+public class ImprimirComprobantePremio extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +41,10 @@ public class SeguirUsuario extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SeguirUsuario</title>");
+            out.println("<title>Servlet ImprimirComprobantePremio</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SeguirUsuario at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ImprimirComprobantePremio at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,30 +60,39 @@ public class SeguirUsuario extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession session = request.getSession(true);
-        UsuarioBO userBO = new UsuarioBO();
-        
-        int usrIDConsultado = Integer.parseInt(request.getParameter("idConsultado"));
-        UsuarioDTO loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
-        
-        boolean loggSigueAconsultado = false;
-        
-        try {
+        String premioId = request.getParameter("premioId");
+        String userId = request.getParameter("userID");
+        PremioDao premDao = new PremioDao();
+        if (userId != null && premioId != null) {
+            File pdfComprobante = premDao.imprimirPremio(Integer.parseInt(premioId), Integer.parseInt(userId));
+            // Get PrintWriter object
             PrintWriter out = response.getWriter();
-            int seguidores = userBO.getSeguidores(usrIDConsultado);
-            int seguidos = userBO.getSeguidos(usrIDConsultado);
-            FollowData fd = new FollowData(seguidores, seguidos);
-            String JSONdata = new Gson().toJson(fd);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(JSONdata);
-            response.setStatus(HttpServletResponse.SC_OK);
-//            request.setAttribute("sigoAlConsultado", loggSigueAconsultado);
-        } catch (Exception e) {
+
+            // Set the content type and header of the response.
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=\""
+                    + pdfComprobante + "\"");
+
+            // Get FileInputStream object to identify the path
+            FileInputStream inputStream
+                    = new FileInputStream(pdfComprobante);
+
+            // Loop through the document and write into the
+            // output.
+            int in;
+            while ((in = inputStream.read()) != -1) {
+                out.write(in);
+            }
+
+            // Close FileInputStream and PrintWriter object
+            inputStream.close();
+            out.close();
         }
+
     }
 
     /**
@@ -99,31 +106,7 @@ public class SeguirUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //doGet(request, response);
-        try {
-            UsuarioBO userBO = new UsuarioBO();
-            HttpSession session = request.getSession(true);
-            UsuarioDTO loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
-
-            int idConsultado = Integer.parseInt(request.getParameter("idConsultado"));
-
-            boolean loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), idConsultado);
-
-            if (!loggSigueAconsultado) {
-                userBO.seguirAUsuario(loggedUser.getId(), idConsultado);
-                System.out.println("LLEGO 1");
-            } else {
-                try {
-                    userBO.dejarSeguirUsuario(loggedUser.getId(), idConsultado);
-                    System.out.println("LLEGO 2");
-                } catch (Exception e) {
-                }
-            }
-        response.sendRedirect("verPerfil?&userID="+idConsultado);
-
-        } catch (Exception e) {
-            response.sendRedirect("NotFound.jsp");
-        }
+        processRequest(request, response);
     }
 
     /**

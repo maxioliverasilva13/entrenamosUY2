@@ -13,6 +13,8 @@ import Cuponera.DtCuponera;
 import Institucion.DtInstitucion;
 import Institucion.InstitucionBO;
 import ParseDate.ParseDate;
+import Premio.PremioBO;
+import Premio.dtos.PremioDTO;
 import Profesor.ProfesorBO;
 import Profesor.dtos.ProfesorDTO;
 import Registro.DtRegistro;
@@ -106,8 +108,7 @@ public class ServletVerPerfilUsuario extends HttpServlet {
 
         request.setAttribute("cantSeguidores", seguidores);
         request.setAttribute("cantSeguidos", seguidos);
-        
-        
+
         byte[] imageBlob = null;
         imageBlob = userInfoToShow.getBlobImage();
 
@@ -157,7 +158,7 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("apellido", dtProfesor.getApellido());
             request.setAttribute("correo", dtProfesor.getEmail());
             request.setAttribute("institucion", dtIns.getNombre());
-            if(dtProfesor.getNacimiento() != null){
+            if (dtProfesor.getNacimiento() != null) {
                 SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
                 String date = DATE_FORMAT.format(dtProfesor.getNacimiento());
                 request.setAttribute("fnacimiento", date);
@@ -196,6 +197,8 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             }
             List<DtRegistro> listRegistrosOfUser = new ArrayList<>();
             List<ActividadDTO> actividadesOfUser = new ArrayList<>();
+            PremioBO premBO = new PremioBO();
+            List<PremioDTO> premioOfuser = premBO.premiosOfUser(dtSocio.getId());
 
             dtSocio.getRegistros().forEach((DtRegistro r) -> {
                 listRegistrosOfUser.add(r);
@@ -212,6 +215,8 @@ public class ServletVerPerfilUsuario extends HttpServlet {
 
                 // actividadesOfUser.add()
             });
+            request.setAttribute("premioOfuser", premioOfuser);
+
             request.setAttribute("listRegistrosOfUser", listRegistrosOfUser);
             request.setAttribute("actividadesOfUser", actividadesOfUser);
 
@@ -220,13 +225,12 @@ public class ServletVerPerfilUsuario extends HttpServlet {
             request.setAttribute("apellido", dtSocio.getApellido());
             request.setAttribute("correo", dtSocio.getEmail());
             request.setAttribute("nickname", dtSocio.getNickname());
-            if(dtSocio.getNacimiento() != null){
+            if (dtSocio.getNacimiento() != null) {
                 SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
                 String date = DATE_FORMAT.format(dtSocio.getNacimiento());
                 request.setAttribute("fnacimiento", date);
             }
             request.setAttribute("cuponeras", listCuponeras);
-
 
             // Validar si el perfil q va a consultar es el suyo o uno ajeno.
             if (loggedUser != null) {

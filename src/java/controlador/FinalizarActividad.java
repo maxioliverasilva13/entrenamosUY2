@@ -4,27 +4,22 @@
  */
 package controlador;
 
-import Usuario.UsuarioBO;
-import Usuario.dtos.UsuarioDTO;
+import Actividad.ActividadBO;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import util.FollowData;
 
 /**
  *
  * @author mandi
  */
-@WebServlet(name = "SeguirUsuario", urlPatterns = {"/SeguirUsuario"})
-public class SeguirUsuario extends HttpServlet {
+@WebServlet(name = "FinalizarActividad", urlPatterns = {"/finalizarActividad"})
+public class FinalizarActividad extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +38,10 @@ public class SeguirUsuario extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SeguirUsuario</title>");
+            out.println("<title>Servlet FinalizarActividad</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SeguirUsuario at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet FinalizarActividad at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -64,27 +59,29 @@ public class SeguirUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession session = request.getSession(true);
-        UsuarioBO userBO = new UsuarioBO();
-        
-        int usrIDConsultado = Integer.parseInt(request.getParameter("idConsultado"));
-        UsuarioDTO loggedUser = (UsuarioDTO)session.getAttribute("currentSessionUser");
-        
-        boolean loggSigueAconsultado = false;
-        
-        try {
-            PrintWriter out = response.getWriter();
-            int seguidores = userBO.getSeguidores(usrIDConsultado);
-            int seguidos = userBO.getSeguidos(usrIDConsultado);
-            FollowData fd = new FollowData(seguidores, seguidos);
-            String JSONdata = new Gson().toJson(fd);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(JSONdata);
-            response.setStatus(HttpServletResponse.SC_OK);
-//            request.setAttribute("sigoAlConsultado", loggSigueAconsultado);
-        } catch (Exception e) {
+        String actId = request.getParameter("actId");
+
+        if (actId != null) {
+            ActividadBO actBO = new ActividadBO();
+            try {
+                System.out.println("Intentando finalizar...");
+                actBO.cambiarEstado(Integer.parseInt(actId), "Finalizada");
+                System.out.println("Actividad "+ actId + " finalizada con exito!");
+                request.setAttribute("exito", "true");
+                response.setStatus(HttpServletResponse.SC_OK, "Actividad finalizada con exito!"); 
+            } catch (Exception e) {
+                System.out.println("Error al finalizar!");
+                System.out.println(e.getMessage());
+                response.sendError(400,"La actividad ya fue finalizada");
+            }
+//            DtClase claseInfo = claseBO.consultarClase(Integer.parseInt(claseId));
+//            // request.setAttribute("selectedCuponeraInfo", cupinfo);
+//            PrintWriter out = response.getWriter();
+//            String claseJSON = new Gson().toJson(claseInfo);
+//            response.setContentType("application/json");
+//            response.setCharacterEncoding("UTF-8");
+//            out.print(claseJSON);
+//            response.setStatus(HttpServletResponse.SC_OK);
         }
     }
 
@@ -99,31 +96,7 @@ public class SeguirUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //doGet(request, response);
-        try {
-            UsuarioBO userBO = new UsuarioBO();
-            HttpSession session = request.getSession(true);
-            UsuarioDTO loggedUser = (UsuarioDTO) session.getAttribute("currentSessionUser");
-
-            int idConsultado = Integer.parseInt(request.getParameter("idConsultado"));
-
-            boolean loggSigueAconsultado = userBO.consultarSigueUsuario(loggedUser.getId(), idConsultado);
-
-            if (!loggSigueAconsultado) {
-                userBO.seguirAUsuario(loggedUser.getId(), idConsultado);
-                System.out.println("LLEGO 1");
-            } else {
-                try {
-                    userBO.dejarSeguirUsuario(loggedUser.getId(), idConsultado);
-                    System.out.println("LLEGO 2");
-                } catch (Exception e) {
-                }
-            }
-        response.sendRedirect("verPerfil?&userID="+idConsultado);
-
-        } catch (Exception e) {
-            response.sendRedirect("NotFound.jsp");
-        }
+        processRequest(request, response);
     }
 
     /**

@@ -4,14 +4,16 @@
  */
 package controlador;
 
-import customsDtos.ClaseInfoToReturn;
 import Clase.ClaseBO;
 import Clase.DtClase;
-import Cuponera.CuponeraBo;
-import Cuponera.DtCuponera;
 import Profesor.dtos.ProfesorDTO;
+import Registro.DtRegistro;
 import Socio.dtos.SocioDTO;
+import Usuario.Usuario;
+import Usuario.UsuarioDAO;
 import com.google.gson.Gson;
+import customsDtos.ClaseInfoToReturn;
+import customsDtos.ResponseServer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -23,14 +25,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import Registro.DtRegistro;
 
 /**
  *
- * @author Maximiliano Olivera
+ * @author maximilianoolivera
  */
-@WebServlet(name = "ClaseById", urlPatterns = {"/claseById"})
-public class ClaseById extends HttpServlet {
+@WebServlet(name = "ConsultarSocioByEmail", urlPatterns = {"/consultarSocioByEmail"})
+public class ConsultarSocioByEmail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,10 +50,10 @@ public class ClaseById extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ClaseById</title>");
+            out.println("<title>Servlet ConsultarSocioByEmail</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ClaseById at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ConsultarSocioByEmail at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -70,48 +71,29 @@ public class ClaseById extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String claseId = request.getParameter("claseId");
-        
-        if (claseId != null) {
-            ClaseBO claseBO = new ClaseBO();
-            request.setAttribute("", this);
-            DtClase claseInfo = claseBO.consultarClase(Integer.parseInt(claseId));
-            // request.setAttribute("selectedCuponeraInfo", cupinfo);
-            PrintWriter out = response.getWriter();
-            boolean isProfesorDeClaseAndYaPaso = false;
-            boolean verResultados = false;
-            HttpSession session = request.getSession(true);
-            List<SocioDTO> resultados = new ArrayList<>();
-            String typeofUser = (String) session.getAttribute("typeOfUser");
-            if (typeofUser != null && typeofUser.equals("Profesor")) {
-                ProfesorDTO profe = (ProfesorDTO) session.getAttribute("currentSessionUser");
-                if (claseInfo.getProfesorId() == profe.getId()) {
-                    if (claseInfo.getPremio() != null) {
-                        if (claseInfo.getPremio().getRegistros().size() > 0) {
-                            verResultados = true;
-                            claseInfo.getPremio().getRegistros().forEach((DtRegistro reg) -> {
-                                resultados.add(reg.getSocio());
-                            });
-                        } else {
-                            Date now = new Date();
-                            if (claseInfo.getFecha().before(now) && claseInfo.getPremio() != null) {
-                                if (claseInfo.getPremio().isFueSorteado() == false) {
-                                    isProfesorDeClaseAndYaPaso = true;
-                                }
-                            }
-                        }
-
-                    }
-
-                }
-            }
-            ClaseInfoToReturn claseToReturn = new ClaseInfoToReturn(claseInfo, isProfesorDeClaseAndYaPaso, verResultados, resultados);
-            String claseJSON = new Gson().toJson(claseToReturn);
+        PrintWriter out = response.getWriter();
+        String emailUser = request.getParameter("email");
+        UsuarioDAO userDao = new UsuarioDAO();
+        Usuario userInfoByEmail = userDao.getByEmail(emailUser);
+        Boolean alreadyExists = userInfoByEmail != null;
+        if (emailUser != null) {
+            response.setStatus(200);
+            ResponseServer resp = new ResponseServer(200, "todo ok", alreadyExists);
+            String claseJSON = new Gson().toJson(resp);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            out.print(claseJSON);
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.setStatus(404);
+            ResponseServer resp = new ResponseServer(404, "No se provee un email correcto", alreadyExists);
+            String claseJSON = new Gson().toJson(resp);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             out.print(claseJSON);
             response.setStatus(HttpServletResponse.SC_OK);
         }
+
     }
 
     /**
