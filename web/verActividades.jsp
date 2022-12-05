@@ -70,7 +70,7 @@
             <jsp:param name="descripcion" value="<%=val.getDescripcion()%>" />
             <jsp:param name="actID" value="<%=val.getId()%>" />
             <jsp:param name="isFavorita" value="<%=isFavoriteOfUser.get()%>" />
-            <jsp:param name="cantFavs" value="<%=val.getCantFavoritos()%>" />
+            <jsp:param name="cantFavs" value="<%=val.getFavoritos().size()%>" />
         </jsp:include>
         <%
             }

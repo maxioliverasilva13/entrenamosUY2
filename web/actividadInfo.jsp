@@ -273,7 +273,7 @@
                                 }
                             %>
                         </button>
-                        <p id="favCount" class="text-lg font-medium"><%=infoAct.getCantFavoritos()%></p>
+                        <p id="favCount" class="text-lg font-medium"><%=infoAct.getFavoritos().size()%></p>
                     </div>
                     <%
                         }
@@ -367,9 +367,6 @@
                     <%
                         if (clasesAct.size() == 0) {
                     %>
-<<<<<<< HEAD
-                    <a onclick="handleGetClase('<%=clase.getId()%>')" class="w-full <%  !%>flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
-=======
                     <div class="w-full h-full flex-grow flex items-center flex-col justify-center">
                         <img src="https://cdni.iconscout.com/illustration/premium/thumb/folder-is-empty-4064360-3363921.png" class="select-none object-cover w-[300px]" />
                         <p class="text-gray-800 font-medium text-base">¡No encontramos ninguna Clase!</p>
@@ -379,7 +376,6 @@
                         for (DtClase clase : clasesAct) {
                     %>
                     <a onclick="handleGetClase('<%=clase.getId()%>', true)" class="w-full cursor-pointer flex flex-row items-center justify-start h-16 border-b border-gray-300 px-4 text-center">
->>>>>>> 29a04c9000b0047f5228390f345fa5da142c2181
                         <div class="w-[25%] gap-x-2 h-auto flex items-center justify-center">
                             <img
                                 src="<%=btimg.getBase64StringImage(clase.getImageBlob())%>"
