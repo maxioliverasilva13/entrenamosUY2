@@ -181,9 +181,11 @@
                     title: 'Actividad agregada a favoritos',
                     text: "Tu actividad se agrego a favoritos correctamente"
                 });
-                $("#favoriteButton").html(`<i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>`)
+                $("#favoriteButton").html(`<i class="fa-sharp text-red-700 fa-solid text-[20px] fa-heart"></i>`);
+                $("#favCount").text(parseInt($("#favCount").text()) + 1);
             } else {
-                $("#favoriteButton").html(`<i class="fa-regular fa-heart text-[20px]"></i>`)
+                $("#favCount").text(parseInt($("#favCount").text()) - 1);
+                $("#favoriteButton").html(`<i class="fa-regular fa-heart text-[20px]"></i>`);
                 Swal.fire({
                     icon: 'success',
                     title: 'Esta actividad ya no es favorita',
